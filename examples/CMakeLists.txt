@@ -41,3 +41,6 @@ target_link_libraries(example-socket-publisher traeger::socket)
 
 add_executable(example-socket-subscriber example-socket-subscriber.cpp)
 target_link_libraries(example-socket-subscriber traeger::socket)
+
+add_executable(example-group example-group.cpp)
+target_link_libraries(example-group traeger::actor)

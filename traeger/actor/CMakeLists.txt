@@ -1,6 +1,7 @@
 set(TRAEGER_ACTOR_HEADERS
     actor.h
     Actor.hpp
+    Group.hpp
     Mailbox.hpp
     Promise.hpp
     Queue.hpp
@@ -25,6 +26,7 @@ target_sources(traeger_actor PRIVATE ${TRAEGER_ACTOR_HEADERS})
 target_sources(
     traeger_actor
     PRIVATE
+        Group.cpp
         Mailbox.cpp
         Promise.cpp
         Result.cpp
