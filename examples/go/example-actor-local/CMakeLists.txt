@@ -1,0 +1,9 @@
+add_go_example(example-actor-local
+    ${CMAKE_SOURCE_DIR}/go/traeger_value.go
+    ${CMAKE_SOURCE_DIR}/go/traeger_format.go
+    ${CMAKE_SOURCE_DIR}/go/traeger_actor.go
+    go.mod
+    main.go
+    ../example-actor-definition/pkg.go
+    ../example-actor-messaging/pkg.go
+)

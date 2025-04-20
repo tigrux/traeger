@@ -1,0 +1,34 @@
+ARG DISTRO=debian
+ARG RELEASE=bullseye
+ARG OS=${DISTRO}:${RELEASE}
+FROM ${OS}
+
+ENV DEBIAN_FRONTEND=noninteractive
+RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
+    --mount=target=/var/cache/apt,type=cache,sharing=locked \
+    apt update -y && \
+    apt install -y \
+    g++ ninja-build python3 libpython3-dev wget
+
+ARG CMAKE_VERSION=4.0.1
+WORKDIR /opt/cmake
+RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(uname -m).tar.gz -O - | tar --strip-components=1 -xz
+ARG GO_VERSION=1.24.2
+WORKDIR /opt/go
+RUN wget https://go.dev/dl/go${GO_VERSION}.linux-$(dpkg --print-architecture).tar.gz -O - | tar --strip-components=1 -xz
+ENV PATH=${PATH}:/opt/cmake/bin:/opt/go/bin
+
+ARG TRAEGER_HOME=/opt/traeger
+ARG TRAEGER_BUILD=/opt/traeger
+ADD . ${TRAEGER_HOME}
+WORKDIR ${TRAEGER_HOME}
+
+RUN cmake -S ${TRAEGER_HOME} -B ${TRAEGER_BUILD} -DCMAKE_BUILD_TYPE=MinSizeRel -G Ninja
+RUN cmake --build ${TRAEGER_BUILD}
+RUN cmake --build ${TRAEGER_BUILD} --target test
+RUN cmake --install ${TRAEGER_BUILD}
+
+RUN cmake -S ${TRAEGER_HOME}/python -B ${TRAEGER_BUILD}/python -DCMAKE_BUILD_TYPE=MinSizeRel -G Ninja
+RUN cmake --build ${TRAEGER_BUILD}/python
+RUN cmake --install ${TRAEGER_BUILD}/python
+ENV LD_LIBRARY_PATH=/usr/local/lib

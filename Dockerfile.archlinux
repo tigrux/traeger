@@ -1,0 +1,20 @@
+FROM archlinux:latest
+
+RUN --mount=type=cache,target=/var/cache/pacman/pkg \
+    pacman -Syu --noconfirm \
+    gcc ninja python3 wget cmake go
+
+ARG TRAEGER_HOME=/opt/traeger
+ARG TRAEGER_BUILD=/opt/traeger
+ADD . ${TRAEGER_HOME}
+WORKDIR ${TRAEGER_HOME}
+
+RUN cmake -S ${TRAEGER_HOME} -B ${TRAEGER_BUILD} -DCMAKE_BUILD_TYPE=MinSizeRel -G Ninja
+RUN cmake --build ${TRAEGER_BUILD}
+RUN cmake --build ${TRAEGER_BUILD} --target test
+RUN cmake --install ${TRAEGER_BUILD}
+
+RUN cmake -S ${TRAEGER_HOME}/python -B ${TRAEGER_BUILD}/python -DCMAKE_BUILD_TYPE=MinSizeRel -G Ninja
+RUN cmake --build ${TRAEGER_BUILD}/python
+RUN cmake --install ${TRAEGER_BUILD}/python --prefix $(python3 -m site --user-site)
+ENV LD_LIBRARY_PATH=/usr/local/lib
