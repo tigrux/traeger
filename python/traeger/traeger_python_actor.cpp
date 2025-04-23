@@ -25,7 +25,7 @@ namespace
     namespace nb = nanobind;
     using namespace traeger;
 
-    auto result_from_value(Variant variant) -> Result
+    auto result_from_variant(Variant variant) -> Result
     {
         return {value_from_variant(std::move(variant))};
     }
@@ -143,11 +143,11 @@ namespace
         self.push(value_from_variant(variant));
     }
 
-    auto queue_next(const Queue &self) -> Value
+    auto queue_next(const Queue &self) -> Variant
     {
         if (auto optional = self.pop(); optional)
         {
-            return optional.value();
+            return value_to_variant(optional.value());
         }
         throw nb::stop_iteration();
     }
@@ -165,7 +165,7 @@ auto traeger_python_register_actor_types(nb::module_ &module) -> void
     result_class
         .def(nb::init<>())
         .def("__repr__", &result_repr)
-        .def_static("from_value", &result_from_value, nb::arg("value").none())
+        .def_static("from_value", &result_from_variant, nb::arg("value").none())
         .def_static("from_error", &result_from_error);
 
     scheduler_class

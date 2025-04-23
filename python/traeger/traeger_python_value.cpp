@@ -165,11 +165,11 @@ namespace
     }
 
     auto list_find(List &self,
-                   Int index) -> Value
+                   Int index) -> Variant
     {
         if (const auto *ptr_value = self.find(index); ptr_value)
         {
-            return *ptr_value;
+            return value_to_variant(*ptr_value);
         }
         throw nb::index_error("index out of range");
     }
@@ -199,13 +199,13 @@ namespace
         return self.begin();
     }
 
-    auto list_iterator_next(List::Iterator &self) -> Value
+    auto list_iterator_next(List::Iterator &self) -> Variant
     {
         if (self)
         {
             auto value = self.value();
             self.increment();
-            return value;
+            return value_to_variant(value);
         }
         throw nb::stop_iteration();
     }
@@ -216,11 +216,11 @@ namespace
     }
 
     auto map_find(Map &self,
-                  const String &key) -> Value
+                  const String &key) -> Variant
     {
         if (const auto *ptr_value = self.find(key); ptr_value)
         {
-            return *ptr_value;
+            return value_to_variant(*ptr_value);
         }
         throw nb::key_error("key not found");
     }

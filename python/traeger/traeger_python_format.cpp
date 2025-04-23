@@ -85,7 +85,7 @@ namespace
     }
 
     auto format_decode(Format &self,
-                       const nb::object &object) -> Value
+                       const nb::object &object) -> Variant
     {
         auto content = std::visit(
             overload{
@@ -98,7 +98,7 @@ namespace
         auto [result, error] = self.decode(content);
         if (result)
         {
-            return std::move(result).value();
+            return value_to_variant(std::move(result).value());
         }
         else
         {

@@ -32,7 +32,7 @@ class Actor(StatelessActor):
                         f"function takes {n_parameters} arguments but {n_arguments} were given"
                     )
                 args = [
-                    convert(param.annotation, value.get())
+                    convert(param.annotation, value)
                     for param, value in zip(parameters, arguments)
                 ]
                 result = method(state, *args)
