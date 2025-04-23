@@ -95,9 +95,10 @@ namespace traeger
                         { value_callback(value); });
                     value_callbacks_.pop();
                 }
-                while (!error_callbacks_.empty())
+                if (!error_callbacks_.empty())
                 {
-                    error_callbacks_.pop();
+                    ErrorCallbacks empty;
+                    error_callbacks_.swap(empty);
                 }
                 break;
             }
@@ -111,9 +112,10 @@ namespace traeger
                         { error_callback(error); });
                     error_callbacks_.pop();
                 }
-                while (!value_callbacks_.empty())
+                if (!value_callbacks_.empty())
                 {
-                    value_callbacks_.pop();
+                    ValueCallbacks empty;
+                    value_callbacks_.swap(empty);
                 }
                 break;
             }
