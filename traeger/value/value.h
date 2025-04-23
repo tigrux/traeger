@@ -52,8 +52,7 @@ extern "C"
     void traeger_list_append_value(traeger_list_t *self,
                                    const traeger_value_t *value);
 
-    void traeger_list_append_null(traeger_list_t *self,
-                                  void *);
+    void traeger_list_append_null(traeger_list_t *self);
 
     void traeger_list_append_bool(traeger_list_t *self,
                                   traeger_bool_t value);
@@ -82,8 +81,7 @@ extern "C"
                                 const traeger_value_t *value);
 
     void traeger_list_set_null(traeger_list_t *self,
-                               int index,
-                               void *);
+                               int index);
 
     void traeger_list_set_bool(traeger_list_t *self,
                                int index,
@@ -156,8 +154,7 @@ extern "C"
 
     void traeger_map_set_null(traeger_map_t *self,
                               const char *key_data,
-                              size_t key_size,
-                              void *);
+                              size_t key_size);
 
     void traeger_map_set_bool(traeger_map_t *self,
                               const char *key_data,
@@ -238,8 +235,7 @@ extern "C"
 
     const char *traeger_value_type_get_name(traeger_value_type_t type);
 
-    void traeger_value_set_null(traeger_value_t *self,
-                                void *);
+    void traeger_value_set_null(traeger_value_t *self);
 
     void traeger_value_set_bool(traeger_value_t *self,
                                 traeger_bool_t value);
@@ -266,7 +262,7 @@ extern "C"
     void traeger_value_set_value(traeger_value_t *self,
                                  const traeger_value_t *value);
 
-    bool traeger_value_get_null(const traeger_value_t *self, void *);
+    bool traeger_value_get_null(const traeger_value_t *self);
 
     bool traeger_value_get_bool(const traeger_value_t *self,
                                 traeger_bool_t *value);

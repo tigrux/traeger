@@ -104,8 +104,7 @@ extern "C"
         }
     }
 
-    void traeger_list_append_null(traeger_list_t *self,
-                                  void *)
+    void traeger_list_append_null(traeger_list_t *self)
     {
         if (self != nullptr)
         {
@@ -192,8 +191,7 @@ extern "C"
     }
 
     void traeger_list_set_null(traeger_list_t *self,
-                               int index,
-                               void *)
+                               int index)
     {
         if (self != nullptr)
         {
@@ -430,8 +428,7 @@ extern "C"
 
     void traeger_map_set_null(traeger_map_t *self,
                               const char *key_data,
-                              size_t key_size,
-                              void *)
+                              size_t key_size)
     {
         if (self != nullptr &&
             key_data != nullptr)
@@ -705,7 +702,7 @@ extern "C"
         return Value::type_name(value_type).c_str();
     }
 
-    void traeger_value_set_null(traeger_value_t *self, void *)
+    void traeger_value_set_null(traeger_value_t *self)
     {
         if (self != nullptr)
         {
@@ -789,8 +786,7 @@ extern "C"
         }
     }
 
-    bool traeger_value_get_null(const traeger_value_t *self,
-                                void *)
+    bool traeger_value_get_null(const traeger_value_t *self)
     {
         if (self != nullptr)
         {

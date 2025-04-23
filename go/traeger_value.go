@@ -148,7 +148,7 @@ func (list *List) Append(variant any) bool {
 }
 
 func (list *List) AppendNull(variant any) {
-	C.traeger_list_append_null(list.self, nil)
+	C.traeger_list_append_null(list.self)
 }
 
 func (list *List) AppendBool(variant bool) {
@@ -180,7 +180,7 @@ func (list *List) AppendMap(variant *Map) {
 }
 
 func (list *List) SetNull(index int, variant any) {
-	C.traeger_list_set_null(list.self, C.int(index), nil)
+	C.traeger_list_set_null(list.self, C.int(index))
 }
 
 func (list *List) SetBool(index int, variant bool) {
@@ -443,7 +443,7 @@ func (mapping *Map) Set(key string, variant any) bool {
 }
 
 func (mapping *Map) SetNull(key string, variant any) {
-	C.traeger_map_set_null(mapping.self, C._GoStringPtr(key), C._GoStringLen(key), nil)
+	C.traeger_map_set_null(mapping.self, C._GoStringPtr(key), C._GoStringLen(key))
 }
 
 func (mapping *Map) SetBool(key string, variant bool) {
@@ -668,7 +668,7 @@ func (value *Value) Set(variant any) bool {
 }
 
 func (value *Value) SetNull(any) {
-	C.traeger_value_set_null(value.self, nil)
+	C.traeger_value_set_null(value.self)
 }
 
 func (value *Value) SetBool(variant bool) {
@@ -716,7 +716,7 @@ func (valueType ValueType) GetName() string {
 }
 
 func (value *Value) GetNull() (any, bool) {
-	if C.traeger_value_get_null(value.self, nil) {
+	if C.traeger_value_get_null(value.self) {
 		return nil, true
 	}
 	return nil, false
