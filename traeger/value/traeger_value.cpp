@@ -350,7 +350,7 @@ extern "C"
         }
     }
 
-    bool traeger_list_iterator_has_next(traeger_list_iterator_t *self)
+    bool traeger_list_iterator_has_next(const traeger_list_iterator_t *self)
     {
         if (self != nullptr)
         {
@@ -625,7 +625,7 @@ extern "C"
         }
     }
 
-    bool traeger_map_iterator_has_next(traeger_map_iterator_t *self)
+    bool traeger_map_iterator_has_next(const traeger_map_iterator_t *self)
     {
         if (self != nullptr)
         {

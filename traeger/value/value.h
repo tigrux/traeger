@@ -130,7 +130,7 @@ extern "C"
 
     traeger_list_iterator_t *traeger_list_iterator_new(const traeger_list_t *self);
 
-    bool traeger_list_iterator_has_next(traeger_list_iterator_t *self);
+    bool traeger_list_iterator_has_next(const traeger_list_iterator_t *self);
 
     bool traeger_list_iterator_next(traeger_list_iterator_t *self,
                                     traeger_value_t **value);
@@ -219,7 +219,7 @@ extern "C"
 
     traeger_map_iterator_t *traeger_map_iterator_new(const traeger_map_t *self);
 
-    bool traeger_map_iterator_has_next(traeger_map_iterator_t *self);
+    bool traeger_map_iterator_has_next(const traeger_map_iterator_t *self);
 
     bool traeger_map_iterator_next(traeger_map_iterator_t *self,
                                    traeger_string_t **key,

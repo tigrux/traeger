@@ -47,9 +47,19 @@ namespace traeger
         return *static_cast<List::Iterator *>(iterator);
     }
 
+    inline auto cast(const traeger_list_iterator_t *iterator) noexcept -> const List::Iterator &
+    {
+        return *static_cast<const List::Iterator *>(iterator);
+    }
+
     inline auto cast(traeger_map_iterator_t *iterator) noexcept -> Map::Iterator &
     {
         return *static_cast<Map::Iterator *>(iterator);
+    }
+
+    inline auto cast(const traeger_map_iterator_t *iterator) noexcept -> const Map::Iterator &
+    {
+        return *static_cast<const Map::Iterator *>(iterator);
     }
 
     inline auto cast(Value::Type type) noexcept -> traeger_value_type_t
