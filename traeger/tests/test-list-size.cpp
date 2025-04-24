@@ -18,13 +18,13 @@ TEST_CASE("List.size")
             list.append(i);
             REQUIRE(list.size() == i);
         }
-        REQUIRE(Value{list} == make_list(1, 2, 3, 4, 5));
+        REQUIRE(list == make_list(1, 2, 3, 4, 5));
     }
 
     SECTION("size increases at once")
     {
         list.resize(5);
         REQUIRE(list.size() == 5);
-        REQUIRE(Value{list} == make_list(nullptr, nullptr, nullptr, nullptr, nullptr));
+        REQUIRE(list == make_list(nullptr, nullptr, nullptr, nullptr, nullptr));
     }
 }

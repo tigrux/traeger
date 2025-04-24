@@ -100,6 +100,10 @@ func (list *List) String() string {
 	return wrap_c_string(s).String()
 }
 
+func (list *List) Equal(other *List) bool {
+	return bool(C.traeger_list_equal(list.self, other.self))
+}
+
 func (list *List) Append(variant any) bool {
 	switch variant := variant.(type) {
 	case bool:
@@ -395,6 +399,10 @@ func (mapping *Map) String() string {
 	return wrap_c_string(str).String()
 }
 
+func (mapping *Map) Equal(other *Map) bool {
+	return bool(C.traeger_map_equal(mapping.self, other.self))
+}
+
 func (mapping *Map) Set(key string, variant any) bool {
 	switch variant := variant.(type) {
 	case bool:
@@ -618,6 +626,10 @@ func (value *Value) String() string {
 	var s *C.traeger_string_t
 	C.traeger_value_to_string(value.self, &s)
 	return wrap_c_string(s).String()
+}
+
+func (value *Value) Equal(other *Value) bool {
+	return bool(C.traeger_value_equal(value.self, other.self))
 }
 
 func (value *Value) Set(variant any) bool {

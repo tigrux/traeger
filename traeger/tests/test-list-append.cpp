@@ -14,14 +14,14 @@ TEST_CASE("List.append")
     SECTION("temporary")
     {
         list.append(true);
-        REQUIRE(Value{list} == make_list(true));
+        REQUIRE(list == make_list(true));
 
         SECTION("copies are not affected")
         {
             auto list2 = list;
             list.append(123);
-            REQUIRE(Value{list} == make_list(true, 123));
-            REQUIRE(Value{list2} == make_list(true));
+            REQUIRE(list == make_list(true, 123));
+            REQUIRE(list2 == make_list(true));
         }
     }
 
@@ -29,15 +29,15 @@ TEST_CASE("List.append")
     {
         Value value_1{true};
         list.append(value_1);
-        REQUIRE(Value{list} == make_list(true));
+        REQUIRE(list == make_list(true));
 
         SECTION("copies are not affected")
         {
             auto list2 = list;
             Value value_2{123};
             list.append(value_2);
-            REQUIRE(Value{list} == make_list(true, 123));
-            REQUIRE(Value{list2} == make_list(true));
+            REQUIRE(list == make_list(true, 123));
+            REQUIRE(list2 == make_list(true));
         }
     }
 
@@ -50,8 +50,8 @@ TEST_CASE("List.append")
         {
             auto list2 = list;
             list.append(Value{123});
-            REQUIRE(Value{list} == make_list(true, 123));
-            REQUIRE(Value{list2} == make_list(true));
+            REQUIRE(list == make_list(true, 123));
+            REQUIRE(list2 == make_list(true));
         }
     }
 }

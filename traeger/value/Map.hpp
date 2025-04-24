@@ -41,6 +41,10 @@ namespace traeger
 
         auto operator=(Map &&other) noexcept -> Map &;
 
+        auto operator==(const Map &other) const noexcept -> bool;
+
+        auto operator!=(const Map &other) const noexcept -> bool;
+
         auto set(const String &key,
                  const Value &value) noexcept -> void;
 

@@ -69,5 +69,5 @@ TEST_CASE("Context.publisher")
         }
     }
 
-    REQUIRE(Value{events} == make_list(10, 20, 30, 40, 50));
+    REQUIRE(events == make_list(10, 20, 30, 40, 50));
 }

@@ -14,14 +14,14 @@ TEST_CASE("Map.set")
     SECTION("temporary")
     {
         map.set("b", true);
-        REQUIRE(Value{map} == make_map("b", true));
+        REQUIRE(map == make_map("b", true));
 
         SECTION("copies are not affected")
         {
             auto map2 = map;
             map.set("i", 123);
-            REQUIRE(Value{map} == make_map("b", true, "i", 123));
-            REQUIRE(Value{map2} == make_map("b", true));
+            REQUIRE(map == make_map("b", true, "i", 123));
+            REQUIRE(map2 == make_map("b", true));
         }
     }
 
@@ -29,15 +29,15 @@ TEST_CASE("Map.set")
     {
         Value value_1{true};
         map.set("b", value_1);
-        REQUIRE(Value{map} == make_map("b", true));
+        REQUIRE(map == make_map("b", true));
 
         SECTION("copies are not affected")
         {
             auto map2 = map;
             Value value_2{123};
             map.set("i", value_2);
-            REQUIRE(Value{map} == make_map("b", true, "i", 123));
-            REQUIRE(Value{map2} == make_map("b", true));
+            REQUIRE(map == make_map("b", true, "i", 123));
+            REQUIRE(map2 == make_map("b", true));
         }
     }
 
@@ -50,8 +50,8 @@ TEST_CASE("Map.set")
         {
             auto map2 = map;
             map.set("i", Value{123});
-            REQUIRE(Value{map} == make_map("b", true, "i", 123));
-            REQUIRE(Value{map2} == make_map("b", true));
+            REQUIRE(map == make_map("b", true, "i", 123));
+            REQUIRE(map2 == make_map("b", true));
         }
     }
 }

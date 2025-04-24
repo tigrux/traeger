@@ -54,5 +54,5 @@ TEST_CASE("Context.subscriber")
     std::this_thread::sleep_for(50ms);
     auto events = List{};
     queue.pop(events);
-    REQUIRE(Value{events} == make_list(10, 20, 30, 40, 50));
+    REQUIRE(events == make_list(10, 20, 30, 40, 50));
 }

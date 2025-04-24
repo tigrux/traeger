@@ -25,5 +25,5 @@ TEST_CASE("Queue.push")
     {
         list.append(optional.value());
     }
-    REQUIRE(Value{list} == make_list(10, 20, 30));
+    REQUIRE(list == make_list(10, 20, 30));
 }

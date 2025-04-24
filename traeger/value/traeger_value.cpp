@@ -94,6 +94,17 @@ extern "C"
         }
     }
 
+    bool traeger_list_equal(const traeger_list_t *self,
+                            const traeger_list_t *other)
+    {
+        if (self != nullptr &&
+            other != nullptr)
+        {
+            return cast(self) == cast(other);
+        }
+        return false;
+    }
+
     void traeger_list_append_value(traeger_list_t *self,
                                    const traeger_value_t *value)
     {
@@ -411,6 +422,17 @@ extern "C"
         }
     }
 
+    bool traeger_map_equal(const traeger_map_t *self,
+                           const traeger_map_t *other)
+    {
+        if (self != nullptr &&
+            other != nullptr)
+        {
+            return cast(self) == cast(other);
+        }
+        return false;
+    }
+
     // Map::set
 
     void traeger_map_set_value(traeger_map_t *self,
@@ -676,6 +698,17 @@ extern "C"
         {
             *string = to_string(cast(self));
         }
+    }
+
+    bool traeger_value_equal(const traeger_value_t *self,
+                             const traeger_value_t *other)
+    {
+        if (self != nullptr &&
+            other != nullptr)
+        {
+            return cast(self) == cast(other);
+        }
+        return false;
     }
 
     traeger_value_type_t traeger_value_get_type(const traeger_value_t *self)

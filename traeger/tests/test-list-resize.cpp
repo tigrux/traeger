@@ -15,13 +15,13 @@ TEST_CASE("List.resize")
     {
         list.resize(5);
         REQUIRE(list.size() == 5);
-        REQUIRE(Value{list} == make_list(10, 20, 30, nullptr, nullptr));
+        REQUIRE(list == make_list(10, 20, 30, nullptr, nullptr));
     }
 
     SECTION("smaller size removes values")
     {
         list.resize(2);
-        REQUIRE(Value{list} == make_list(10, 20));
+        REQUIRE(list == make_list(10, 20));
         REQUIRE(list.size() == 2);
     }
 
@@ -29,6 +29,6 @@ TEST_CASE("List.resize")
     {
         list.resize(3);
         REQUIRE(list.size() == 3);
-        REQUIRE(Value{list} == make_list(10, 20, 30));
+        REQUIRE(list == make_list(10, 20, 30));
     }
 }

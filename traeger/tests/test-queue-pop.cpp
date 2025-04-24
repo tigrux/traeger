@@ -42,5 +42,5 @@ TEST_CASE("Queue.pop")
     {
         list.append(optional_value.value());
     }
-    REQUIRE(Value{list} == make_list(10, 20, 30, 40, 50, 60, 70, 80));
+    REQUIRE(list == make_list(10, 20, 30, 40, 50, 60, 70, 80));
 }

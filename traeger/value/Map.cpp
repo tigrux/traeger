@@ -97,6 +97,16 @@ namespace traeger
         return *this;
     }
 
+    auto Map::operator==(const Map &other) const noexcept -> bool
+    {
+        return impl().persistent() == other.impl().persistent();
+    }
+
+    auto Map::operator!=(const Map &other) const noexcept -> bool
+    {
+        return impl().persistent() != other.impl().persistent();
+    }
+
     auto Map::set(const String &key,
                   const Value &value) noexcept -> void
     {

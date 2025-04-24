@@ -23,5 +23,5 @@ TEST_CASE("Queue.close")
     REQUIRE(queue.count() == 3);
     auto list = List{};
     queue.pop(list);
-    REQUIRE(Value{list} == make_list(10, 20, 30));
+    REQUIRE(list == make_list(10, 20, 30));
 }

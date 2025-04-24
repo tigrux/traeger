@@ -324,6 +324,8 @@ auto traeger_python_register_value_types(nb::module_ &module) -> void
         .def("resize", &List::resize)
         .def("__repr__", &list_repr)
         .def("__str__", &type_str<List>)
+        .def("__eq__", &List::operator==)
+        .def("__ne__", &List::operator!=)
         .def("__len__", &List::size)
         .def("__bool__", &type_bool<List>)
         .def("__getitem__", &list_find)
@@ -340,6 +342,8 @@ auto traeger_python_register_value_types(nb::module_ &module) -> void
         .def("copy", &type_copy<Map>)
         .def("__repr__", &map_repr)
         .def("__str__", &type_str<Map>)
+        .def("__eq__", &Map::operator==)
+        .def("__ne__", &Map::operator!=)
         .def("__len__", &Map::size)
         .def("__bool__", &type_bool<Map>)
         .def("__contains__", &Map::contains)
@@ -375,7 +379,9 @@ auto traeger_python_register_value_types(nb::module_ &module) -> void
         .def("set", &value_set_variant, nb::arg("value").none())
         .def("copy", &type_copy<Value>)
         .def("__repr__", &value_repr)
-        .def("__str__", &type_str<Value>);
+        .def("__str__", &type_str<Value>)
+        .def("__eq__", &Value::operator==)
+        .def("__ne__", &Value::operator!=);
 
     value_type_enum
         .value("Null", Value::Type::Null)

@@ -21,5 +21,5 @@ TEST_CASE("Map.size")
             REQUIRE(map.size() == i + 1);
         }
     }
-    REQUIRE(Value{map} == make_map("A", 1, "B", 2, "C", 3, "D", 4, "E", 5));
+    REQUIRE(map == make_map("A", 1, "B", 2, "C", 3, "D", 4, "E", 5));
 }

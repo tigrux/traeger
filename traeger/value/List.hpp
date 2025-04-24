@@ -45,6 +45,10 @@ namespace traeger
 
         auto operator=(List &&other) noexcept -> List &;
 
+        auto operator==(const List &other) const noexcept -> bool;
+
+        auto operator!=(const List &other) const noexcept -> bool;
+
         auto append(const Value &value) noexcept -> void;
 
         auto append(Value &&value) noexcept -> void;

@@ -96,6 +96,16 @@ namespace traeger
         return *this;
     }
 
+    auto List::operator==(const List &other) const noexcept -> bool
+    {
+        return impl().persistent() == other.impl().persistent();
+    }
+
+    auto List::operator!=(const List &other) const noexcept -> bool
+    {
+        return impl().persistent() != other.impl().persistent();
+    }
+
     auto List::append(const Value &value) noexcept -> void
     {
         impl().list.push_back(value);

@@ -49,6 +49,9 @@ extern "C"
     void traeger_list_to_string(const traeger_list_t *self,
                                 traeger_string_t **string);
 
+    bool traeger_list_equal(const traeger_list_t *self,
+                            const traeger_list_t *other);
+
     void traeger_list_append_value(traeger_list_t *self,
                                    const traeger_value_t *value);
 
@@ -147,6 +150,9 @@ extern "C"
     void traeger_map_to_string(const traeger_map_t *self,
                                traeger_string_t **string);
 
+    bool traeger_map_equal(const traeger_map_t *self,
+                           const traeger_map_t *other);
+
     void traeger_map_set_value(traeger_map_t *self,
                                const char *key_data,
                                size_t key_size,
@@ -229,6 +235,14 @@ extern "C"
 
     void traeger_value_free(traeger_value_t *self);
 
+    void traeger_value_print(const traeger_value_t *self);
+
+    void traeger_value_to_string(const traeger_value_t *self,
+                                 traeger_string_t **string);
+
+    bool traeger_value_equal(const traeger_value_t *self,
+                             const traeger_value_t *other);
+
     traeger_value_type_t traeger_value_get_type(const traeger_value_t *self);
 
     const char *traeger_value_get_type_name(const traeger_value_t *self);
@@ -284,11 +298,6 @@ extern "C"
 
     bool traeger_value_get_map(const traeger_value_t *self,
                                traeger_map_t **map);
-
-    void traeger_value_print(const traeger_value_t *self);
-
-    void traeger_value_to_string(const traeger_value_t *self,
-                                 traeger_string_t **string);
 
 #ifdef __cplusplus
 }
