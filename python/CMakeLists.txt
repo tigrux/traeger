@@ -52,7 +52,7 @@ add_subdirectory(traeger)
 
 if(CALL_FROM_SETUP_PY)
     install(FILES traeger/__init__.py DESTINATION traeger)
-    install(TARGETS traeger_python DESTINATION traeger)
+    install(TARGETS traeger DESTINATION traeger)
 else()
     message(AUTHOR_WARNING "The Python bindings should be installed via pip")
     execute_process(
@@ -65,6 +65,6 @@ else()
             FILES traeger/__init__.py
             DESTINATION ${PYTHON_USER_SITE}/traeger
         )
-        install(TARGETS traeger_python DESTINATION ${PYTHON_USER_SITE}/traeger)
+        install(TARGETS traeger DESTINATION ${PYTHON_USER_SITE}/traeger)
     endif()
 endif()

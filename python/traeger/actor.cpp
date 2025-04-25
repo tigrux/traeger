@@ -18,7 +18,7 @@
 #include <traeger/actor/Scheduler.hpp>
 #include <traeger/actor/StatelessActor.hpp>
 
-#include "traeger_python.hpp"
+#include "traeger.hpp"
 
 namespace
 {

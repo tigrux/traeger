@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: BSL-1.0
 
-#include "traeger_python.hpp"
+#include "traeger.hpp"
 
 NB_MODULE(traeger, module)
 {

@@ -14,7 +14,7 @@
 #include <traeger/socket/Publisher.hpp>
 #include <traeger/socket/Subscriber.hpp>
 
-#include "traeger_python.hpp"
+#include "traeger.hpp"
 
 namespace
 {

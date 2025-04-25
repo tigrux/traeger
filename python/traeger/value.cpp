@@ -9,7 +9,7 @@
 #include <traeger/value/Variant.hpp>
 #include <traeger/value/Value.hpp>
 
-#include "traeger_python.hpp"
+#include "traeger.hpp"
 
 namespace
 {

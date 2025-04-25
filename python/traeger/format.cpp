@@ -11,7 +11,7 @@
 #include <traeger/value/Value.hpp>
 #include <traeger/format/Format.hpp>
 
-#include "traeger_python.hpp"
+#include "traeger.hpp"
 
 namespace
 {
