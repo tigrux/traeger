@@ -45,6 +45,10 @@ func FromBytes(bytes []byte) *String {
 			C.size_t(len(bytes))))
 }
 
+func (str *String) Copy() *String {
+	return wrap_c_string(C.traeger_string_copy(str.self))
+}
+
 func (str *String) String() string {
 	return C.GoStringN(
 		C.traeger_string_data(str.self),
@@ -55,6 +59,10 @@ func (str *String) Bytes() []byte {
 	return C.GoBytes(
 		unsafe.Pointer(C.traeger_string_data(str.self)),
 		C.int(C.traeger_string_size(str.self)))
+}
+
+func (str *String) Equal(other *String) bool {
+	return bool(C.traeger_string_equal(str.self, other.self))
 }
 
 // List

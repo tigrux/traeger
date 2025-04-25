@@ -34,6 +34,15 @@ extern "C"
         return nullptr;
     }
 
+    traeger_string_t *traeger_string_copy(const traeger_string_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_string_t{cast(self)};
+        }
+        return nullptr;
+    }
+
     void traeger_string_free(traeger_string_t *self)
     {
         if (self != nullptr)
@@ -50,6 +59,17 @@ extern "C"
     size_t traeger_string_size(const traeger_string_t *self)
     {
         return cast(self).size();
+    }
+
+    bool traeger_string_equal(const traeger_string_t *self,
+                              const traeger_string_t *other)
+    {
+        if (self != nullptr &&
+            other != nullptr)
+        {
+            return cast(self) == cast(other);
+        }
+        return false;
     }
 
     // List

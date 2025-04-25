@@ -30,11 +30,16 @@ extern "C"
     traeger_string_t *traeger_string_new(const char *string_data,
                                          size_t string_size);
 
+    traeger_string_t *traeger_string_copy(const traeger_string_t *self);
+
     void traeger_string_free(traeger_string_t *self);
 
     const char *traeger_string_data(const traeger_string_t *self);
 
     size_t traeger_string_size(const traeger_string_t *self);
+
+    bool traeger_string_equal(const traeger_string_t *self,
+                              const traeger_string_t *other);
 
     // List
 
