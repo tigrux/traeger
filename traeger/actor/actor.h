@@ -193,8 +193,7 @@ extern "C"
 
     size_t traeger_queue_count(const traeger_queue_t *self);
 
-    bool traeger_queue_push_null(const traeger_queue_t *self,
-                                 void *);
+    bool traeger_queue_push_null(const traeger_queue_t *self);
 
     bool traeger_queue_push_bool(const traeger_queue_t *self,
                                  traeger_bool_t value);

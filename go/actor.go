@@ -531,7 +531,7 @@ func (queue *Queue) Push(variant any) bool {
 }
 
 func (queue *Queue) PushNull(variant any) bool {
-	return bool(C.traeger_queue_push_null(queue.self, nil))
+	return bool(C.traeger_queue_push_null(queue.self))
 }
 
 func (queue *Queue) PushBool(variant bool) bool {

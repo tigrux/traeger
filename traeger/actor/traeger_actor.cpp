@@ -548,7 +548,7 @@ extern "C"
         return false;
     }
 
-    bool traeger_queue_push_null(const traeger_queue_t *self, void *)
+    bool traeger_queue_push_null(const traeger_queue_t *self)
     {
         if (self != nullptr)
         {
