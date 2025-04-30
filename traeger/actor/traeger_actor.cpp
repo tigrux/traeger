@@ -212,25 +212,26 @@ extern "C"
         }
     }
 
-    bool traeger_result_get_value_or_error(const traeger_result_t *self,
-                                           traeger_value_t **value,
-                                           traeger_string_t **error)
+    traeger_result_type_t
+    traeger_result_get_value_or_error(const traeger_result_t *self,
+                                      traeger_value_t **value,
+                                      traeger_string_t **error)
     {
         if (self != nullptr)
         {
             switch (cast(self).type())
             {
             case Result::Type::Undefined:
-                return false;
+                return TRAEGER_RESULT_TYPE_UNDEFINED;
             case Result::Type::Value:
                 *value = new traeger_value_t{*cast(self).value()};
-                return true;
+                return TRAEGER_RESULT_TYPE_VALUE;
             case Result::Type::Error:
                 *error = new traeger_string_t{*cast(self).error()};
-                return false;
+                return TRAEGER_RESULT_TYPE_ERROR;
             }
         }
-        return false;
+        return TRAEGER_RESULT_TYPE_UNDEFINED;
     }
 
     // Function

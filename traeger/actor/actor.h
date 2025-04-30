@@ -20,6 +20,13 @@ typedef struct traeger_queue_t traeger_queue_t;
 
 typedef struct traeger_group_t traeger_group_t;
 
+typedef enum traeger_result_type_t
+{
+    TRAEGER_RESULT_TYPE_UNDEFINED = 0,
+    TRAEGER_RESULT_TYPE_VALUE = 1,
+    TRAEGER_RESULT_TYPE_ERROR = 2,
+} traeger_result_type_t;
+
 #ifdef __cplusplus
 extern "C"
 {
@@ -69,9 +76,10 @@ extern "C"
     void traeger_result_set_result(traeger_result_t *self,
                                    const traeger_result_t *result);
 
-    bool traeger_result_get_value_or_error(const traeger_result_t *self,
-                                           traeger_value_t **value,
-                                           traeger_string_t **error);
+    traeger_result_type_t
+    traeger_result_get_value_or_error(const traeger_result_t *self,
+                                      traeger_value_t **value,
+                                      traeger_string_t **error);
 
     // Function
 

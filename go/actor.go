@@ -130,13 +130,13 @@ func MakeResult(variant any) *Result {
 func (result *Result) GetValueOrError() (*Value, error) {
 	var value *C.traeger_value_t
 	var err *C.traeger_string_t
-	if C.traeger_result_get_value_or_error(result.self, &value, &err) {
+	switch C.traeger_result_get_value_or_error(result.self, &value, &err) {
+	case C.TRAEGER_RESULT_TYPE_VALUE:
 		return wrap_c_value(value), nil
-	} else if err != nil {
+	case C.TRAEGER_RESULT_TYPE_ERROR:
 		return nil, errors.New(wrap_c_string(err).String())
-	} else {
-		return nil, nil
 	}
+	return nil, nil
 }
 
 func (result *Result) Set(variant any) bool {
