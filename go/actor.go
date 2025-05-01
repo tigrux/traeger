@@ -13,15 +13,15 @@ import (
 #cgo LDFLAGS: -ltraeger_actor
 #include <traeger/actor/actor.h>
 
-extern void traeger_go_promise_result_callback(traeger_value_t *value,
+extern void traeger_go_promise_result_callback(const traeger_value_t *value,
                                                traeger_closure_t closure,
                                                traeger_result_t *result);
 
-extern void traeger_go_promise_promise_callback(traeger_value_t *value,
+extern void traeger_go_promise_promise_callback(const traeger_value_t *value,
                                                 traeger_closure_t closure,
-                                                traeger_promise_t *promise);
+                                                const traeger_promise_t *promise);
 
-extern void traeger_go_promise_error_callback(traeger_string_t *error, traeger_closure_t handle);
+extern void traeger_go_promise_error_callback(const traeger_string_t *error, traeger_closure_t handle);
 
 extern void traeger_go_closure_free(traeger_closure_t handle);
 
@@ -69,34 +69,19 @@ static inline void traeger_go_scheduler_schedule_delayed(traeger_scheduler_t *se
                                        closure, traeger_go_closure_free);
 }
 
-extern void traeger_go_function_callback(traeger_list_t *arguments,
+extern void traeger_go_function_callback(const traeger_list_t *arguments,
                                          traeger_closure_t closure,
                                          traeger_result_t *result);
 
 extern void traeger_go_closure_free(traeger_closure_t handle);
 
-static inline void
-traeger_go_actor_define_reader(const traeger_actor_t *self,
-                               const char *name_data, size_t name_size,
-                               uintptr_t handle)
+static inline traeger_function_t *
+traeger_go_function_new(uintptr_t handle)
 {
     void *closure = (void*)handle;
-    traeger_actor_define_reader(self,
-                                name_data, name_size,
-                                traeger_go_function_callback,
-                                closure, traeger_go_closure_free);
-}
-
-static inline void
-traeger_go_actor_define_writer(const traeger_actor_t *self,
-                               const char *name_data, size_t name_size,
-                               uintptr_t handle)
-{
-    void *closure = (void*)handle;
-    traeger_actor_define_writer(self,
-                                name_data, name_size,
-                                traeger_go_function_callback,
-                                closure, traeger_go_closure_free);
+	return traeger_function_new(traeger_go_function_callback,
+	                            closure,
+								traeger_go_closure_free);
 }
 */
 import "C"
@@ -237,6 +222,36 @@ func (result *Result) SetError(err error) {
 	C.traeger_result_set_error(result.self, C._GoStringPtr(str), C._GoStringLen(str))
 }
 
+// Function
+
+type FunctionFunc func(arguments *List) (any, error)
+
+type Function struct {
+	self *C.traeger_function_t
+}
+
+func FreeFunction(function *Function) {
+	C.traeger_function_free(function.self)
+}
+
+func wrap_c_function(self *C.traeger_function_t) *Function {
+	function := Function{self}
+	runtime.SetFinalizer(&function, FreeFunction)
+	return &function
+}
+
+func NewFunction(functionFunc FunctionFunc) *Function {
+	handle := cgo.NewHandle(functionFunc)
+	return wrap_c_function(C.traeger_go_function_new(C.uintptr_t(handle)))
+}
+
+func (function *Function) Call(arguments *List) (any, error) {
+	var c_result *C.traeger_result_t
+	C.traeger_function_call(function.self, arguments.self, &c_result)
+	result := wrap_c_result(c_result)
+	return result.GetValueOrError()
+}
+
 // Promise
 
 type PromiseResultFunc func(value *Value) (any, error)
@@ -246,7 +261,7 @@ type PromisePromiseFunc func(value *Value) *Promise
 type PromiseErrorFunc func(err error)
 
 //export traeger_go_promise_result_callback
-func traeger_go_promise_result_callback(c_value *C.traeger_value_t, closure C.traeger_closure_t, c_result *C.traeger_result_t) {
+func traeger_go_promise_result_callback(c_value *C.traeger_const_value_t, closure C.traeger_closure_t, c_result *C.traeger_result_t) {
 	handle := cgo.Handle(closure)
 	valueFunc := handle.Value().(PromiseResultFunc)
 	value := wrap_c_value(c_value)
@@ -260,7 +275,7 @@ func traeger_go_promise_result_callback(c_value *C.traeger_value_t, closure C.tr
 }
 
 //export traeger_go_promise_promise_callback
-func traeger_go_promise_promise_callback(c_value *C.traeger_value_t, closure C.traeger_closure_t, c_promise *C.traeger_promise_t) {
+func traeger_go_promise_promise_callback(c_value *C.traeger_const_value_t, closure C.traeger_closure_t, c_promise *C.traeger_const_promise_t) {
 	handle := cgo.Handle(closure)
 	resultFunc := handle.Value().(PromisePromiseFunc)
 	value := wrap_c_value(c_value)
@@ -270,7 +285,7 @@ func traeger_go_promise_promise_callback(c_value *C.traeger_value_t, closure C.t
 }
 
 //export traeger_go_promise_error_callback
-func traeger_go_promise_error_callback(c_error *C.traeger_string_t, closure C.traeger_closure_t) {
+func traeger_go_promise_error_callback(c_error *C.traeger_const_string_t, closure C.traeger_closure_t) {
 	handle := cgo.Handle(closure)
 	errorFunc := handle.Value().(PromiseErrorFunc)
 	err := String{c_error}
@@ -402,12 +417,10 @@ func (mailbox *Mailbox) Send(sched *Scheduler, name string, arguments ...any) *P
 
 // Actor
 
-type FunctionFunc func(arguments *List) (any, error)
-
 type MethodFunc[State any] func(state *State, values *List) (any, error)
 
 //export traeger_go_function_callback
-func traeger_go_function_callback(c_arguments *C.traeger_list_t, closure C.traeger_closure_t, c_result *C.traeger_result_t) {
+func traeger_go_function_callback(c_arguments *C.traeger_const_list_t, closure C.traeger_closure_t, c_result *C.traeger_result_t) {
 	h := cgo.Handle(closure)
 	functionFunc := h.Value().(FunctionFunc)
 	arguments := &List{c_arguments}
@@ -448,25 +461,23 @@ func MakeActor[State any](state *State) *Actor[State] {
 }
 
 func (actor *Actor[State]) DefineReader(name string, methodFunc MethodFunc[State]) {
-	var functionFunc FunctionFunc = func(arguments *List) (any, error) {
+	function := NewFunction(func(arguments *List) (any, error) {
 		return methodFunc(actor.state, arguments)
-	}
-	handle := cgo.NewHandle(functionFunc)
-	C.traeger_go_actor_define_reader(
+	})
+	C.traeger_actor_define_reader(
 		actor.BaseActor.self,
 		C._GoStringPtr(name), C._GoStringLen(name),
-		C.uintptr_t(handle))
+		function.self)
 }
 
 func (actor *Actor[State]) DefineWriter(name string, methodFunc MethodFunc[State]) {
-	var functionFunc FunctionFunc = func(arguments *List) (any, error) {
+	function := NewFunction(func(arguments *List) (any, error) {
 		return methodFunc(actor.state, arguments)
-	}
-	handle := cgo.NewHandle(functionFunc)
-	C.traeger_go_actor_define_writer(
+	})
+	C.traeger_actor_define_writer(
 		actor.BaseActor.self,
 		C._GoStringPtr(name), C._GoStringLen(name),
-		C.uintptr_t(handle))
+		function.self)
 }
 
 // Queue

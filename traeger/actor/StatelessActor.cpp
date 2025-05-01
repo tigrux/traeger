@@ -158,9 +158,9 @@ namespace traeger
 
         auto define(const String &name,
                     concurrency_type concurrency,
-                    Function &&function) noexcept -> void
+                    const Function &function) noexcept -> void
         {
-            functions_.set(name, std::make_pair(concurrency, std::move(function)));
+            functions_.set(name, std::make_pair(concurrency, function));
         }
 
         auto mailbox() const noexcept -> std::shared_ptr<mailbox_impl_type>
@@ -188,15 +188,15 @@ namespace traeger
     }
 
     auto StatelessActor::define_writer(const String &name,
-                                       Function &&function) const noexcept -> void
+                                       const Function &function) const noexcept -> void
     {
-        impl_->define(name, impl_type::concurrency_type::EXCLUSIVE, std::move(function));
+        impl_->define(name, impl_type::concurrency_type::EXCLUSIVE, function);
     }
 
     auto StatelessActor::define_reader(const String &name,
-                                       Function &&function) const noexcept -> void
+                                       const Function &function) const noexcept -> void
     {
-        impl_->define(name, impl_type::concurrency_type::SHARED, std::move(function));
+        impl_->define(name, impl_type::concurrency_type::SHARED, function);
     }
 
     auto StatelessActor::mailbox() const noexcept -> Mailbox

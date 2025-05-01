@@ -23,10 +23,10 @@ namespace traeger
         StatelessActor(StatelessActor &&other) noexcept;
 
         auto define_reader(const String &name,
-                           Function &&function) const noexcept -> void;
+                           const Function &function) const noexcept -> void;
 
         auto define_writer(const String &name,
-                           Function &&function) const noexcept -> void;
+                           const Function &function) const noexcept -> void;
 
         auto mailbox() const noexcept -> Mailbox;
 

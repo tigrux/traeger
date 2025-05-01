@@ -12,6 +12,8 @@ typedef struct traeger_scheduler_t traeger_scheduler_t;
 
 typedef struct traeger_promise_t traeger_promise_t;
 
+typedef const traeger_promise_t traeger_const_promise_t;
+
 typedef struct traeger_mailbox_t traeger_mailbox_t;
 
 typedef struct traeger_actor_t traeger_actor_t;
@@ -138,7 +140,7 @@ extern "C"
                                                       traeger_closure_t closure,
                                                       traeger_result_t *result);
 
-    typedef void (*traeger_promise_promise_callback_t)(traeger_value_t *value,
+    typedef void (*traeger_promise_promise_callback_t)(const traeger_value_t *value,
                                                        traeger_closure_t closure,
                                                        const traeger_promise_t *promise);
 
@@ -181,16 +183,12 @@ extern "C"
     void traeger_actor_define_reader(const traeger_actor_t *self,
                                      const char *name_data,
                                      size_t name_size,
-                                     traeger_function_callback_t function_callback,
-                                     traeger_closure_t closure,
-                                     traeger_closure_free_t closure_free);
+                                     const traeger_function_t *function);
 
     void traeger_actor_define_writer(const traeger_actor_t *self,
                                      const char *name_data,
                                      size_t name_size,
-                                     traeger_function_callback_t function_callback,
-                                     traeger_closure_t closure,
-                                     traeger_closure_free_t closure_free);
+                                     const traeger_function_t *function);
 
     // Queue
 

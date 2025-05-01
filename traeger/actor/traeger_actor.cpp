@@ -480,38 +480,30 @@ extern "C"
     void traeger_actor_define_reader(const traeger_actor_t *self,
                                      const char *name_data,
                                      size_t name_size,
-                                     traeger_function_callback_t function_callback,
-                                     traeger_closure_t closure,
-                                     traeger_closure_free_t closure_free)
+                                     const traeger_function_t *function)
     {
         if (self != nullptr &&
             name_data != nullptr &&
-            function_callback != nullptr &&
-            closure != nullptr &&
-            closure_free != nullptr)
+            function != nullptr)
         {
             cast(self).define_reader(
                 String(name_data, name_size),
-                make_function(function_callback, closure, closure_free));
+                cast(function));
         }
     }
 
     void traeger_actor_define_writer(const traeger_actor_t *self,
                                      const char *name_data,
                                      size_t name_size,
-                                     traeger_function_callback_t function_callback,
-                                     traeger_closure_t closure,
-                                     traeger_closure_free_t closure_free)
+                                     const traeger_function_t *function)
     {
         if (self != nullptr &&
             name_data != nullptr &&
-            function_callback != nullptr &&
-            closure != nullptr &&
-            closure_free != nullptr)
+            function != nullptr)
         {
             cast(self).define_writer(
                 String(name_data, name_size),
-                make_function(function_callback, closure, closure_free));
+                cast(function));
         }
     }
 
