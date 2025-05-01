@@ -93,9 +93,10 @@ extern "C"
 
     void traeger_function_free(traeger_function_t *self);
 
-    bool traeger_function_call(const traeger_function_t *self,
-                               const traeger_list_t *arguments,
-                               traeger_result_t **result);
+    traeger_result_type_t
+    traeger_function_call(const traeger_function_t *self,
+                          const traeger_list_t *arguments,
+                          traeger_result_t **result);
 
     // Scheduler
 

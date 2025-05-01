@@ -257,18 +257,27 @@ extern "C"
         }
     }
 
-    bool traeger_function_call(const traeger_function_t *self,
-                               const traeger_list_t *arguments,
-                               traeger_result_t **result)
+    traeger_result_type_t
+    traeger_function_call(const traeger_function_t *self,
+                          const traeger_list_t *arguments,
+                          traeger_result_t **result)
     {
         if (self != nullptr &&
             arguments != nullptr &&
             result != nullptr)
         {
             *result = new traeger_result_t{cast(self)(cast(arguments))};
-            return (*result)->type() == Result::Type::Value;
+            switch ((*result)->type())
+            {
+            case Result::Type::Undefined:
+                return TRAEGER_RESULT_TYPE_UNDEFINED;
+            case Result::Type::Value:
+                return TRAEGER_RESULT_TYPE_VALUE;
+            case Result::Type::Error:
+                return TRAEGER_RESULT_TYPE_ERROR;
+            }
         }
-        return false;
+        return TRAEGER_RESULT_TYPE_UNDEFINED;
     }
 
     // Scheduler
