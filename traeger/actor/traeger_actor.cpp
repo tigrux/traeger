@@ -336,7 +336,7 @@ extern "C"
 
     // Promise
 
-    traeger_promise_t *traeger_promise_new(traeger_scheduler_t *scheduler)
+    traeger_promise_t *traeger_promise_new(const traeger_scheduler_t *scheduler)
     {
         if (scheduler != nullptr)
         {

@@ -83,7 +83,7 @@ extern "C"
 
     // Function
 
-    typedef void (*traeger_function_callback_t)(traeger_list_t *arguments,
+    typedef void (*traeger_function_callback_t)(const traeger_list_t *arguments,
                                                 traeger_closure_t closure,
                                                 traeger_result_t *result);
 
@@ -121,7 +121,7 @@ extern "C"
 
     // Promise
 
-    traeger_promise_t *traeger_promise_new(traeger_scheduler_t *scheduler);
+    traeger_promise_t *traeger_promise_new(const traeger_scheduler_t *scheduler);
 
     void traeger_promise_free(traeger_promise_t *self);
 
@@ -134,13 +134,13 @@ extern "C"
     void traeger_promise_set_promise(traeger_promise_t *self,
                                      const traeger_promise_t *promise);
 
-    typedef void (*traeger_promise_result_callback_t)(traeger_value_t *value,
+    typedef void (*traeger_promise_result_callback_t)(const traeger_value_t *value,
                                                       traeger_closure_t closure,
                                                       traeger_result_t *result);
 
     typedef void (*traeger_promise_promise_callback_t)(traeger_value_t *value,
                                                        traeger_closure_t closure,
-                                                       traeger_promise_t *promise);
+                                                       const traeger_promise_t *promise);
 
     traeger_promise_t *traeger_promise_then_result(const traeger_promise_t *self,
                                                    traeger_promise_result_callback_t result_callback,
@@ -152,7 +152,7 @@ extern "C"
                                                     traeger_closure_t closure,
                                                     traeger_closure_free_t closure_free);
 
-    typedef void (*traeger_promise_error_callback_t)(traeger_string_t *error,
+    typedef void (*traeger_promise_error_callback_t)(const traeger_string_t *error,
                                                      traeger_closure_t closure);
 
     void traeger_promise_fail(const traeger_promise_t *self,
