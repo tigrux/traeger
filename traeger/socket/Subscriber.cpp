@@ -66,7 +66,7 @@ namespace
             return;
         }
         const auto recv_promise = listen_closure->subscriber.recv(listen_closure->scheduler);
-        recv_promise.set_promise(listen_closure->promise);
+        recv_promise.set_result_from_promise(listen_closure->promise);
         recv_promise.then(
             [listen_closure](const Value &value) -> Result
             {

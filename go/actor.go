@@ -19,7 +19,7 @@ extern void traeger_go_promise_result_callback(const traeger_value_t *value,
 
 extern void traeger_go_promise_promise_callback(const traeger_value_t *value,
                                                 traeger_closure_t closure,
-                                                const traeger_promise_t *promise);
+                                                traeger_promise_t *promise);
 
 extern void traeger_go_promise_error_callback(const traeger_string_t *error, traeger_closure_t handle);
 
@@ -275,7 +275,7 @@ func traeger_go_promise_result_callback(c_value *C.traeger_const_value_t, closur
 }
 
 //export traeger_go_promise_promise_callback
-func traeger_go_promise_promise_callback(c_value *C.traeger_const_value_t, closure C.traeger_closure_t, c_promise *C.traeger_const_promise_t) {
+func traeger_go_promise_promise_callback(c_value *C.traeger_const_value_t, closure C.traeger_closure_t, c_promise *C.traeger_promise_t) {
 	handle := cgo.Handle(closure)
 	resultFunc := handle.Value().(PromisePromiseFunc)
 	value := wrap_c_value(c_value)

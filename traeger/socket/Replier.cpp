@@ -92,7 +92,7 @@ namespace
         }
 
         const auto recv_promise = reply_closure->router.recv(reply_closure->scheduler);
-        recv_promise.set_promise(reply_closure->promise);
+        recv_promise.set_result_from_promise(reply_closure->promise);
         recv_promise.then(
             [reply_closure](const Value &value) -> Result
             {

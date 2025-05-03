@@ -202,16 +202,6 @@ extern "C"
         }
     }
 
-    void traeger_promise_set_promise(traeger_promise_t *self,
-                                     const traeger_promise_t *promise)
-    {
-        if (self != nullptr &&
-            promise != nullptr)
-        {
-            cast(self) = cast(promise);
-        }
-    }
-
     traeger_result_type_t
     traeger_result_get_value_or_error(const traeger_result_t *self,
                                       traeger_value_t **value,
@@ -353,6 +343,26 @@ extern "C"
         }
     }
 
+    void traeger_promise_set_promise(traeger_promise_t *self,
+                                     const traeger_promise_t *promise)
+    {
+        if (self != nullptr &&
+            promise != nullptr)
+        {
+            cast(self) = cast(promise);
+        }
+    }
+
+    void traeger_promise_get_result(const traeger_promise_t *self,
+                                    traeger_result_t **result)
+    {
+        if (self != nullptr &&
+            result != nullptr)
+        {
+            *result = new traeger_result_t{cast(self).result()};
+        }
+    }
+
     bool traeger_promise_set_result(const traeger_promise_t *self,
                                     const traeger_result_t *result)
     {
@@ -364,13 +374,13 @@ extern "C"
         return false;
     }
 
-    void traeger_promise_get_result(const traeger_promise_t *self,
-                                    traeger_result_t **result)
+    void traeger_promise_set_result_from_promise(const traeger_promise_t *self,
+                                                 const traeger_promise_t *promise)
     {
         if (self != nullptr &&
-            result != nullptr)
+            promise != nullptr)
         {
-            *result = new traeger_result_t{cast(self).result()};
+            cast(self).set_result_from_promise(cast(promise));
         }
     }
 

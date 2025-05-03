@@ -50,7 +50,7 @@ namespace traeger
             Promise promise{scheduler_};
             value_callbacks_.push(
                 [promise, promise_callback = std::move(promise_callback)](const Value &value)
-                { promise.set_promise(promise_callback(value)); });
+                { promise.set_result_from_promise(promise_callback(value)); });
             error_callbacks_.push([promise](const Error &error)
                                   { promise.set_result(error); });
             schedule_callbacks();
@@ -184,7 +184,7 @@ namespace traeger
         return impl_->set(std::move(result));
     }
 
-    auto Promise::set_promise(const Promise &promise) const noexcept -> void
+    auto Promise::set_result_from_promise(const Promise &promise) const noexcept -> void
     {
         promise.then(
             [impl = impl_](const Value &value) -> Result

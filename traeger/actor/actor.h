@@ -127,14 +127,17 @@ extern "C"
 
     void traeger_promise_free(traeger_promise_t *self);
 
-    bool traeger_promise_set_result(const traeger_promise_t *self,
-                                    const traeger_result_t *result);
+    void traeger_promise_set_promise(traeger_promise_t *self,
+                                     const traeger_promise_t *promise);
 
     void traeger_promise_get_result(const traeger_promise_t *self,
                                     traeger_result_t **result);
 
-    void traeger_promise_set_promise(traeger_promise_t *self,
-                                     const traeger_promise_t *promise);
+    bool traeger_promise_set_result(const traeger_promise_t *self,
+                                    const traeger_result_t *result);
+
+    void traeger_promise_set_result_from_promise(const traeger_promise_t *self,
+                                                 const traeger_promise_t *promise);
 
     typedef void (*traeger_promise_result_callback_t)(const traeger_value_t *value,
                                                       traeger_closure_t closure,
@@ -142,7 +145,7 @@ extern "C"
 
     typedef void (*traeger_promise_promise_callback_t)(const traeger_value_t *value,
                                                        traeger_closure_t closure,
-                                                       const traeger_promise_t *promise);
+                                                       traeger_promise_t *promise);
 
     traeger_promise_t *traeger_promise_then_result(const traeger_promise_t *self,
                                                    traeger_promise_result_callback_t result_callback,
@@ -150,7 +153,7 @@ extern "C"
                                                    traeger_closure_free_t closure_free);
 
     traeger_promise_t *traeger_promise_then_promise(const traeger_promise_t *self,
-                                                    traeger_promise_promise_callback_t result_callback,
+                                                    traeger_promise_promise_callback_t promise_callback,
                                                     traeger_closure_t closure,
                                                     traeger_closure_free_t closure_free);
 

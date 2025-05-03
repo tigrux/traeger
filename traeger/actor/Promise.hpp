@@ -47,7 +47,7 @@ namespace traeger
 
         auto set_result(Result &&result) const noexcept -> bool;
 
-        auto set_promise(const Promise &promise) const noexcept -> void;
+        auto set_result_from_promise(const Promise &promise) const noexcept -> void;
 
         auto then(ResultCallback &&result_callback) const noexcept -> Promise;
 

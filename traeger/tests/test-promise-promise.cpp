@@ -13,7 +13,7 @@ TEST_CASE("Promise.promise")
 
     auto precedent_promise = Promise{scheduler};
     auto consequent_promise = Promise{scheduler};
-    consequent_promise.set_promise(precedent_promise);
+    consequent_promise.set_result_from_promise(precedent_promise);
 
     SECTION("value")
     {
