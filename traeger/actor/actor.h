@@ -104,6 +104,8 @@ extern "C"
 
     traeger_scheduler_t *traeger_scheduler_new(unsigned int threads_count);
 
+    traeger_scheduler_t *traeger_scheduler_copy(const traeger_scheduler_t *self);
+
     void traeger_scheduler_free(traeger_scheduler_t *self);
 
     size_t traeger_scheduler_count(const traeger_scheduler_t *self);
@@ -166,6 +168,8 @@ extern "C"
                               traeger_closure_free_t closure_free);
 
     // Mailbox
+
+    traeger_mailbox_t *traeger_mailbox_copy(const traeger_mailbox_t *self);
 
     void traeger_mailbox_free(traeger_mailbox_t *self);
 

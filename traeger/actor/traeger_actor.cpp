@@ -277,6 +277,15 @@ extern "C"
         return new traeger_scheduler_t{Scheduler{Threads{threads_count}}};
     }
 
+    traeger_scheduler_t *traeger_scheduler_copy(const traeger_scheduler_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_scheduler_t{cast(self)};
+        }
+        return nullptr;
+    }
+
     void traeger_scheduler_free(traeger_scheduler_t *self)
     {
         if (self != nullptr)
@@ -436,6 +445,15 @@ extern "C"
     }
 
     // Mailbox
+
+    traeger_mailbox_t *traeger_mailbox_copy(const traeger_mailbox_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_mailbox_t{cast(self)};
+        }
+        return nullptr;
+    }
 
     void traeger_mailbox_free(traeger_mailbox_t *self)
     {
