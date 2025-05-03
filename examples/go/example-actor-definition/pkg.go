@@ -18,7 +18,7 @@ func (account *Account) deposit(arguments *traeger.List) (any, error) {
 	time.Sleep(200 * time.Millisecond)
 
 	var amount float64
-	if ok, err := arguments.Get(&amount); !ok {
+	if ok, err := arguments.Unpack(&amount); !ok {
 		return nil, err
 	}
 
@@ -34,7 +34,7 @@ func (account *Account) debit(arguments *traeger.List) (any, error) {
 	time.Sleep(200 * time.Millisecond)
 
 	var amount float64
-	if ok, err := arguments.Get(&amount); !ok {
+	if ok, err := arguments.Unpack(&amount); !ok {
 		return nil, err
 	}
 

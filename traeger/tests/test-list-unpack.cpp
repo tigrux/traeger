@@ -4,7 +4,7 @@
 #include <traeger/value/List.hpp>
 #include <traeger/value/Value.hpp>
 
-TEST_CASE("List.get")
+TEST_CASE("List.unpack")
 {
     using namespace traeger;
 
@@ -14,7 +14,7 @@ TEST_CASE("List.get")
         Bool b{};
         Int i{};
         Float f{};
-        auto [ok, error] = list.get(b, i, f);
+        auto [ok, error] = list.unpack(b, i, f);
         REQUIRE(ok);
         REQUIRE(b == true);
         REQUIRE(i == 10);
@@ -27,7 +27,7 @@ TEST_CASE("List.get")
         Bool b{};
         Int i{};
         Float f{};
-        auto [ok, error] = list.get(b, i, f);
+        auto [ok, error] = list.unpack(b, i, f);
         REQUIRE_FALSE(ok);
         REQUIRE_FALSE(error.empty());
     }
@@ -38,7 +38,7 @@ TEST_CASE("List.get")
         Bool b{};
         Int i{};
         Float f{};
-        auto [ok, error] = list.get(b, i, f);
+        auto [ok, error] = list.unpack(b, i, f);
         REQUIRE_FALSE(ok);
         REQUIRE_FALSE(error.empty());
     }

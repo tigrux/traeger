@@ -79,7 +79,7 @@ TEST_CASE("Context.requester")
         if (method_name == "multiply")
         {
             Int a = 0, b = 0;
-            if (auto [ok, error] = arguments.get(a, b); !ok)
+            if (auto [ok, error] = arguments.unpack(a, b); !ok)
             {
                 result = Error{error};
             }

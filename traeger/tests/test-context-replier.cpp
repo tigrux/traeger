@@ -20,7 +20,7 @@ TEST_CASE("Context.replier")
             [](const List &arguments) -> Result
             {
                 Int a = 0, b = 0;
-                arguments.get(a, b);
+                arguments.unpack(a, b);
                 return Value{a * b};
             });
 

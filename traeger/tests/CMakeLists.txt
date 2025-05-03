@@ -21,11 +21,11 @@ target_sources(
         test-list-append.cpp
         test-list-empty.cpp
         test-list-find.cpp
-        test-list-get.cpp
         test-list-iterator.cpp
         test-list-resize.cpp
         test-list-set.cpp
         test-list-size.cpp
+        test-list-unpack.cpp
         test-map-empty.cpp
         test-map-find.cpp
         test-map-get.cpp

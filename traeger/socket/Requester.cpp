@@ -51,7 +51,7 @@ namespace traeger
                         const auto list = value.get_list().value();
                         traeger::String response;
                         traeger::String response_error;
-                        auto [unpack_ok, unpack_error] = list.get(response, response_error);
+                        auto [unpack_ok, unpack_error] = list.unpack(response, response_error);
                         if (!unpack_ok)
                         {
                             return {Error{unpack_error}};

@@ -102,7 +102,7 @@ TEST_CASE("Value.get")
         Bool b{};
         Int i{};
         String s{};
-        value.get_list()->get(b, i, s);
+        value.get_list()->unpack(b, i, s);
         REQUIRE(b == true);
         REQUIRE(i == 123);
         REQUIRE(s == "Hello");

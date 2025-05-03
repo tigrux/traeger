@@ -37,7 +37,7 @@ namespace
                const std::shared_ptr<reply_closure> &closure) -> Result
     {
         String id, message_name, format_name, request;
-        auto [unpack_ok, unpack_error] = messages.get(id, message_name, format_name, request);
+        auto [unpack_ok, unpack_error] = messages.unpack(id, message_name, format_name, request);
         if (!unpack_ok)
         {
             return {Error{"unpacking frames: " + unpack_error}};

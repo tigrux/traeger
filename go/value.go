@@ -235,7 +235,7 @@ func (list *List) Find(index int) (*Value, bool) {
 	return nil, false
 }
 
-func (list *List) Get(variants ...any) (bool, error) {
+func (list *List) Unpack(variants ...any) (bool, error) {
 	if len(variants) != list.Size() {
 		return false, fmt.Errorf("expected %d arguments but %d were given", len(variants), list.Size())
 	}

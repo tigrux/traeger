@@ -37,7 +37,7 @@ namespace
                 const std::shared_ptr<listen_closure> &closure) -> Result
     {
         String topic, format_name, encoded_message;
-        auto [unpack_ok, unpack_error] = messages.get(topic, format_name, encoded_message);
+        auto [unpack_ok, unpack_error] = messages.unpack(topic, format_name, encoded_message);
         if (!unpack_ok)
         {
             return {Error{"unpacking frames: " + unpack_error}};

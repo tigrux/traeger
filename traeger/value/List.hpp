@@ -82,7 +82,7 @@ namespace traeger
         }
 
         template <typename... Args>
-        auto get(Args &...args) const -> std::pair<bool, String>
+        auto unpack(Args &...args) const -> std::pair<bool, String>
         {
             try
             {
