@@ -40,16 +40,16 @@ namespace
 
 namespace traeger
 {
-    Format::Format(const String &name,
+    Format::Format(traeger_string_t &&name,
                    encoder_type *encoder,
                    decoder_type *decoder) noexcept
-        : name_(name),
+        : name_(std::move(name)),
           encoder_(encoder),
           decoder_(decoder)
     {
     }
 
-    auto Format::name() const noexcept -> const String &
+    auto Format::name() const noexcept -> const traeger_string_t &
     {
         return name_;
     }

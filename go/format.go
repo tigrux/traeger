@@ -25,7 +25,10 @@ func NewFormatByName(name string) *Format {
 }
 
 func (format *Format) Name() string {
-	return C.GoString(C.traeger_format_get_name(format.self))
+	name := C.traeger_format_get_name(format.self)
+	return C.GoStringN(
+		C.traeger_string_data(name),
+		C.int(C.traeger_string_size(name)))
 }
 
 func (format *Format) EncodeValue(value *Value) (*String, error) {

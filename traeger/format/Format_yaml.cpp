@@ -111,7 +111,7 @@ extern "C"
 {
     traeger_format_t traeger_format_yaml{
         Format{
-            "yaml",
+            traeger_string_t{String{"yaml"}},
             [](const Value &value) -> String
             {
                 return YAML::Dump(yaml_from(value));

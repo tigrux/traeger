@@ -117,7 +117,7 @@ extern "C"
 {
     traeger_format_t traeger_format_json{
         Format{
-            "json",
+            traeger_string_t{String{"json"}},
             [](const Value &value) -> String
             {
                 return json_from(value).dump();

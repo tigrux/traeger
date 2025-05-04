@@ -19,11 +19,11 @@ namespace traeger
 
         Format() = delete;
 
-        Format(const String &name,
+        Format(traeger_string_t &&name,
                encoder_type *encoder,
                decoder_type *decoder) noexcept;
 
-        auto name() const noexcept -> const String &;
+        auto name() const noexcept -> const traeger_string_t &;
 
         auto encode(const Value &value) const noexcept -> std::pair<std::optional<String>, String>;
 
@@ -42,7 +42,7 @@ namespace traeger
 #endif
 
     private:
-        String name_;
+        traeger_string_t name_;
         encoder_type *encoder_;
         decoder_type *decoder_;
     };

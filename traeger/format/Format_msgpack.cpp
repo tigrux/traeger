@@ -138,7 +138,7 @@ extern "C"
 {
     traeger_format_t traeger_format_msgpack{
         Format{
-            "msgpack",
+            traeger_string_t{String{"msgpack"}},
             [](const Value &value) -> String
             {
                 Stream stream;

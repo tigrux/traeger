@@ -17,11 +17,11 @@ extern "C"
         return nullptr;
     }
 
-    const char *traeger_format_get_name(const traeger_format_t *self)
+    const traeger_string_t *traeger_format_get_name(const traeger_format_t *self)
     {
         if (self != nullptr)
         {
-            return cast(self).name().c_str();
+            return &cast(self).name();
         }
         return nullptr;
     }

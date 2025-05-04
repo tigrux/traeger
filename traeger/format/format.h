@@ -14,7 +14,7 @@ extern "C"
     const traeger_format_t *traeger_format_get_by_name(const char *name_data,
                                                        size_t name_size);
 
-    const char *traeger_format_get_name(const traeger_format_t *self);
+    const traeger_string_t *traeger_format_get_name(const traeger_format_t *self);
 
     bool traeger_format_encode_value(const traeger_format_t *self,
                                      const traeger_value_t *value,
