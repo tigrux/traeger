@@ -19,7 +19,7 @@ func main() {
 	json := traeger.NewFormatByName("json")
 	encoded, err := json.EncodeValue(value)
 	if err != nil {
-		fmt.Printf("Encode error ", err.Error())
+		fmt.Printf("Encode error %v\n", err.Error())
 		return
 	}
 
@@ -27,7 +27,7 @@ func main() {
 
 	decoded, err := json.DecodeString(encoded)
 	if err != nil {
-		fmt.Printf("Decode error ", err.Error())
+		fmt.Printf("Decode error %v\n", err.Error())
 	}
 	fmt.Printf("The decoded value is %v\n", decoded)
 }
