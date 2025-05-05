@@ -87,6 +87,15 @@ extern "C"
         return new traeger_result_t{};
     }
 
+    traeger_result_t *traeger_result_copy(const traeger_result_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_result_t{cast(self)};
+        }
+        return nullptr;
+    }
+
     void traeger_result_free(traeger_result_t *self)
     {
         if (self != nullptr)
@@ -239,6 +248,15 @@ extern "C"
         return nullptr;
     }
 
+    traeger_function_t *traeger_function_copy(const traeger_function_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_function_t{cast(self)};
+        }
+        return nullptr;
+    }
+
     void traeger_function_free(traeger_function_t *self)
     {
         if (self != nullptr)
@@ -340,6 +358,15 @@ extern "C"
         if (scheduler != nullptr)
         {
             return new traeger_promise_t{Promise{*scheduler}};
+        }
+        return nullptr;
+    }
+
+    traeger_promise_t *traeger_promise_copy(const traeger_promise_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_promise_t{cast(self)};
         }
         return nullptr;
     }
@@ -540,6 +567,15 @@ extern "C"
     traeger_queue_t *traeger_queue_new()
     {
         return new traeger_queue_t{};
+    }
+
+    traeger_queue_t *traeger_queue_copy(const traeger_queue_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_queue_t{cast(self)};
+        }
+        return nullptr;
     }
 
     void traeger_queue_free(traeger_queue_t *self)

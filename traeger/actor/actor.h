@@ -42,6 +42,8 @@ extern "C"
 
     traeger_result_t *traeger_result_new();
 
+    traeger_result_t *traeger_result_copy(const traeger_result_t *self);
+
     void traeger_result_free(traeger_result_t *self);
 
     void traeger_result_set_value(traeger_result_t *self,
@@ -93,6 +95,8 @@ extern "C"
                                              traeger_closure_t closure,
                                              traeger_closure_free_t closure_free);
 
+    traeger_function_t *traeger_function_copy(const traeger_function_t *self);
+
     void traeger_function_free(traeger_function_t *self);
 
     traeger_result_type_t
@@ -126,6 +130,8 @@ extern "C"
     // Promise
 
     traeger_promise_t *traeger_promise_new(const traeger_scheduler_t *scheduler);
+
+    traeger_promise_t *traeger_promise_copy(const traeger_promise_t *self);
 
     void traeger_promise_free(traeger_promise_t *self);
 
@@ -200,6 +206,8 @@ extern "C"
     // Queue
 
     traeger_queue_t *traeger_queue_new();
+
+    traeger_queue_t *traeger_queue_copy(const traeger_queue_t *self);
 
     void traeger_queue_free(traeger_queue_t *self);
 
