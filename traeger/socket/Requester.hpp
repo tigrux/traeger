@@ -27,6 +27,6 @@ namespace traeger
     };
 }
 
-struct traeger_requester_t : traeger::Requester
+struct traeger_requester_t final : traeger::Requester
 {
 };

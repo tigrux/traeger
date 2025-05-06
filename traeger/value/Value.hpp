@@ -289,6 +289,6 @@ namespace traeger
     }
 }
 
-struct traeger_value_t : traeger::Value
+struct traeger_value_t final : traeger::Value
 {
 };

@@ -19,6 +19,6 @@ namespace traeger
     struct Value;
 }
 
-struct traeger_string_t : traeger::String
+struct traeger_string_t final : traeger::String
 {
 };

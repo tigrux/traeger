@@ -11,9 +11,10 @@ namespace
 
     struct AdderMailbox : public Mailbox::Interface
     {
-        virtual auto send(const Scheduler &scheduler,
-                          const String &name,
-                          const List &arguments) noexcept -> Promise
+        Promise
+        send(const Scheduler &scheduler,
+             const String &name,
+             const List &arguments) noexcept override
         {
             auto promise = Promise{scheduler};
             if (name == "add")

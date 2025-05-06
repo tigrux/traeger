@@ -43,10 +43,10 @@ namespace traeger
     };
 }
 
-struct traeger_work_t : traeger::Work
+struct traeger_work_t final : traeger::Work
 {
 };
 
-struct traeger_scheduler_t : traeger::Scheduler
+struct traeger_scheduler_t final : traeger::Scheduler
 {
 };

@@ -169,10 +169,10 @@ inline auto end(const traeger::Map &map) -> bool
     return map.end();
 }
 
-struct traeger_map_t : traeger::Map
+struct traeger_map_t final : traeger::Map
 {
 };
 
-struct traeger_map_iterator_t : traeger::Map::Iterator
+struct traeger_map_iterator_t final : traeger::Map::Iterator
 {
 };

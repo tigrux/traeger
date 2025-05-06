@@ -36,10 +36,10 @@ namespace traeger
     };
 }
 
-struct traeger_function_t : traeger::Function
+struct traeger_function_t final : traeger::Function
 {
 };
 
-struct traeger_actor_t : traeger::StatelessActor
+struct traeger_actor_t final : traeger::StatelessActor
 {
 };

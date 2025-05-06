@@ -204,10 +204,10 @@ inline auto end(const traeger::List &list) -> bool
     return list.end();
 }
 
-struct traeger_list_t : traeger::List
+struct traeger_list_t final : traeger::List
 {
 };
 
-struct traeger_list_iterator_t : traeger::List::Iterator
+struct traeger_list_iterator_t final : traeger::List::Iterator
 {
 };

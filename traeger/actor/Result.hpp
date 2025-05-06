@@ -66,6 +66,6 @@ namespace traeger
                     const Result &result) noexcept -> std::ostream &;
 }
 
-struct traeger_result_t : traeger::Result
+struct traeger_result_t final : traeger::Result
 {
 };

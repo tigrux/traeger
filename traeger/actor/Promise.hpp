@@ -61,6 +61,6 @@ namespace traeger
     };
 }
 
-struct traeger_promise_t : traeger::Promise
+struct traeger_promise_t final : traeger::Promise
 {
 };

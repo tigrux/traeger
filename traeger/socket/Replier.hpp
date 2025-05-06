@@ -24,6 +24,6 @@ namespace traeger
     };
 }
 
-struct traeger_replier_t : traeger::Replier
+struct traeger_replier_t final : traeger::Replier
 {
 };

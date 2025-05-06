@@ -33,6 +33,6 @@ namespace traeger
     };
 };
 
-struct traeger_queue_t : traeger::Queue
+struct traeger_queue_t final : traeger::Queue
 {
 };

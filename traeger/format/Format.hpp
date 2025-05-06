@@ -48,6 +48,6 @@ namespace traeger
     };
 }
 
-struct traeger_format_t : traeger::Format
+struct traeger_format_t final : traeger::Format
 {
 };

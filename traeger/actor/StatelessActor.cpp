@@ -122,10 +122,10 @@ namespace traeger
             {
             }
 
-            virtual auto
+            Promise
             send(const Scheduler &scheduler,
                  const String &name,
-                 const List &arguments) noexcept -> Promise
+                 const List &arguments) noexcept override
             {
                 Promise promise{scheduler};
                 if (const auto *iter = functions_.find(name); iter)

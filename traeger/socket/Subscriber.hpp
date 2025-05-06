@@ -28,6 +28,6 @@ namespace traeger
     };
 }
 
-struct traeger_subscriber_t : traeger::Subscriber
+struct traeger_subscriber_t final : traeger::Subscriber
 {
 };

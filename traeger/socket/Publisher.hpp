@@ -26,6 +26,6 @@ namespace traeger
     };
 }
 
-struct traeger_publisher_t : traeger::Publisher
+struct traeger_publisher_t final : traeger::Publisher
 {
 };

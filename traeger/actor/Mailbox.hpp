@@ -14,10 +14,10 @@ namespace traeger
     {
         struct Interface
         {
-            virtual auto
+            virtual Promise
             send(const Scheduler &scheduler,
                  const String &name,
-                 const List &arguments) noexcept -> Promise = 0;
+                 const List &arguments) noexcept = 0;
         };
 
         Mailbox() = delete;
@@ -33,6 +33,6 @@ namespace traeger
     };
 }
 
-struct traeger_mailbox_t : traeger::Mailbox
+struct traeger_mailbox_t final : traeger::Mailbox
 {
 };

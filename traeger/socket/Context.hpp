@@ -43,6 +43,6 @@ namespace traeger
     };
 }
 
-struct traeger_context_t : traeger::Context
+struct traeger_context_t final : traeger::Context
 {
 };

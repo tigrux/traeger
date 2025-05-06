@@ -26,10 +26,10 @@ namespace traeger
         {
         }
 
-        virtual auto
+        Promise
         send(const Scheduler &scheduler,
              const String &name,
-             const List &arguments) noexcept -> Promise
+             const List &arguments) noexcept override
         {
             auto [encoded, encoded_error] = format_.encode(arguments);
             if (!encoded)
