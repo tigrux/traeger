@@ -45,6 +45,10 @@ if(NOT yaml-cpp_FOUND)
         URL https://github.com/jbeder/yaml-cpp/archive/refs/tags/0.8.0.tar.gz
         URL_HASH
             SHA256=fbe74bbdcee21d656715688706da3c8becfd946d92cd44705cc6098bb23b3a16
+        PATCH_COMMAND
+            patch -p1 <
+            ${CMAKE_CURRENT_SOURCE_DIR}/patches/yaml-cpp-include-cstdint.diff
+        UPDATE_DISCONNECTED 1
         DOWNLOAD_EXTRACT_TIMESTAMP ON
         OVERRIDE_FIND_PACKAGE
         EXCLUDE_FROM_ALL
