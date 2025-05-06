@@ -1,8 +1,11 @@
-FROM archlinux:latest
+ARG DISTRO=archlinux
+ARG RELEASE=latest
+ARG OS=${DISTRO}:${RELEASE}
+FROM ${OS}
 
 RUN --mount=type=cache,target=/var/cache/pacman/pkg \
     pacman -Syu --noconfirm \
-    gcc ninja python3 wget cmake go
+    cmake gcc go ninja patch python3 wget
 
 ARG TRAEGER_HOME=/opt/traeger
 ARG TRAEGER_BUILD=/opt/traeger
