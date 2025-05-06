@@ -1,5 +1,5 @@
 ARG DISTRO=debian
-ARG RELEASE=bullseye
+ARG RELEASE=latest
 ARG OS=${DISTRO}:${RELEASE}
 FROM ${OS}
 
@@ -7,8 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     apt update -y && \
-    apt install -y \
-    g++ ninja-build python3 libpython3-dev wget
+    apt install -y g++ libpython3-dev ninja-build patch python3 wget
 
 ARG CMAKE_VERSION=4.0.1
 WORKDIR /opt/cmake
