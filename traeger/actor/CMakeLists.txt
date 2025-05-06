@@ -13,6 +13,12 @@ target_link_libraries(traeger_actor PUBLIC traeger::value traeger::format)
 
 find_package(Immer REQUIRED)
 find_package(Threads REQUIRED)
+if(
+    CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+    OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
+)
+    target_compile_options(traeger_actor PRIVATE -Wno-array-bounds)
+endif()
 target_link_libraries(traeger_actor PRIVATE immer Threads::Threads)
 
 target_sources(traeger_actor PRIVATE ${TRAEGER_ACTOR_HEADERS})

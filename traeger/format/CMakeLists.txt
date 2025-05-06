@@ -2,6 +2,12 @@ set(TRAEGER_FORMAT_HEADERS Format.hpp format.h)
 
 target_link_libraries(traeger_format PUBLIC traeger::value)
 
+if(
+    CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+    OR CMAKE_CXX_COMPILER_ID STREQUAL "Clang"
+)
+    target_compile_options(traeger_format PRIVATE -Wno-array-bounds)
+endif()
 target_link_libraries(traeger_format PRIVATE immer)
 
 target_sources(traeger_format PRIVATE ${TRAEGER_FORMAT_HEADERS})
