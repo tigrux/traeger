@@ -9,7 +9,7 @@ RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     apt update -y && \
     apt install -y g++ libpython3-dev ninja-build patch python3 wget
 
-ARG CMAKE_VERSION=4.0.1
+ARG CMAKE_VERSION=4.0.2
 WORKDIR /opt/cmake
 RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(uname -m).tar.gz -O - | tar --strip-components=1 -xz
 ARG GO_VERSION=1.24.2
