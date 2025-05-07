@@ -48,6 +48,15 @@ extern "C"
         return new traeger_context_t{Context{}};
     }
 
+    traeger_context_t *traeger_context_copy(const traeger_context_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_context_t{cast(self)};
+        }
+        return nullptr;
+    }
+
     void traeger_context_free(traeger_context_t *self)
     {
         if (self != nullptr)
@@ -79,6 +88,15 @@ extern "C"
             }
         }
         return false;
+    }
+
+    traeger_replier_t *traeger_replier_copy(const traeger_replier_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_replier_t{cast(self)};
+        }
+        return nullptr;
     }
 
     void traeger_replier_free(traeger_replier_t *self)
@@ -129,6 +147,15 @@ extern "C"
         return false;
     }
 
+    traeger_requester_t *traeger_requester_copy(const traeger_requester_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_requester_t{cast(self)};
+        }
+        return nullptr;
+    }
+
     void traeger_requester_free(traeger_requester_t *self)
     {
         if (self != nullptr)
@@ -173,6 +200,15 @@ extern "C"
             }
         }
         return false;
+    }
+
+    traeger_publisher_t *traeger_publisher_copy(const traeger_publisher_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_publisher_t{cast(self)};
+        }
+        return nullptr;
     }
 
     void traeger_publisher_free(traeger_publisher_t *self)
@@ -224,6 +260,15 @@ extern "C"
             }
         }
         return false;
+    }
+
+    traeger_subscriber_t *traeger_subscriber_copy(const traeger_subscriber_t *self)
+    {
+        if (self != nullptr)
+        {
+            return new traeger_subscriber_t{cast(self)};
+        }
+        return nullptr;
     }
 
     void traeger_subscriber_free(traeger_subscriber_t *self)

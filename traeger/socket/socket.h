@@ -24,6 +24,8 @@ extern "C"
 
     traeger_context_t *traeger_context_new();
 
+    traeger_context_t *traeger_context_copy(const traeger_context_t *self);
+
     void traeger_context_free(traeger_context_t *self);
 
     // Replier
@@ -32,6 +34,8 @@ extern "C"
                              const char *address,
                              traeger_replier_t **result,
                              traeger_string_t **error);
+
+    traeger_replier_t *traeger_replier_copy(const traeger_replier_t *self);
 
     void traeger_replier_free(traeger_replier_t *self);
 
@@ -47,6 +51,8 @@ extern "C"
                                traeger_requester_t **result,
                                traeger_string_t **error);
 
+    traeger_requester_t *traeger_requester_copy(const traeger_requester_t *self);
+
     void traeger_requester_free(traeger_requester_t *self);
 
     traeger_mailbox_t *traeger_requester_get_mailbox(const traeger_requester_t *self);
@@ -58,6 +64,8 @@ extern "C"
                                const traeger_format_t *format,
                                traeger_publisher_t **result,
                                traeger_string_t **error);
+
+    traeger_publisher_t *traeger_publisher_copy(const traeger_publisher_t *self);
 
     void traeger_publisher_free(traeger_publisher_t *self);
 
@@ -74,6 +82,8 @@ extern "C"
                                 const traeger_list_t *topics,
                                 traeger_subscriber_t **result,
                                 traeger_string_t **error);
+
+    traeger_subscriber_t *traeger_subscriber_copy(const traeger_subscriber_t *self);
 
     void traeger_subscriber_free(traeger_subscriber_t *self);
 
