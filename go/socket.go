@@ -6,7 +6,6 @@ import (
 	"errors"
 	"runtime"
 	"runtime/cgo"
-	"unsafe"
 )
 
 /*
@@ -154,9 +153,8 @@ func NewContext() *Context {
 func (context *Context) Replier(address string) (*Replier, error) {
 	var result *C.traeger_replier_t
 	var err *C.traeger_string_t
-	cstr_address := C.CString(address)
-	defer C.free(unsafe.Pointer(cstr_address))
-	if C.traeger_replier_new(context.self, cstr_address, &result, &err) {
+
+	if C.traeger_replier_new(context.self, C._GoStringPtr(address), C._GoStringLen(address), &result, &err) {
 		return wrap_c_replier(result), nil
 	} else {
 		return nil, errors.New(wrap_c_string(err).String())
@@ -166,9 +164,7 @@ func (context *Context) Replier(address string) (*Replier, error) {
 func (context *Context) Requester(address string, format *Format) (*Requester, error) {
 	var result *C.traeger_requester_t
 	var err *C.traeger_string_t
-	cstr_address := C.CString(address)
-	defer C.free(unsafe.Pointer(cstr_address))
-	if C.traeger_requester_new(context.self, cstr_address, format.self, &result, &err) {
+	if C.traeger_requester_new(context.self, C._GoStringPtr(address), C._GoStringLen(address), format.self, &result, &err) {
 		return wrap_c_requester(result), nil
 	} else {
 		return nil, errors.New(wrap_c_string(err).String())
@@ -178,9 +174,7 @@ func (context *Context) Requester(address string, format *Format) (*Requester, e
 func (context *Context) Publisher(address string, format *Format) (*Publisher, error) {
 	var result *C.traeger_publisher_t
 	var err *C.traeger_string_t
-	cstr_address := C.CString(address)
-	defer C.free(unsafe.Pointer(cstr_address))
-	if C.traeger_publisher_new(context.self, cstr_address, format.self, &result, &err) {
+	if C.traeger_publisher_new(context.self, C._GoStringPtr(address), C._GoStringLen(address), format.self, &result, &err) {
 		return wrap_c_publisher(result), nil
 	} else {
 		return nil, errors.New(wrap_c_string(err).String())
@@ -191,15 +185,12 @@ func (context *Context) Subscriber(address string, topics []string) (*Subscriber
 	var result *C.traeger_subscriber_t
 	var err *C.traeger_string_t
 
-	cstr_address := C.CString(address)
-	defer C.free(unsafe.Pointer(cstr_address))
-
 	list := NewList()
 	for _, topic := range topics {
 		list.AppendString(topic)
 	}
 
-	if C.traeger_subscriber_new(context.self, cstr_address, list.self, &result, &err) {
+	if C.traeger_subscriber_new(context.self, C._GoStringPtr(address), C._GoStringLen(address), list.self, &result, &err) {
 		return wrap_c_subscriber(result), nil
 	} else {
 		return nil, errors.New(wrap_c_string(err).String())

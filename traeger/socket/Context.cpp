@@ -106,7 +106,7 @@ namespace traeger
     }
 #endif
 
-    auto Context::replier(const char *address) const noexcept -> std::pair<std::optional<Replier>, String>
+    auto Context::replier(const String &address) const noexcept -> std::pair<std::optional<Replier>, String>
     {
         try
         {
@@ -120,7 +120,7 @@ namespace traeger
         }
     }
 
-    auto Context::requester(const char *address,
+    auto Context::requester(const String &address,
                             const Format &format) const noexcept -> std::pair<std::optional<Requester>, String>
     {
         try
@@ -135,7 +135,7 @@ namespace traeger
         }
     }
 
-    auto Context::publisher(const char *address,
+    auto Context::publisher(const String &address,
                             const Format &format) const noexcept -> std::pair<std::optional<Publisher>, String>
     {
         try
@@ -150,7 +150,7 @@ namespace traeger
         }
     }
 
-    auto Context::subscriber(const char *address,
+    auto Context::subscriber(const String &address,
                              const std::vector<String> &topics) const noexcept -> std::pair<std::optional<Subscriber>, String>
     {
         try

@@ -29,13 +29,13 @@ namespace traeger
         operator zmq::context_t &() const;
 #endif
 
-        auto replier(const char *address) const noexcept -> std::pair<std::optional<Replier>, String>;
+        auto replier(const String &address) const noexcept -> std::pair<std::optional<Replier>, String>;
 
-        auto requester(const char *address, const Format &format) const noexcept -> std::pair<std::optional<Requester>, String>;
+        auto requester(const String &address, const Format &format) const noexcept -> std::pair<std::optional<Requester>, String>;
 
-        auto publisher(const char *address, const Format &format) const noexcept -> std::pair<std::optional<Publisher>, String>;
+        auto publisher(const String &address, const Format &format) const noexcept -> std::pair<std::optional<Publisher>, String>;
 
-        auto subscriber(const char *address, const std::vector<String> &topics) const noexcept -> std::pair<std::optional<Subscriber>, String>;
+        auto subscriber(const String &address, const std::vector<String> &topics) const noexcept -> std::pair<std::optional<Subscriber>, String>;
 
     private:
         struct impl_type;

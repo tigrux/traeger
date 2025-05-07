@@ -68,15 +68,16 @@ extern "C"
     // Replier
 
     bool traeger_replier_new(const traeger_context_t *self,
-                             const char *address,
+                             const char *address_data,
+                             size_t address_size,
                              traeger_replier_t **result,
                              traeger_string_t **error)
     {
         if (self != nullptr &&
-            address != nullptr &&
+            address_data != nullptr &&
             result != nullptr)
         {
-            auto [replier, socket_error] = cast(self).replier(address);
+            auto [replier, socket_error] = cast(self).replier(String(address_data, address_size));
             if (replier)
             {
                 *result = new traeger_replier_t{std::move(replier).value()};
@@ -123,17 +124,18 @@ extern "C"
     // Requester
 
     bool traeger_requester_new(const traeger_context_t *self,
-                               const char *address,
+                               const char *address_data,
+                               size_t address_size,
                                const traeger_format_t *format,
                                traeger_requester_t **result,
                                traeger_string_t **error)
     {
         if (self != nullptr &&
-            address != nullptr &&
+            address_data != nullptr &&
             format != nullptr &&
             result != nullptr)
         {
-            auto [requester, socket_error] = cast(self).requester(address, cast(format));
+            auto [requester, socket_error] = cast(self).requester(String(address_data, address_size), cast(format));
             if (requester)
             {
                 *result = new traeger_requester_t{std::move(requester).value()};
@@ -176,19 +178,19 @@ extern "C"
     // Publisher
 
     bool traeger_publisher_new(const traeger_context_t *self,
-                               const char *address,
+                               const char *address_data,
+                               size_t address_size,
                                const traeger_format_t *format,
                                traeger_publisher_t **result,
                                traeger_string_t **error)
     {
         if (self != nullptr &&
-            address != nullptr &&
+            address_data != nullptr &&
             format != nullptr &&
-            address != nullptr &&
             result != nullptr)
         {
             // return new traeger_publisher_t{cast(self).publisher(cast(format))};
-            auto [publisher, socket_error] = cast(self).publisher(address, cast(format));
+            auto [publisher, socket_error] = cast(self).publisher(String(address_data, address_size), cast(format));
             if (publisher)
             {
                 *result = new traeger_publisher_t{std::move(publisher).value()};
@@ -238,17 +240,18 @@ extern "C"
     // Subscriber
 
     bool traeger_subscriber_new(const traeger_context_t *self,
-                                const char *address,
+                                const char *address_data,
+                                size_t address_size,
                                 const traeger_list_t *topics,
                                 traeger_subscriber_t **result,
                                 traeger_string_t **error)
     {
         if (self != nullptr &&
-            address != nullptr &&
+            address_data != nullptr &&
             topics != nullptr &&
             result != nullptr)
         {
-            auto [subscriber, socket_error] = cast(self).subscriber(address, list_to_strings(cast(topics)));
+            auto [subscriber, socket_error] = cast(self).subscriber(String(address_data, address_size), list_to_strings(cast(topics)));
             if (subscriber)
             {
                 *result = new traeger_subscriber_t{std::move(subscriber).value()};

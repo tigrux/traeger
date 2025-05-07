@@ -31,7 +31,8 @@ extern "C"
     // Replier
 
     bool traeger_replier_new(const traeger_context_t *self,
-                             const char *address,
+                             const char *address_data,
+                             size_t address_size,
                              traeger_replier_t **result,
                              traeger_string_t **error);
 
@@ -46,7 +47,8 @@ extern "C"
     // Requester
 
     bool traeger_requester_new(const traeger_context_t *self,
-                               const char *address,
+                               const char *address_data,
+                               size_t address_size,
                                const traeger_format_t *format,
                                traeger_requester_t **result,
                                traeger_string_t **error);
@@ -60,7 +62,8 @@ extern "C"
     // Publisher
 
     bool traeger_publisher_new(const traeger_context_t *self,
-                               const char *address,
+                               const char *address_data,
+                               size_t address_size,
                                const traeger_format_t *format,
                                traeger_publisher_t **result,
                                traeger_string_t **error);
@@ -78,7 +81,8 @@ extern "C"
     // Subscriber
 
     bool traeger_subscriber_new(const traeger_context_t *self,
-                                const char *address,
+                                const char *address_data,
+                                size_t address_size,
                                 const traeger_list_t *topics,
                                 traeger_subscriber_t **result,
                                 traeger_string_t **error);
