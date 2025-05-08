@@ -9,16 +9,11 @@ namespace
 {
     using namespace traeger;
 
-    Subscriber::Callback make_subscriber_callback(traeger_subscriber_callback_t callback,
-                                                  traeger_closure_t closure,
-                                                  traeger_closure_free_t closure_free) noexcept
+    Subscriber::Callback make_subscriber_callback(const Function &function) noexcept
     {
-        return [closure = std::shared_ptr<void>{closure, closure_free},
-                callback](String string, Value value) -> void
+        return [function](String topic, Value value) -> void
         {
-            const traeger_string_t topic{std::move(string)};
-            auto *event = new traeger_value_t{std::move(value)};
-            callback(&topic, event, closure.get());
+            function(make_list(topic, value));
         };
     }
 
@@ -284,19 +279,15 @@ extern "C"
 
     traeger_promise_t *traeger_subscriber_listen(const traeger_subscriber_t *self,
                                                  const traeger_scheduler_t *scheduler,
-                                                 traeger_subscriber_callback_t callback,
-                                                 traeger_closure_t closure,
-                                                 traeger_closure_free_t closure_free)
+                                                 const traeger_function_t *function)
     {
         if (self != nullptr &&
             scheduler != nullptr &&
-            callback != nullptr &&
-            closure != nullptr &&
-            closure_free != nullptr)
+            function != nullptr)
         {
             return new traeger_promise_t{cast(self).listen(
                 cast(scheduler),
-                make_subscriber_callback(callback, closure, closure_free))};
+                make_subscriber_callback(cast(function)))};
         }
         return nullptr;
     }

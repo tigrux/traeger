@@ -97,9 +97,7 @@ extern "C"
 
     traeger_promise_t *traeger_subscriber_listen(const traeger_subscriber_t *self,
                                                  const traeger_scheduler_t *scheduler,
-                                                 traeger_subscriber_callback_t callback,
-                                                 traeger_closure_t closure,
-                                                 traeger_closure_free_t closure_free);
+                                                 const traeger_function_t *function);
 
 #ifdef __cplusplus
 }

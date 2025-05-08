@@ -5,29 +5,12 @@ package traeger
 import (
 	"errors"
 	"runtime"
-	"runtime/cgo"
 )
 
 /*
 #cgo LDFLAGS: -ltraeger_socket
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <traeger/socket/socket.h>
-
-extern void traeger_go_subscriber_callback(const traeger_string_t *topic,
-                                           traeger_value_t *value,
-                                           traeger_closure_t closure);
-
-extern void traeger_go_closure_free(traeger_closure_t handle);
-
-static inline traeger_promise_t *
-traeger_go_subscriber_listen(const traeger_subscriber_t *self,
-                             const traeger_scheduler_t *scheduler,
-							 uintptr_t handle)
-{
-	void *closure = (void*)handle;
-	return traeger_subscriber_listen(self, scheduler, traeger_go_subscriber_callback,
-	                                 closure, traeger_go_closure_free);
-}
 */
 import "C"
 
@@ -115,18 +98,17 @@ func wrap_c_subscriber(self *C.traeger_subscriber_t) *Subscriber {
 	return &subscriber
 }
 
-//export traeger_go_subscriber_callback
-func traeger_go_subscriber_callback(c_topic *C.traeger_const_string_t, c_value *C.traeger_value_t, closure C.traeger_closure_t) {
-	handle := cgo.Handle(closure)
-	subscriberFunc := handle.Value().(SubscriberFunc)
-	topic := &String{c_topic}
-	value := wrap_c_value(c_value)
-	subscriberFunc(topic.String(), value)
-}
-
 func (subscriber *Subscriber) Listen(scheduler *Scheduler, subscriberFunc SubscriberFunc) *Promise {
-	handle := cgo.NewHandle(subscriberFunc)
-	c_promise := C.traeger_go_subscriber_listen(subscriber.self, scheduler.self, C.uintptr_t(handle))
+	function := NewFunction(func(arguments *List) (any, error) {
+		var topic string
+		var value *Value
+		if ok, err := arguments.Unpack(&topic, &value); !ok {
+			return nil, err
+		}
+		subscriberFunc(topic, value)
+		return nil, nil
+	})
+	c_promise := C.traeger_subscriber_listen(subscriber.self, scheduler.self, function.self)
 	return wrap_c_promise(c_promise)
 }
 
