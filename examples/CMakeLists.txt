@@ -4,11 +4,6 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     set(version 0.1.0)
     set(CMAKE_CXX_STANDARD 17)
     find_package(traeger REQUIRED)
-else()
-    find_program(GO go)
-    if(GO)
-        add_subdirectory(go)
-    endif()
 endif()
 
 # Examples in the README.md
@@ -46,4 +41,3 @@ target_link_libraries(example-socket-publisher traeger::socket)
 
 add_executable(example-socket-subscriber example-socket-subscriber.cpp)
 target_link_libraries(example-socket-subscriber traeger::socket)
-

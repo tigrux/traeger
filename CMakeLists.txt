@@ -25,6 +25,11 @@ if(BUILD_PYTHON)
     add_subdirectory(python)
 endif()
 
+find_program(GO go)
+if(GO)
+    add_subdirectory(go)
+endif()
+
 option(BUILD_EXAMPLES "Build examples" ON)
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)

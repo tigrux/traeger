@@ -52,7 +52,7 @@ $ CMAKE_PREFIX_PATH=${HOME}/local pip install ./python/
 ```
 
 # Quick start
-The following examples, as well as examples for [Python](./examples/python) and [Go](./examples/go), are available in the directory [examples](./examples).
+The following examples, as well as examples for [Python](./python/examples) and [Go](./go/examples), are available in the directory [examples](./examples).
 
 ## Value semantics
 Traeger provides a library `traeger::value` with types that can be efficiently copied and shared without data-races.
