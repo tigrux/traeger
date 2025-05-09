@@ -12,7 +12,7 @@ RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
 ARG CMAKE_VERSION=4.0.2
 WORKDIR /opt/cmake
 RUN wget https://github.com/Kitware/CMake/releases/download/v${CMAKE_VERSION}/cmake-${CMAKE_VERSION}-linux-$(uname -m).tar.gz -O - | tar --strip-components=1 -xz
-ARG GO_VERSION=1.24.2
+ARG GO_VERSION=1.24.3
 WORKDIR /opt/go
 RUN wget https://go.dev/dl/go${GO_VERSION}.linux-$(dpkg --print-architecture).tar.gz -O - | tar --strip-components=1 -xz
 ENV PATH=${PATH}:/opt/cmake/bin:/opt/go/bin
