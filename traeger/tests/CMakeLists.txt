@@ -3,9 +3,8 @@ find_package(Catch2 3 QUIET)
 if(NOT Catch2_FOUND)
     FetchContent_Declare(
         Catch2
-        URL https://github.com/catchorg/Catch2/archive/refs/tags/v3.8.1.tar.gz
-        URL_HASH
-            SHA256=18b3f70ac80fccc340d8c6ff0f339b2ae64944782f8d2fca2bd705cf47cadb79
+        GIT_REPOSITORY https://github.com/catchorg/Catch2
+        GIT_TAG v3.8.1
         DOWNLOAD_EXTRACT_TIMESTAMP ON
         OVERRIDE_FIND_PACKAGE
         EXCLUDE_FROM_ALL

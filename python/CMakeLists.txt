@@ -15,9 +15,8 @@ find_package(tsl-robin-map QUIET)
 if(NOT tsl-robin-map_FOUND)
     FetchContent_Declare(
         tsl-robin-map
-        URL https://github.com/Tessil/robin-map/archive/refs/tags/v1.4.0.tar.gz
-        URL_HASH
-            SHA256=7930dbf9634acfc02686d87f615c0f4f33135948130b8922331c16d90a03250c
+        GIT_REPOSITORY https://github.com/Tessil/robin-map/
+        GIT_TAG v1.4.0
         DOWNLOAD_EXTRACT_TIMESTAMP ON
         OVERRIDE_FIND_PACKAGE
         EXCLUDE_FROM_ALL
@@ -37,9 +36,8 @@ if(NOT nanobind_FOUND)
     )
     FetchContent_Declare(
         nanobind
-        URL https://github.com/wjakob/nanobind/archive/refs/tags/v2.7.0.tar.gz
-        URL_HASH
-            SHA256=6c8c6bf0435b9d8da9312801686affcf34b6dbba142db60feec8d8e220830499
+        GIT_REPOSITORY https://github.com/wjakob/nanobind
+        GIT_TAG v2.7.0
         DOWNLOAD_EXTRACT_TIMESTAMP ON
         OVERRIDE_FIND_PACKAGE
         EXCLUDE_FROM_ALL

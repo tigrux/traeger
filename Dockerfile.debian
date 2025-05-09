@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN --mount=target=/var/lib/apt/lists,type=cache,sharing=locked \
     --mount=target=/var/cache/apt,type=cache,sharing=locked \
     apt update -y && \
-    apt install -y g++ libpython3-dev ninja-build patch python3 wget
+    apt install -y g++ git libpython3-dev ninja-build python3 wget
 
 ARG CMAKE_VERSION=4.0.2
 WORKDIR /opt/cmake

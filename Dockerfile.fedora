@@ -5,7 +5,7 @@ FROM ${OS}
 
 RUN --mount=type=cache,target=/var/cache/dnf \
     dnf install -y \
-    cmake gcc-c++ go ninja patch python3 python3-devel wget
+    cmake gcc-c++ git go ninja python3 python3-devel
 
 ARG TRAEGER_HOME=/opt/traeger
 ARG TRAEGER_BUILD=/opt/traeger

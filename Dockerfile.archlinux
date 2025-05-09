@@ -5,7 +5,7 @@ FROM ${OS}
 
 RUN --mount=type=cache,target=/var/cache/pacman/pkg \
     pacman -Syu --noconfirm \
-    cmake gcc go ninja patch python3 wget
+    cmake gcc git go ninja python3
 
 ARG TRAEGER_HOME=/opt/traeger
 ARG TRAEGER_BUILD=/opt/traeger
