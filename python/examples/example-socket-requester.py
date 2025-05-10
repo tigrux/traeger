@@ -3,7 +3,7 @@
 import time
 import traeger
 
-actor_messaging = __import__("example-actor-messaging")
+from example_actor_messaging import perform_operations
 
 
 def main():
@@ -15,7 +15,7 @@ def main():
     scheduler: traeger.Scheduler = traeger.Scheduler(threads_count=8)
 
     print(f"Sending messages to replier on address: {address}")
-    actor_messaging.perform_operations(scheduler, requester.mailbox())
+    perform_operations(scheduler, requester.mailbox())
 
     while scheduler.count() != 0:
         time.sleep(0.010)

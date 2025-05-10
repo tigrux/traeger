@@ -12,8 +12,9 @@ def broadcast(scheduler: traeger.Scheduler, publisher: traeger.Publisher, counte
 
 
 def heart_beat(
-    scheduler: traeger.Scheduler, publisher: traeger.Publisher, counter: int
-):
+    scheduler: traeger.Scheduler,
+    publisher: traeger.Publisher,
+    counter: int):
     scheduler.schedule_delayed(1, lambda: broadcast(scheduler, publisher, counter))
 
 

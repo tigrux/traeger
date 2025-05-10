@@ -3,7 +3,7 @@
 import time
 import traeger
 
-actor_definition = __import__("example-actor-definition")
+from example_actor_definition import make_account_actor
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
 
     replier: traeger.Replier = context.replier(address)
     scheduler: traeger.Scheduler = traeger.Scheduler(threads_count=8)
-    actor: traeger.Actor = actor_definition.make_account_actor(0.0)
+    actor: traeger.Actor = make_account_actor(0.0)
     reply_promise = replier.reply(scheduler, actor.mailbox())
     print(f"Replier listening on address: {address}")
 
