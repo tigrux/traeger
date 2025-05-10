@@ -4,10 +4,10 @@ function(add_go_example EXAMPLE)
     add_custom_target(
         go-${EXAMPLE}
         ALL
-        DEPENDS ${CMAKE_BINARY_DIR}/examples/go/${EXAMPLE}/${EXAMPLE}
+        DEPENDS ${CMAKE_BINARY_DIR}/go/examples/${EXAMPLE}/${EXAMPLE}
     )
     add_custom_command(
-        OUTPUT ${CMAKE_BINARY_DIR}/examples/go/${EXAMPLE}/${EXAMPLE}
+        OUTPUT ${CMAKE_BINARY_DIR}/go/examples/${EXAMPLE}/${EXAMPLE}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMAND
             CC=${CMAKE_C_COMPILER} GOEXPERIMENT=rangefunc
