@@ -1,4 +1,4 @@
-# Traeger: A portable Actor System for C++ and Python
+# Traeger: A portable Actor System for C++ and other languages
 Traeger is a collection of libraries to write applications following the principles of the [Actor Model](https://en.wikipedia.org/wiki/Actor_model).
 
 * It simplifies the development of concurrent, distributed and portable applications.
@@ -13,8 +13,8 @@ Traeger is a collection of libraries to write applications following the princip
   [nanobind](https://github.com/wjakob/nanobind).
 * Bindings for a few other languages are provided:
     * Python: for prototyping and testing.
+    * C: for interfacing with other languages like Go.
     * Go: for networking and micro-services.
-    * C: for interfacing with other languages via [FFI](https://doc.rust-lang.org/nomicon/ffi.html).
 * The word Traeger is German for carrier and the name was inspired by the library [immer](https://github.com/arximboldi/immer/).
 
 # Prerequisites
@@ -52,7 +52,11 @@ $ CMAKE_PREFIX_PATH=${HOME}/local pip install ./python/
 ```
 
 # Quick start
-The following examples, as well as examples for [Python](./python/examples) and [Go](./go/examples), are available in the directory [examples](./examples).
+
+This quickstart is available with examples for:
+* [C++](/README.md#quick-start).
+* [Python](/python/README.md#quick-start).
+* [Go](/go/README.md#quick-start).
 
 ## Value semantics
 Traeger provides a library `traeger::value` with types that can be efficiently copied and shared without data-races.
@@ -169,7 +173,7 @@ public:
     }
 };
 
-// this method acts as the factory for the Account actor
+// this function acts as the factory for the Account actor
 traeger::Actor make_account_actor(traeger::Float initial_funds)
 {
     auto account_actor = traeger::make_actor<Account>(initial_funds);
@@ -378,7 +382,7 @@ int main()
 * Data received by the socket is encoded then send over to the replier.
 * The requester decodes responses and use them to complete messages.
 
- ```C++
+```C++
 // FILE: examples/example-socket-requester.cpp
 // SPDX-License-Identifier: BSL-1.0
 
@@ -426,7 +430,7 @@ In this pattern a publisher binds to an address to multicast values grouped by t
 * A publisher is used to multicast values over a network grouped by topic.
 * A publisher multicasts regardless if there are subscribers or not.
 
- ```C++
+```C++
 // FILE: examples/example-socket-publisher.cpp
 // SPDX-License-Identifier: BSL-1.0
 
@@ -484,7 +488,7 @@ int main()
 * A subscriber connects to the address of a publisher.
 * A subscriber listens for values ​​of topics to which it has subscribed.
 
- ```C++
+```C++
 // FILE: examples/example-socket-subscriber.cpp
 // SPDX-License-Identifier: BSL-1.0
 
