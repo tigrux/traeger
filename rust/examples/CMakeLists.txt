@@ -1,0 +1,7 @@
+add_rust_example(example-value-semantics)
+add_rust_example(example-actor-local)
+add_rust_example(example-format-serialization)
+add_rust_example(example-socket-replier)
+add_rust_example(example-socket-requester)
+add_rust_example(example-socket-publisher)
+add_rust_example(example-socket-subscriber)

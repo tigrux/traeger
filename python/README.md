@@ -13,8 +13,9 @@ Traeger is a collection of libraries to write applications following the princip
   [nanobind](https://github.com/wjakob/nanobind).
 * Bindings for a few other languages are provided:
     * Python: for prototyping and testing.
-    * C: for interfacing with other languages like Go.
+    * C: for interfacing with other languages like Rust and Go.
     * Go: for networking and micro-services.
+    * Rust: to gain access to its arsenal of crates.
 * The word Traeger is German for carrier and the name was inspired by the library [immer](https://github.com/arximboldi/immer/).
 
 # Prerequisites
@@ -57,6 +58,8 @@ This quickstart is available with examples for:
 * [C++](/README.md#quick-start).
 * [Python](/python/README.md#quick-start).
 * [Go](/go/README.md#quick-start).
+* [Rust](/rust/README.md#quick-start).
+
 
 ## Value semantics
 Traeger provides a library `traeger::value` with types that can be efficiently copied and shared without data-races.

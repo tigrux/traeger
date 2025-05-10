@@ -30,6 +30,11 @@ if(GO)
     add_subdirectory(go)
 endif()
 
+find_program(RUSTC rustc)
+if(RUSTC)
+    add_subdirectory(rust)
+endif()
+
 option(BUILD_EXAMPLES "Build examples" ON)
 if(BUILD_EXAMPLES)
     add_subdirectory(examples)
