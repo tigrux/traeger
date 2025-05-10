@@ -31,10 +31,11 @@ class Account(traeger.Actor):
         time.sleep(0.200)
         return self.funds
 
+
+# this function acts as the factory for the Account actor
 def make_account_actor(initial_funds: float) -> traeger.Actor:
     account_actor = traeger.make_actor(Account, initial_funds)
     account_actor.define_writer("deposit", Account.deposit)
     account_actor.define_writer("debit", Account.debit)
     account_actor.define_reader("balance", Account.balance)
     return account_actor
-

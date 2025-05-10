@@ -55,6 +55,7 @@ func (account *Account) balance(arguments *traeger.List) (any, error) {
 	return account.funds, nil
 }
 
+// this function acts as the factory for the Account actor
 func MakeAccountActor(initialFunds float64) *traeger.Actor[Account] {
 	accountActor := traeger.MakeActor(&Account{initialFunds})
 	accountActor.DefineWriter("deposit", (*Account).deposit)

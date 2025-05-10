@@ -54,7 +54,7 @@ public:
     }
 };
 
-// this method acts as the factory for the Account actor
+// this function acts as the factory for the Account actor
 traeger::Actor make_account_actor(traeger::Float initial_funds)
 {
     auto account_actor = traeger::make_actor<Account>(initial_funds);
