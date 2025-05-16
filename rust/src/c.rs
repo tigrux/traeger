@@ -41,7 +41,7 @@ pub struct traeger_value_t {
 }
 
 #[link(name = "traeger_value")]
-unsafe extern "C" {
+extern "C" {
 
     // String
 
@@ -141,9 +141,8 @@ unsafe extern "C" {
 
     // ListIterator
 
-    pub unsafe fn traeger_list_iterator_new(
-        c_self: *const traeger_list_t,
-    ) -> *mut traeger_list_iterator_t;
+    pub fn traeger_list_iterator_new(c_self: *const traeger_list_t)
+        -> *mut traeger_list_iterator_t;
 
     pub fn traeger_list_iterator_next(
         c_self: *mut traeger_list_iterator_t,
@@ -244,9 +243,7 @@ unsafe extern "C" {
 
     // MaptIterator
 
-    pub unsafe fn traeger_map_iterator_new(
-        c_self: *const traeger_map_t,
-    ) -> *mut traeger_map_iterator_t;
+    pub fn traeger_map_iterator_new(c_self: *const traeger_map_t) -> *mut traeger_map_iterator_t;
 
     pub fn traeger_map_iterator_next(
         c_self: *mut traeger_map_iterator_t,
@@ -372,7 +369,7 @@ pub struct traeger_queue_t {
 }
 
 #[link(name = "traeger_actor")]
-unsafe extern "C" {
+extern "C" {
 
     // Result
 
@@ -606,7 +603,9 @@ pub struct traeger_format_t {
 }
 
 #[link(name = "traeger_format")]
-unsafe extern "C" {
+extern "C" {
+
+    // Format
 
     pub fn traeger_format_get_by_name(
         c_name_data: *const u8,
@@ -666,7 +665,7 @@ pub struct traeger_subscriber_t {
 }
 
 #[link(name = "traeger_socket")]
-unsafe extern "C" {
+extern "C" {
 
     // Context
 
