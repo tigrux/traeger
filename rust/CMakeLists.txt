@@ -1,3 +1,5 @@
+file(GLOB TRAEGER_RUST_FILES ${CMAKE_SOURCE_DIR}/rust/src/*.rs)
+
 set(TRAEGER_RUST_COMPILER ${RUSTC} --edition=2021)
 
 add_custom_target(
@@ -12,7 +14,12 @@ add_custom_command(
         ${TRAEGER_RUST_COMPILER} --crate-type lib --crate-name traeger
         src/lib.rs -L ${TRAEGER_LIBRARY_PATH} --out-dir
         ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS traeger::actor traeger::format traeger::socket traeger::value
+    DEPENDS
+        ${TRAEGER_RUST_FILES}
+        traeger::actor
+        traeger::format
+        traeger::socket
+        traeger::value
 )
 
 function(add_rust_target OUTPUT TYPE SOURCE)
