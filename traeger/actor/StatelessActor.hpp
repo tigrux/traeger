@@ -30,6 +30,8 @@ namespace traeger
 
         auto mailbox() const noexcept -> Mailbox;
 
+        auto mailbox_interface() const noexcept -> std::unique_ptr<Mailbox::Interface>;
+
     private:
         struct impl_type;
         std::unique_ptr<impl_type> impl_;

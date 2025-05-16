@@ -502,6 +502,75 @@ func (mapping *Map) Find(key string) (*Value, bool) {
 	return nil, false
 }
 
+func (mapping *Map) Get(key string, variant any) (bool, error) {
+	value, ok := mapping.Find(key)
+	if !ok {
+		return false, fmt.Errorf("invalid key '%s'", key)
+	}
+	switch variant := variant.(type) {
+	case *bool:
+		if val, ok := value.GetBool(); ok {
+			*variant = val
+		}
+	case *int:
+		if val, ok := value.GetInt(); ok {
+			*variant = int(val)
+		}
+	case *int32:
+		if val, ok := value.GetInt(); ok {
+			*variant = int32(val)
+		}
+	case *int64:
+		if val, ok := value.GetInt(); ok {
+			*variant = val
+		}
+	case *uint:
+		if val, ok := value.GetUInt(); ok {
+			*variant = uint(val)
+		}
+	case *uint32:
+		if val, ok := value.GetUInt(); ok {
+			*variant = uint32(val)
+		}
+	case *uint64:
+		if val, ok := value.GetUInt(); ok {
+			*variant = val
+		}
+	case *float32:
+		if val, ok := value.GetFloat(); ok {
+			*variant = float32(val)
+		}
+	case *float64:
+		if val, ok := value.GetFloat(); ok {
+			*variant = val
+		}
+	case *string:
+		if val, ok := value.GetString(); ok {
+			*variant = val.String()
+		}
+	case **String:
+		if val, ok := value.GetString(); ok {
+			*variant = val
+		}
+	case **List:
+		if val, ok := value.GetList(); ok {
+			*variant = val
+		}
+	case **Map:
+		if val, ok := value.GetMap(); ok {
+			*variant = val
+		}
+	case **Value:
+		*variant = value
+	default:
+		return false, fmt.Errorf(
+			"invalid cast from type %s to %s",
+			value.GetTypeName(),
+			reflect.TypeOf(variant))
+	}
+	return true, nil
+}
+
 func (mapping *Map) Empty() bool {
 	return bool(C.traeger_map_empty(mapping.self))
 }

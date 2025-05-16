@@ -485,5 +485,82 @@ fn main() {
 }
 ```
 
+## Modules
+
+Traeger provides a library `traeger::module` to define and load modules.
+
+Actors can be instantiated in the code of shared objects, then loaded programatically.
+This enables modular applications in environments where the hardware may vary.
+
+### Loading modules
+
+Loading a module, then retrieving a mailbox from it.
+
+```Rust
+// FILE: rust/examples/example-module-actor.rs
+// SPDX-License-Identifier: BSL-1.0
+
+use std::{env, thread::sleep, time::Duration};
+
+use traeger::{Module, Scheduler, Threads, map};
+
+pub mod example_actor_messaging;
+use example_actor_messaging::perform_operations;
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+    if args.len() < 2 {
+        println!("Missing argument");
+        return;
+    }
+
+    let path = &args[1];
+    println!("Attempting to load module from path: {path}");
+
+    match Module::from_path(&path, &map!("initial_funds" => 1000.0)) {
+        Err(error) => {
+            println!("Module error: {error}");
+        }
+        Ok(module) => {
+            let scheduler = Scheduler::new(Threads { count: 8 });
+            let mailbox = module.mailbox();
+            perform_operations(&scheduler, &mailbox);
+
+            while scheduler.count() != 0 {
+                sleep(Duration::from_millis(10));
+            }
+        }
+    }
+}
+```
+
+### Defining modules
+
+The definition of a shared object, it is provided an initial configuration, and returns either a mailbox interface or an error.
+
+```Rust
+// FILE: rust/examples/example-module.rs
+// SPDX-License-Identifier: BSL-1.0
+
+use traeger::{unpack, Float};
+
+pub mod example_actor_definition;
+use example_actor_definition::make_account_actor;
+
+traeger::module_init!(|map| {
+    let initial_funds = match unpack!(map, "initial_funds" => Float) {
+        Ok((value,)) => value,
+        Err(_) => 0.0,
+    };
+
+    println!("initial_funds: {initial_funds}");
+    let actor = make_account_actor(initial_funds);
+    Ok(actor)
+});
+
+#[allow(dead_code)]
+fn main() {}
+```
+
 # License
 Boost Software License - Version 1.0

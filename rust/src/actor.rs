@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 use crate::*;
 // Result
 
@@ -460,7 +462,7 @@ impl Clone for Promise {
 // Actor
 
 pub struct Actor<T> {
-    ptr: *mut c::traeger_actor_t,
+    pub(crate) ptr: *mut c::traeger_actor_t,
     state: std::rc::Rc<std::cell::RefCell<T>>,
 }
 
@@ -497,7 +499,7 @@ impl<T: 'static> Actor<T> {
         self,
         name: &str,
         mut method: impl FnMut(&mut T, List) -> std::result::Result<Variant, std::string::String>
-        + 'static,
+            + 'static,
     ) -> Self {
         let state = self.state.clone();
         let function =

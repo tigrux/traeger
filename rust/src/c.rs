@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: BSL-1.0
+
 #[allow(non_camel_case_types)]
 #[repr(C)]
 pub struct traeger_string_t {
@@ -53,6 +55,8 @@ extern "C" {
     pub fn traeger_string_copy(c_self: *const traeger_string_t) -> *mut traeger_string_t;
 
     pub fn traeger_string_free(c_self: *mut traeger_string_t);
+
+    pub fn traeger_string_set(c_self: *mut traeger_string_t, c_data: *const u8, c_size: usize);
 
     pub fn traeger_string_data(c_self: *const traeger_string_t) -> *const u8;
 
@@ -363,6 +367,13 @@ pub struct traeger_mailbox_t {
 
 #[allow(non_camel_case_types)]
 #[repr(C)]
+pub struct traeger_mailbox_interface_t {
+    _opaque: (),
+    _marker: std::marker::PhantomData<(*mut u8, std::marker::PhantomPinned)>,
+}
+
+#[allow(non_camel_case_types)]
+#[repr(C)]
 pub struct traeger_queue_t {
     _opaque: (),
     _marker: std::marker::PhantomData<(*mut u8, std::marker::PhantomPinned)>,
@@ -516,6 +527,10 @@ extern "C" {
     pub fn traeger_actor_free(c_self: *mut traeger_actor_t);
 
     pub fn traeger_actor_get_mailbox(c_self: *const traeger_actor_t) -> *mut traeger_mailbox_t;
+
+    pub fn traeger_actor_get_mailbox_interface(
+        c_self: *const traeger_actor_t,
+    ) -> *mut traeger_mailbox_interface_t;
 
     pub fn traeger_actor_define_reader(
         c_self: *const traeger_actor_t,
@@ -759,4 +774,31 @@ extern "C" {
         c_scheduler: *const traeger_scheduler_t,
         c_function: *const traeger_function_t,
     ) -> *mut traeger_promise_t;
+}
+
+#[allow(non_camel_case_types)]
+#[repr(C)]
+pub struct traeger_module_t {
+    _opaque: (),
+    _marker: std::marker::PhantomData<(*mut u8, std::marker::PhantomPinned)>,
+}
+
+#[link(name = "traeger_module")]
+extern "C" {
+
+    // Module
+
+    pub fn traeger_module_new_from_path_or_error(
+        c_path_data: *const u8,
+        c_path_size: usize,
+        c_configuration: *const traeger_map_t,
+        c_result: *mut *mut traeger_module_t,
+        c_error: *mut *mut traeger_string_t,
+    ) -> bool;
+
+    pub fn traeger_module_copy(c_self: *const traeger_module_t) -> *mut traeger_module_t;
+
+    pub fn traeger_module_free(c_self: *mut traeger_module_t);
+
+    pub fn traeger_module_get_mailbox(c_self: *const traeger_module_t) -> *mut traeger_mailbox_t;
 }

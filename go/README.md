@@ -540,5 +540,93 @@ func main() {
 }
 ```
 
+## Modules
+
+Traeger provides a library `traeger::module` to define and load modules.
+
+Actors can be instantiated in the code of shared objects, then loaded programatically.
+This enables modular applications in environments where the hardware may vary.
+
+### Loading modules
+
+Loading a module, then retrieving a mailbox from it.
+
+```Go
+// FILE: go/examples/example-module-actor/main.go
+// SPDX-License-Identifier: BSL-1.0
+
+package main
+
+import (
+	"actor_messaging"
+	"fmt"
+	"os"
+	"runtime"
+	"time"
+
+	traeger "github.com/tigrux/traeger/go"
+)
+
+func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("Missing arguments")
+		return
+	}
+
+	path := os.Args[1]
+	configuration := traeger.MakeMap(map[string]any{
+		"initial_funds": 1000.0,
+	})
+
+	fmt.Printf("Attempting to load module from path: %s", path)
+	module, err := traeger.NewModuleFromPathOrError(path, configuration)
+	if err != nil {
+		fmt.Printf("Module error: %s", err.Error())
+		return
+	}
+
+	scheduler := traeger.NewScheduler(8)
+	actor_messaging.PerformOperations(scheduler, module.Mailbox())
+
+	for scheduler.Count() != 0 {
+		time.Sleep(10 * time.Millisecond)
+		runtime.GC()
+	}
+}
+```
+
+### Defining modules
+
+The definition of a shared object, it is provided an initial configuration, and returns either a mailbox interface or an error.
+
+```Go
+// FILE: go/examples/example-module/main.go
+// SPDX-License-Identifier: BSL-1.0
+
+package main
+
+import (
+	"actor_definition"
+	"fmt"
+
+	traeger "github.com/tigrux/traeger/go"
+)
+
+func init() {
+	traeger.ModuleInit(
+		func(configuration *traeger.Map) (*traeger.BaseActor, error) {
+			initial_funds := 0.0
+			configuration.Get("initial_funds", &initial_funds)
+
+			fmt.Printf("initial_funds: %f\n", initial_funds)
+			actor := actor_definition.MakeAccountActor(initial_funds)
+			return &actor.BaseActor, nil
+		})
+}
+
+func main() {
+}
+```
+
 # License
 Boost Software License - Version 1.0

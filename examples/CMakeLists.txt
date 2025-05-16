@@ -41,3 +41,20 @@ target_link_libraries(example-socket-publisher traeger::socket)
 
 add_executable(example-socket-subscriber example-socket-subscriber.cpp)
 target_link_libraries(example-socket-subscriber traeger::socket)
+
+add_executable(
+    example-module-actor
+    example-module-actor.cpp
+    example-actor-messaging.cpp
+)
+target_link_libraries(example-module-actor traeger::module)
+
+add_library(
+    example-module
+    MODULE
+    example-module.cpp
+    example-actor-definition.cpp
+)
+target_link_libraries(example-module traeger::actor)
+set_target_properties(example-module PROPERTIES PREFIX "")
+set_target_properties(example-module PROPERTIES SUFFIX ".module")

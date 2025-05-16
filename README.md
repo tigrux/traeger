@@ -543,5 +543,98 @@ int main()
 }
 ```
 
+## Modules
+
+Traeger provides a library `traeger::module` to define and load modules.
+
+Actors can be instantiated in the code of shared objects, then loaded programatically.
+This enables modular applications in environments where the hardware may vary.
+
+### Loading modules
+
+Loading a module, then retrieving a mailbox from it.
+
+```C++
+// FILE: examples/example-module-actor.cpp
+// SPDX-License-Identifier: BSL-1.0
+
+#include <thread>
+#include <chrono>
+#include <iostream>
+
+#include <traeger/module/Module.hpp>
+
+extern void perform_operations(traeger::Scheduler scheduler, traeger::Mailbox mailbox);
+
+int main(int argc, char *argv[])
+{
+    if (argc < 2)
+    {
+        std::cout << "Missing argument" << std::endl;
+        return 1;
+    }
+
+    const traeger::String path = argv[1];
+    std::cout << "Attempting to load module from path: " << path << std::endl;
+
+    auto [module_optional, module_error] = traeger::Module::from_path(path,
+                                                                      traeger::make_map("initial_funds", 1000.0));
+
+    if (!module_optional)
+    {
+        std::cout << "Module error: " << module_error << std::endl;
+        return 1;
+    }
+    auto loaded_module = module_optional.value();
+    auto mailbox = loaded_module.mailbox();
+    auto scheduler = traeger::Scheduler{traeger::Threads{8}};
+
+    perform_operations(scheduler, mailbox);
+
+    while (scheduler.count() != 0)
+    {
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+    }
+}
+```
+
+### Defining modules
+
+The definition of a shared object, it is provided an initial configuration, and returns either a mailbox interface or an error.
+
+```C++
+// FILE: examples/example-module.cpp
+// SPDX-License-Identifier: BSL-1.0
+
+#include <iostream>
+
+#include <traeger/value/Value.hpp>
+#include <traeger/actor/Actor.hpp>
+
+#include <traeger/module/module.h>
+
+extern traeger::Actor make_account_actor(traeger::Float initial_funds);
+
+extern "C" DLLEXPORT void
+traeger_module_init(const traeger_map_t *configuration,
+                    traeger_mailbox_interface_t **result,
+                    traeger_string_t *error)
+{
+    if (configuration == nullptr ||
+        result == nullptr ||
+        error == nullptr)
+    {
+        return;
+    }
+
+    traeger::Float initial_funds = 0.0;
+    configuration->get("initial_funds", initial_funds);
+    std::cout << "initial_funds: " << initial_funds << std::endl;
+
+    auto actor = make_account_actor(initial_funds);
+    *result = actor.mailbox_interface().release();
+}
+```
+
 # License
 Boost Software License - Version 1.0

@@ -532,6 +532,15 @@ extern "C"
         return nullptr;
     }
 
+    traeger_mailbox_interface_t *traeger_actor_get_mailbox_interface(const traeger_actor_t *self)
+    {
+        if (self != nullptr)
+        {
+            return cast(self).mailbox_interface().release();
+        }
+        return nullptr;
+    }
+
     void traeger_actor_define_reader(const traeger_actor_t *self,
                                      const char *name_data,
                                      size_t name_size,

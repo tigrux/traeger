@@ -163,9 +163,9 @@ namespace traeger
             functions_.set(name, std::make_pair(concurrency, function));
         }
 
-        auto mailbox() const noexcept -> std::shared_ptr<mailbox_impl_type>
+        auto mailbox() const noexcept -> std::unique_ptr<mailbox_impl_type>
         {
-            return std::make_shared<mailbox_impl_type>(queue_, functions_);
+            return std::make_unique<mailbox_impl_type>(queue_, functions_);
         }
 
     private:
@@ -202,5 +202,10 @@ namespace traeger
     auto StatelessActor::mailbox() const noexcept -> Mailbox
     {
         return Mailbox{impl_->mailbox()};
+    }
+
+    auto StatelessActor::mailbox_interface() const noexcept -> std::unique_ptr<Mailbox::Interface>
+    {
+        return impl_->mailbox();
     }
 }

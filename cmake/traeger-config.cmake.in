@@ -7,6 +7,7 @@ add_library(traeger::value ALIAS traeger_value)
 add_library(traeger::format ALIAS traeger_format)
 add_library(traeger::actor ALIAS traeger_actor)
 add_library(traeger::socket ALIAS traeger_socket)
+add_library(traeger::module ALIAS traeger_module)
 
 set(traeger_INCLUDE_DIRS "${_prefix}/include")
 include_directories(${traeger_INCLUDE_DIRS})

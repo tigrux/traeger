@@ -7,6 +7,12 @@
 
 namespace traeger
 {
+
+    inline auto cast(traeger_string_t *string) noexcept -> std::string &
+    {
+        return *static_cast<std::string *>(string);
+    }
+
     inline auto cast(const traeger_string_t *string) noexcept -> const std::string &
     {
         return *static_cast<const std::string *>(string);

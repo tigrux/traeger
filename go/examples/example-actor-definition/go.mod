@@ -1,4 +1,5 @@
 module example-actor-definition
+
 go 1.23.0
 
 replace github.com/tigrux/traeger/go => ../../../go

@@ -461,5 +461,86 @@ if __name__ == "__main__":
     main()
 ```
 
+## Modules
+
+Traeger provides a library `traeger::module` to define and load modules.
+
+Actors can be instantiated in the code of shared objects, then loaded programatically.
+This enables modular applications in environments where the hardware may vary.
+
+### Loading modules
+
+Loading a module, then retrieving a mailbox from it.
+
+```Python
+# FILE: python/examples/example-module-actor.py
+# SPDX-License-Identifier: BSL-1.0
+
+import sys
+import time
+import traeger
+
+from example_actor_messaging import perform_operations
+
+
+def main(argv: list[str]):
+    if len(argv) < 2:
+        print("Missing argument")
+        return 1
+
+    path: str = argv[1]
+    print(f"Attempting to load module from path: {path}")
+    configuration: traeger.Map = traeger.Map({"initial_funds": 100.0})
+    module: traeger.Module = traeger.Module(path, configuration)
+    scheduler: traeger.Scheduler = traeger.Scheduler(threads_count=8)
+    perform_operations(scheduler, module.mailbox())
+
+    while scheduler.count() != 0:
+        time.sleep(0.010)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
+```
+
+### Defining modules
+
+The definition of a shared object, it is provided an initial configuration, and returns either a mailbox interface or an error.
+
+```Python
+# FILE: examples/example-module.cpp
+// SPDX-License-Identifier: BSL-1.0
+
+#include <iostream>
+
+#include <traeger/value/Value.hpp>
+#include <traeger/actor/Actor.hpp>
+
+#include <traeger/module/module.h>
+
+extern traeger::Actor make_account_actor(traeger::Float initial_funds);
+
+extern "C" DLLEXPORT void
+traeger_module_init(const traeger_map_t *configuration,
+                    traeger_mailbox_interface_t **result,
+                    traeger_string_t *error)
+{
+    if (configuration == nullptr ||
+        result == nullptr ||
+        error == nullptr)
+    {
+        return;
+    }
+
+    traeger::Float initial_funds = 0.0;
+    configuration->get("initial_funds", initial_funds);
+    std::cout << "initial_funds: " << initial_funds << std::endl;
+
+    auto actor = make_account_actor(initial_funds);
+    *result = actor.mailbox_interface().release();
+}
+```
+
 # License
 Boost Software License - Version 1.0

@@ -51,6 +51,17 @@ extern "C"
         }
     }
 
+    void traeger_string_set(traeger_string_t *self,
+                            const char *string_data,
+                            size_t string_size)
+    {
+        if (self != nullptr &&
+            string_data != nullptr)
+        {
+            cast(self) = String(string_data, string_size);
+        }
+    }
+
     const char *traeger_string_data(const traeger_string_t *self)
     {
         return cast(self).data();

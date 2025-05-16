@@ -8,4 +8,5 @@ NB_MODULE(traeger, module)
     traeger_python_register_format_types(module);
     traeger_python_register_actor_types(module);
     traeger_python_register_socket_types(module);
+    traeger_python_register_module_types(module);
 }

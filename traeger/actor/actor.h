@@ -16,6 +16,8 @@ typedef const traeger_promise_t traeger_const_promise_t;
 
 typedef struct traeger_mailbox_t traeger_mailbox_t;
 
+typedef struct traeger_mailbox_interface_t traeger_mailbox_interface_t;
+
 typedef struct traeger_actor_t traeger_actor_t;
 
 typedef struct traeger_queue_t traeger_queue_t;
@@ -192,6 +194,8 @@ extern "C"
     void traeger_actor_free(traeger_actor_t *self);
 
     traeger_mailbox_t *traeger_actor_get_mailbox(const traeger_actor_t *self);
+
+    traeger_mailbox_interface_t *traeger_actor_get_mailbox_interface(const traeger_actor_t *self);
 
     void traeger_actor_define_reader(const traeger_actor_t *self,
                                      const char *name_data,

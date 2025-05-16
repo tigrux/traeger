@@ -16,6 +16,8 @@ typedef struct traeger_list_iterator_t traeger_list_iterator_t;
 
 typedef struct traeger_map_t traeger_map_t;
 
+typedef const struct traeger_map_t traeger_const_map_t;
+
 typedef struct traeger_map_iterator_t traeger_map_iterator_t;
 
 typedef struct traeger_value_t traeger_value_t;
@@ -37,6 +39,10 @@ extern "C"
     traeger_string_t *traeger_string_copy(const traeger_string_t *self);
 
     void traeger_string_free(traeger_string_t *self);
+
+    void traeger_string_set(traeger_string_t *self,
+                            const char *string_data,
+                            size_t string_size);
 
     const char *traeger_string_data(const traeger_string_t *self);
 

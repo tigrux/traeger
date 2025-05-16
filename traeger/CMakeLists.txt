@@ -1,6 +1,13 @@
 set(TRAEGER_LIBRARY_PATH ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
-foreach(LIBRARY value format actor socket)
+foreach(
+    LIBRARY
+    value
+    format
+    actor
+    socket
+    module
+)
     add_library(traeger_${LIBRARY} SHARED)
     list(APPEND TRAEGER_LIBRARIES traeger_${LIBRARY})
     add_library(traeger::${LIBRARY} ALIAS traeger_${LIBRARY})
@@ -24,7 +31,7 @@ if(BUILD_TESTING)
         test
         "ctest"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS test-value test-format test-socket test-actor
+        DEPENDS test-value test-format test-socket test-actor test-module
     )
 endif()
 

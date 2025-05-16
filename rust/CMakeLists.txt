@@ -38,4 +38,8 @@ function(add_rust_example EXAMPLE)
     add_rust_target(${EXAMPLE} bin ${EXAMPLE})
 endfunction()
 
+function(add_rust_module MODULE)
+    add_rust_target(${MODULE}.module cdylib ${MODULE})
+endfunction()
+
 add_subdirectory(examples)

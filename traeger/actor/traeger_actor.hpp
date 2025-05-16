@@ -11,7 +11,6 @@
 #include "traeger/actor/Scheduler.hpp"
 #include "traeger/actor/Promise.hpp"
 
-
 namespace traeger
 {
     inline auto cast(const traeger_result_t *result) -> const Result &

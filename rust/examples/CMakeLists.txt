@@ -5,3 +5,6 @@ add_rust_example(example-socket-replier)
 add_rust_example(example-socket-requester)
 add_rust_example(example-socket-publisher)
 add_rust_example(example-socket-subscriber)
+add_rust_example(example-module-actor)
+
+add_rust_module(example-module)

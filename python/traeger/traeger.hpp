@@ -45,3 +45,5 @@ auto traeger_python_register_format_types(nb::module_ &module) -> void;
 auto traeger_python_register_actor_types(nb::module_ &module) -> void;
 
 auto traeger_python_register_socket_types(nb::module_ &module) -> void;
+
+auto traeger_python_register_module_types(nb::module_ &module) -> void;
