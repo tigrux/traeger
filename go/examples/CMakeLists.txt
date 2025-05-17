@@ -15,9 +15,7 @@ function(add_go_target OUTPUT TYPE)
             CGO_LDFLAGS=-L${TRAEGER_LIBRARY_PATH}
             LD_RUN_PATH=${TRAEGER_LIBRARY_PATH} ${GO} build -o
             ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT} -buildmode=${TYPE}
-        DEPENDS ${TRAEGER_GO_FILES}
-        DEPENDS traeger::value traeger::format traeger::actor traeger::socket
-        DEPENDS ${ARGN}
+        DEPENDS ${TRAEGER_GO_FILES} ${TRAEGER_LIBRARIES} ${ARGN}
     )
 endfunction()
 

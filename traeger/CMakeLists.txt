@@ -1,20 +1,11 @@
 set(TRAEGER_LIBRARY_PATH ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 
-add_library(traeger_value SHARED)
-add_library(traeger::value ALIAS traeger_value)
-add_subdirectory(value)
-
-add_library(traeger_format SHARED)
-add_library(traeger::format ALIAS traeger_format)
-add_subdirectory(format)
-
-add_library(traeger_actor SHARED)
-add_library(traeger::actor ALIAS traeger_actor)
-add_subdirectory(actor)
-
-add_library(traeger_socket SHARED)
-add_library(traeger::socket ALIAS traeger_socket)
-add_subdirectory(socket)
+foreach(LIBRARY value format actor socket)
+    add_library(traeger_${LIBRARY} SHARED)
+    list(APPEND TRAEGER_LIBRARIES traeger_${LIBRARY})
+    add_library(traeger::${LIBRARY} ALIAS traeger_${LIBRARY})
+    add_subdirectory(${LIBRARY})
+endforeach()
 
 include(CTest)
 if(BUILD_TESTING)
@@ -38,9 +29,6 @@ if(BUILD_TESTING)
 endif()
 
 set_target_properties(
-    traeger_value
-    traeger_format
-    traeger_actor
-    traeger_socket
+    ${TRAEGER_LIBRARIES}
     PROPERTIES VERSION ${version} SOVERSION 0
 )

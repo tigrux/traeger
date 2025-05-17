@@ -14,12 +14,7 @@ add_custom_command(
         ${TRAEGER_RUST_COMPILER} --crate-type lib --crate-name traeger
         src/lib.rs -L ${TRAEGER_LIBRARY_PATH} --out-dir
         ${CMAKE_CURRENT_BINARY_DIR}
-    DEPENDS
-        ${TRAEGER_RUST_FILES}
-        traeger::actor
-        traeger::format
-        traeger::socket
-        traeger::value
+    DEPENDS ${TRAEGER_RUST_FILES} ${TRAEGER_LIBRARIES}
 )
 
 function(add_rust_target OUTPUT TYPE SOURCE)

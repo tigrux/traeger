@@ -37,10 +37,7 @@ if(BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-export(
-    TARGETS traeger_value traeger_format traeger_actor traeger_socket
-    FILE traeger-targets.cmake
-)
+export(TARGETS ${TRAEGER_LIBRARIES} FILE traeger-targets.cmake)
 
 configure_file(
     ${traeger_SOURCE_DIR}/cmake/traeger-config.cmake.in
