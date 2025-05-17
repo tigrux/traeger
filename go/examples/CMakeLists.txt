@@ -1,24 +1,28 @@
 file(GLOB TRAEGER_GO_FILES ${CMAKE_SOURCE_DIR}/go/*.go)
 
-function(add_go_example EXAMPLE)
+function(add_go_target OUTPUT TYPE)
     add_custom_target(
-        go-${EXAMPLE}
+        go-${OUTPUT}
         ALL
-        DEPENDS ${CMAKE_BINARY_DIR}/go/examples/${EXAMPLE}/${EXAMPLE}
+        DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT}
     )
     add_custom_command(
-        OUTPUT ${CMAKE_BINARY_DIR}/go/examples/${EXAMPLE}/${EXAMPLE}
+        OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT}
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
         COMMAND
             CC=${CMAKE_C_COMPILER} GOEXPERIMENT=rangefunc
             CGO_CFLAGS=-I${CMAKE_SOURCE_DIR}
             CGO_LDFLAGS=-L${TRAEGER_LIBRARY_PATH}
             LD_RUN_PATH=${TRAEGER_LIBRARY_PATH} ${GO} build -o
-            ${CMAKE_CURRENT_BINARY_DIR}
+            ${CMAKE_CURRENT_BINARY_DIR}/${OUTPUT} -buildmode=${TYPE}
         DEPENDS ${TRAEGER_GO_FILES}
         DEPENDS traeger::value traeger::format traeger::actor traeger::socket
         DEPENDS ${ARGN}
     )
+endfunction()
+
+function(add_go_example EXAMPLE)
+    add_go_target(${EXAMPLE} exe)
 endfunction()
 
 add_subdirectory(example-value-semantics)
