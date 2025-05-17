@@ -2,7 +2,6 @@
 
 #include <utility>
 #include <optional>
-#include <cstddef>
 #include <ostream>
 
 #include "traeger/value/Value.hpp"
@@ -10,25 +9,6 @@
 
 namespace traeger
 {
-    List::impl_type::~impl_type() noexcept
-    {
-    }
-
-    List::impl_type::impl_type() noexcept
-        : list()
-    {
-    }
-
-    List::impl_type::impl_type(const impl_type &other) noexcept
-        : list(other.list)
-    {
-    }
-
-    List::impl_type::impl_type(impl_type &&other) noexcept
-        : list(std::move(other.list))
-    {
-    }
-
     List::impl_type::impl_type(const persistent_type &persistent) noexcept
         : list(persistent.transient())
     {
@@ -86,7 +66,10 @@ namespace traeger
 
     auto List::operator=(const List &other) noexcept -> List &
     {
-        impl().list = other.impl().list;
+        if (this != &other)
+        {
+            impl().list = other.impl().list;
+        }
         return *this;
     }
 
@@ -116,12 +99,12 @@ namespace traeger
         impl().list.push_back(std::move(value));
     }
 
-    auto List::set(int index,
+    auto List::set(const int index,
                    const Value &value) noexcept -> bool
     {
         const auto size_ = size();
-        const std::size_t position = (index < 0) ? index + size_ : index;
-        if (position < size_)
+        if (const std::size_t position = index < 0 ? index + size_ : index;
+            position < size_)
         {
             impl().list.set(position, value);
             return true;
@@ -129,12 +112,12 @@ namespace traeger
         return false;
     }
 
-    auto List::set(int index,
+    auto List::set(const int index,
                    Value &&value) noexcept -> bool
     {
         const auto size_ = size();
-        const std::size_t position = (index < 0) ? index + size_ : index;
-        if (position < size_)
+        if (const std::size_t position = index < 0 ? index + size_ : index;
+            position < size_)
         {
             impl().list.set(position, std::move(value));
             return true;
@@ -142,10 +125,10 @@ namespace traeger
         return false;
     }
 
-    auto List::find(int index) const noexcept -> const Value *
+    auto List::find(const int index) const noexcept -> const Value *
     {
         const auto size_ = size();
-        if (const std::size_t position = (index < 0) ? index + size_ : index; position < size_)
+        if (const std::size_t position = index < 0 ? index + size_ : index; position < size_)
         {
             return &impl().list[position].get();
         }
@@ -164,8 +147,9 @@ namespace traeger
 
     auto List::resize(std::size_t new_size) noexcept -> std::size_t
     {
-        const auto size_ = size();
-        if (new_size < size_)
+
+        if (const auto size_ = size();
+            new_size < size_)
         {
             impl().list.take(new_size);
         }
@@ -179,25 +163,9 @@ namespace traeger
         return size();
     }
 
-    List::Iterator::impl_type::~impl_type() noexcept
-    {
-    }
-
     List::Iterator::impl_type::impl_type(const iterator_type &begin, const iterator_type &end) noexcept
         : begin(begin),
           end(end)
-    {
-    }
-
-    List::Iterator::impl_type::impl_type(const impl_type &other) noexcept
-        : begin(other.begin),
-          end(other.end)
-    {
-    }
-
-    List::Iterator::impl_type::impl_type(impl_type &&other) noexcept
-        : begin(std::move(other.begin)),
-          end(std::move(other.end))
     {
     }
 
@@ -213,7 +181,7 @@ namespace traeger
 
     List::Iterator::operator bool() const noexcept
     {
-        return (impl().begin != impl().end);
+        return impl().begin != impl().end;
     }
 
     auto List::Iterator::value() const noexcept -> const Value &
@@ -231,33 +199,33 @@ namespace traeger
         if (*this)
         {
             ++impl().begin;
-            return bool(*this);
+            return static_cast<bool>(*this);
         }
         return false;
     }
 
-    auto List::Iterator::operator++() noexcept -> List::Iterator &
+    auto List::Iterator::operator++() noexcept -> Iterator &
     {
         increment();
         return *this;
     }
 
-    auto List::Iterator::operator!=(bool end) noexcept -> bool
+    auto List::Iterator::operator!=(const bool end) const noexcept -> bool
     {
-        return bool(*this) != end;
+        return static_cast<bool>(*this) != end;
     }
 
-    auto List::Iterator::operator==(bool end) noexcept -> bool
+    auto List::Iterator::operator==(const bool end) const noexcept -> bool
     {
-        return bool(*this) == end;
+        return static_cast<bool>(*this) == end;
     }
 
-    auto List::begin() const noexcept -> List::Iterator
+    auto List::begin() const noexcept -> Iterator
     {
         return Iterator{*this};
     }
 
-    auto List::end() const noexcept -> bool
+    auto List::end() noexcept -> bool
     {
         return false;
     }

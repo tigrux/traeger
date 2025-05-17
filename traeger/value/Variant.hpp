@@ -18,9 +18,9 @@ namespace traeger
         List,
         Map>;
 
-    auto value_from_variant(const Variant &argument) noexcept -> Value;
+    auto value_from_variant(const Variant &variant) noexcept -> Value;
 
-    auto value_from_variant(Variant &&argument) noexcept -> Value;
+    auto value_from_variant(Variant &&variant) noexcept -> Value;
 
     auto value_to_variant(const Value &value) noexcept -> Variant;
 

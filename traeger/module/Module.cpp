@@ -4,6 +4,11 @@
 
 #include <traeger/module/Module.hpp>
 
+namespace
+{
+    const auto *init_symbol = "traeger_module_init";
+}
+
 #ifdef _WIN32
 #include <windows.h>
 
@@ -45,9 +50,9 @@ namespace
         return module_ptr;
     }
 
-    auto module_get_symbol(const module_ptr_t &module_ptr, const char *symbol) noexcept -> traeger_module_init_t
+    auto module_get_init_symbol(const module_ptr_t &module_ptr) noexcept -> traeger_module_init_t
     {
-        return reinterpret_cast<traeger_module_init_t>(GetProcAddress(module_ptr.get(), symbol));
+        return reinterpret_cast<traeger_module_init_t>(GetProcAddress(module_ptr.get(), init_symbol));
     }
 }
 
@@ -73,9 +78,9 @@ namespace
         return module_ptr;
     }
 
-    auto module_get_symbol(const module_ptr_t &module_ptr, const char *symbol) noexcept -> traeger_module_init_t
+    auto module_get_init_symbol(const module_ptr_t &module_ptr) noexcept -> traeger_module_init_t
     {
-        return reinterpret_cast<traeger_module_init_t>(dlsym(module_ptr.get(), symbol));
+        return reinterpret_cast<traeger_module_init_t>(dlsym(module_ptr.get(), init_symbol));
     }
 }
 
@@ -83,12 +88,12 @@ namespace
 
 namespace traeger
 {
-    struct Module::impl_type : public Mailbox::Interface
+    struct Module::impl_type final : Mailbox::Interface
     {
         impl_type(module_ptr_t &&module_ptr,
                   std::shared_ptr<Mailbox::Interface> &&mailbox_interface) noexcept
             : module_ptr_(std::move(module_ptr)),
-              mailbox_(std::move(mailbox_interface))
+              mailbox_(mailbox_interface)
         {
         }
 
@@ -105,9 +110,7 @@ namespace traeger
         Mailbox mailbox_;
     };
 
-    Module::~Module() noexcept
-    {
-    }
+    Module::~Module() noexcept = default;
 
     Module::Module(std::shared_ptr<impl_type> &&impl) noexcept
         : impl_(std::move(impl))
@@ -129,8 +132,7 @@ namespace traeger
             return {std::nullopt, module_error};
         }
 
-        const char *init_symbol = "traeger_module_init";
-        auto module_init = module_get_symbol(module_ptr, init_symbol);
+        const auto module_init = module_get_init_symbol(module_ptr);
         if (!module_init)
         {
             return {std::nullopt, "failed to find initial symbol"};

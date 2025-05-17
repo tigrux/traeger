@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: BSL-1.0
 
-#include <vector>
 #include <utility>
+#include <vector>
 #include <memory>
 
 #include "traeger/format/Format.hpp"
@@ -21,14 +21,14 @@ namespace
         const Promise promise;
         const Socket subscriber;
 
-        listen_closure(const Scheduler &scheduler,
+        listen_closure(Scheduler scheduler,
                        Subscriber::Callback &&callback,
-                       const Promise &promise,
-                       const Socket &subscriber) noexcept
-            : scheduler(scheduler),
+                       Promise promise,
+                       Socket subscriber) noexcept
+            : scheduler(std::move(scheduler)),
               callback(std::move(callback)),
-              promise(promise),
-              subscriber(subscriber)
+              promise(std::move(promise)),
+              subscriber(std::move(subscriber))
         {
         }
     };
@@ -37,26 +37,26 @@ namespace
                 const std::shared_ptr<listen_closure> &closure) -> Result
     {
         String topic, format_name, encoded_message;
-        auto [unpack_ok, unpack_error] = messages.unpack(topic, format_name, encoded_message);
-        if (!unpack_ok)
+        if (auto [unpack_ok, unpack_error] = messages.unpack(topic, format_name, encoded_message);
+            !unpack_ok)
         {
-            return {Error{"unpacking frames: " + unpack_error}};
+            return Result{Error{"unpacking frames: " + unpack_error}};
         }
 
         const auto *format = Format::by_name(format_name);
         if (!format)
         {
-            return {Error{"no such format " + format_name}};
+            return Result{Error{"no such format " + format_name}};
         }
 
         auto &&[decoded, decoded_error] = format->decode(encoded_message);
         if (!decoded)
         {
-            return {Error{std::move(decoded_error)}};
+            return Result{Error{std::move(decoded_error)}};
         }
 
         closure->callback(std::move(topic), std::move(decoded).value());
-        return {Value{nullptr}};
+        return Result{Value{nullptr}};
     }
 
     auto schedule_listen(const std::shared_ptr<listen_closure> &listen_closure) noexcept -> void
@@ -70,22 +70,19 @@ namespace
         recv_promise.then(
             [listen_closure](const Value &value) -> Result
             {
-                if (auto optional = value.get_list(); optional)
+                if (const auto optional = value.get_list(); optional)
                 {
                     listen_closure->scheduler.schedule(
                         [listen_closure]
                         { schedule_listen(listen_closure); });
                     return listen(optional.value(), listen_closure);
                 }
-                else
-                {
-                    return {};
-                }
+                return {};
             });
         recv_promise.fail(
             [listen_closure](const Error &error)
             {
-                listen_closure->promise.set_result(error);
+                listen_closure->promise.set_result(Result{error});
             });
     }
 }

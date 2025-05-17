@@ -21,7 +21,7 @@ TEST_CASE("Context.subscriber")
     {
         const auto context = Context{};
         const auto [subscriber_optional, error] = context.subscriber("ipc://test-subscriber.socket", {"my_topic"});
-        REQUIRE(error == "");
+        REQUIRE(error.empty());
         REQUIRE(subscriber_optional.has_value());
 
         const auto &subscriber = subscriber_optional.value();
@@ -29,7 +29,7 @@ TEST_CASE("Context.subscriber")
 
         subscriber.listen(
             scheduler,
-            [&queue](const String &topic, const Value &value)
+            [&queue](const String &, const Value &value)
             {
                 queue.push(value);
             });

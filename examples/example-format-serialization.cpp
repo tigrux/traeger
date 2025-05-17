@@ -6,7 +6,7 @@
 
 int main()
 {
-    auto value = traeger::Value{
+    const auto value = traeger::Value{
         traeger::make_map(
             "name", "John",
             "age", 30,
@@ -33,4 +33,5 @@ int main()
 
     const auto decoded_value = decode_optional.value();
     std::cout << "The decoded value is " << decoded_value << std::endl;
+    return 0;
 }

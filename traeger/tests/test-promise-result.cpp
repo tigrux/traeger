@@ -15,23 +15,23 @@ TEST_CASE("Promise.result")
 
     SECTION("value")
     {
-        REQUIRE(promise.set_result(Value{123}));
+        REQUIRE(promise.set_result(Result{Value{123}}));
         REQUIRE(promise.has_result());
         REQUIRE(promise.result().value());
         REQUIRE(*promise.result().value() == 123);
 
-        REQUIRE_FALSE(promise.set_result(Value{456}));
+        REQUIRE_FALSE(promise.set_result(Result{Value{456}}));
         REQUIRE(*promise.result().value() == 123);
     }
 
     SECTION("error")
     {
-        REQUIRE(promise.set_result(Error{"some error"}));
+        REQUIRE(promise.set_result(Result{Error{"some error"}}));
         REQUIRE(promise.has_result());
         REQUIRE(promise.result().error());
         REQUIRE(*promise.result().error() == "some error");
 
-        REQUIRE_FALSE(promise.set_result(Error{"another error"}));
+        REQUIRE_FALSE(promise.set_result(Result{Error{"another error"}}));
         REQUIRE(*promise.result().error() == "some error");
     }
 }

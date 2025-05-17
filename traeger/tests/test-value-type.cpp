@@ -8,14 +8,14 @@ TEST_CASE("Value.type")
 {
     using namespace traeger;
 
-    STATIC_REQUIRE(std::is_same<Null, std::nullptr_t>::value);
-    STATIC_REQUIRE(std::is_same<Bool, bool>::value);
-    STATIC_REQUIRE(std::is_same<Int, std::int64_t>::value);
-    STATIC_REQUIRE(std::is_same<UInt, std::uint64_t>::value);
-    STATIC_REQUIRE(std::is_same<Float, double>::value);
-    STATIC_REQUIRE(std::is_same<String, std::string>::value);
-    STATIC_REQUIRE(std::is_class<List>::value);
-    STATIC_REQUIRE(std::is_class<Map>::value);
+    STATIC_REQUIRE(std::is_same_v<Null, std::nullptr_t>);
+    STATIC_REQUIRE(std::is_same_v<Bool, bool>);
+    STATIC_REQUIRE(std::is_same_v<Int, std::int64_t>);
+    STATIC_REQUIRE(std::is_same_v<UInt, std::uint64_t>);
+    STATIC_REQUIRE(std::is_same_v<Float, double>);
+    STATIC_REQUIRE(std::is_same_v<String, std::string>);
+    STATIC_REQUIRE(std::is_class_v<List>);
+    STATIC_REQUIRE(std::is_class_v<Map>);
 
     SECTION("default")
     {

@@ -8,7 +8,6 @@
 #include "traeger/actor/StatelessActor.hpp"
 #include "traeger/actor/Queue.hpp"
 #include "traeger/actor/Mailbox.hpp"
-#include "traeger/actor/Scheduler.hpp"
 #include "traeger/actor/Promise.hpp"
 
 namespace traeger

@@ -5,16 +5,15 @@
 #include <thread>
 
 #include <traeger/format/Format.hpp>
-#include <traeger/actor/Actor.hpp>
 #include <traeger/socket/Context.hpp>
 #include <traeger/socket/Requester.hpp>
 
-extern void perform_operations(traeger::Scheduler scheduler, traeger::Mailbox mailbox);
+extern void perform_operations(const traeger::Scheduler &scheduler, const traeger::Mailbox &mailbox);
 
 int main()
 {
-    auto context = traeger::Context{};
-    const char *address = "tcp://localhost:5555";
+    const auto context = traeger::Context{};
+    const auto *address = "tcp://localhost:5555";
     const auto &format = traeger::Format::json();
 
     auto [requester_optional, requester_error] = context.requester(address, format);
@@ -23,9 +22,9 @@ int main()
         std::cerr << "Socket error = " << requester_error << std::endl;
         return 1;
     }
-    auto requester = requester_optional.value();
+    const auto requester = requester_optional.value();
 
-    auto scheduler = traeger::Scheduler{traeger::Threads{8}};
+    const auto scheduler = traeger::Scheduler{traeger::Threads{8}};
 
     std::cout << "Sending messages to replier on address: " << address << std::endl;
     perform_operations(scheduler, requester.mailbox());

@@ -11,7 +11,7 @@
 #include <traeger/value/value.h>
 #include <traeger/actor/actor.h>
 
-typedef void (*traeger_module_init_t)(const traeger_map_t *configuration,
+typedef void (*traeger_module_init_t)(const traeger_map_t *init,
                                       traeger_mailbox_interface_t **result,
                                       traeger_string_t *error);
 
@@ -23,7 +23,7 @@ extern "C"
 #endif
 
     DLLEXPORT void
-    traeger_module_init(const traeger_map_t *configuration,
+    traeger_module_init(const traeger_map_t *init,
                         traeger_mailbox_interface_t **result,
                         traeger_string_t *error);
 
@@ -31,7 +31,7 @@ extern "C"
 
     bool traeger_module_new_from_path_or_error(const char *path_data,
                                                size_t path_size,
-                                               const traeger_map_t *configuration,
+                                               const traeger_map_t *init,
                                                traeger_module_t **result,
                                                traeger_string_t **error);
 

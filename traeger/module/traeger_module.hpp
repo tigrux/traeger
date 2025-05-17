@@ -2,9 +2,7 @@
 
 #pragma once
 
-#include "traeger/actor/actor.h"
 #include "traeger/module/module.h"
-#include "traeger/actor/Mailbox.hpp"
 #include "traeger/module/Module.hpp"
 
 namespace traeger

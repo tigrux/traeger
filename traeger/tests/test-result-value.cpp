@@ -9,20 +9,20 @@ TEST_CASE("Result.value")
 
     SECTION("undefined")
     {
-        Result result;
+        const Result result;
         REQUIRE_FALSE(result.value());
     }
 
     SECTION("value")
     {
-        Result result{Value{123}};
+        const Result result{Value{123}};
         REQUIRE(result.value());
         REQUIRE(*result.value() == 123);
     }
 
     SECTION("error")
     {
-        Result result{Error{"some error"}};
+        const Result result{Error{"some error"}};
         REQUIRE_FALSE(result.value());
     }
 }

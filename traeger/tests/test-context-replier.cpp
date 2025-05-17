@@ -21,12 +21,12 @@ TEST_CASE("Context.replier")
             {
                 Int a = 0, b = 0;
                 arguments.unpack(a, b);
-                return Value{a * b};
+                return Result{Value{a * b}};
             });
 
         const auto context = Context{};
         const auto [replier_optional, error] = context.replier("ipc://test-replier.socket");
-        REQUIRE(error == "");
+        REQUIRE(error.empty());
         REQUIRE(replier_optional.has_value());
 
         const auto &replier = replier_optional.value();

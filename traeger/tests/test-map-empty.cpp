@@ -10,11 +10,11 @@ TEST_CASE("Map.empty")
 
     auto map = Map{};
     REQUIRE(map.empty());
-    REQUIRE(map.size() == 0);
+    REQUIRE(map.empty());
 
     SECTION("copies are not affected")
     {
-        auto map2 = map;
+        const auto map2 = map;
         map.set("i", 10);
         REQUIRE_FALSE(map.empty());
         REQUIRE(map2.empty());

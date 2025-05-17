@@ -7,7 +7,6 @@
 #include <traeger/format/Format.hpp>
 #include <traeger/actor/Result.hpp>
 #include <traeger/actor/Scheduler.hpp>
-#include <traeger/actor/StatelessActor.hpp>
 #include <traeger/socket/Context.hpp>
 #include <traeger/socket/Requester.hpp>
 
@@ -21,8 +20,8 @@ TEST_CASE("Context.requester")
     {
         const auto context = Context{};
         const auto &format = Format::json();
-        const auto [requester_optional, error] = context.requester("ipc://test-requester.socket", format);
-        REQUIRE(error == "");
+        const auto [requester_optional, requester_error] = context.requester("ipc://test-requester.socket", format);
+        REQUIRE(requester_error.empty());
         REQUIRE(requester_optional.has_value());
 
         const auto &requester = requester_optional.value();
@@ -39,7 +38,7 @@ TEST_CASE("Context.requester")
             .fail(
                 [&promise](const Error &error)
                 {
-                    promise.set_value(Error{error});
+                    promise.set_value(Result{Error{error}});
                 });
     }
 
@@ -81,16 +80,16 @@ TEST_CASE("Context.requester")
             Int a = 0, b = 0;
             if (auto [ok, error] = arguments.unpack(a, b); !ok)
             {
-                result = Error{error};
+                result = Result{Error{error}};
             }
             else
             {
-                result = Value{a * b};
+                result = Result{Value{a * b}};
             }
         }
         else
         {
-            result = Error{"no such method " + method_name};
+            result = Result{Error{"no such method " + method_name}};
         }
 
         router.send(zmq::buffer(id), zmq::send_flags::sndmore);

@@ -9,7 +9,7 @@ TEST_CASE("List.append")
     using namespace traeger;
 
     auto list = List{};
-    REQUIRE(list.size() == 0);
+    REQUIRE(list.empty());
 
     SECTION("temporary")
     {

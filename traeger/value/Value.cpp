@@ -3,7 +3,6 @@
 #include <variant>
 #include <iomanip>
 #include <ostream>
-#include <cstdint>
 #include <utility>
 #include <ios>
 #include <optional>
@@ -85,22 +84,8 @@ namespace
 
 namespace traeger
 {
-    Value::impl_type::~impl_type() noexcept
-    {
-    }
-
     Value::impl_type::impl_type() noexcept
         : variant()
-    {
-    }
-
-    Value::impl_type::impl_type(const impl_type &other) noexcept
-        : variant(other.variant)
-    {
-    }
-
-    Value::impl_type::impl_type(impl_type &&other) noexcept
-        : variant(std::move(other.variant))
     {
     }
 
@@ -152,7 +137,7 @@ namespace traeger
         other.impl().variant.emplace<Null>();
     }
 
-    Value::Value(Null variant) noexcept
+    Value::Value(Null) noexcept
         : Value()
     {
         impl().variant.emplace<Null>();
@@ -170,13 +155,13 @@ namespace traeger
         impl().variant.emplace<Int>(variant);
     }
 
-    Value::Value(std::int32_t variant) noexcept
+    Value::Value(const std::int32_t variant) noexcept
         : Value()
     {
         impl().variant.emplace<Int>(static_cast<Int>(variant));
     }
 
-    Value::Value(std::uint32_t variant) noexcept
+    Value::Value(const std::uint32_t variant) noexcept
         : Value()
     {
         impl().variant.emplace<Int>(static_cast<Int>(variant));
@@ -245,7 +230,10 @@ namespace traeger
 
     auto Value::operator=(const Value &other) noexcept -> Value &
     {
-        impl().variant = other.impl().variant;
+        if (this != &other)
+        {
+            impl().variant = other.impl().variant;
+        }
         return *this;
     }
 
@@ -266,9 +254,9 @@ namespace traeger
         return impl().variant != other.impl().variant;
     }
 
-    auto Value::type() const noexcept -> Value::Type
+    auto Value::type() const noexcept -> Type
     {
-        return Type(impl().variant.index());
+        return static_cast<Type>(impl().variant.index());
     }
 
     auto Value::type_name() const noexcept -> const String &
@@ -342,11 +330,11 @@ namespace traeger
         {
         case Type::Int:
             return static_cast<Float>(std::get<Int>(impl().variant));
-        case Value::Type::UInt:
+        case Type::UInt:
             return static_cast<Float>(std::get<UInt>(impl().variant));
-        case Value::Type::Float:
+        case Type::Float:
             return std::get<Float>(impl().variant);
-        case Value::Type::String:
+        case Type::String:
             return string_to_float(impl().get_string()->get());
         default:
             break;
@@ -367,7 +355,7 @@ namespace traeger
     {
         if (type() == Type::List)
         {
-            return List{*impl().get_list()};
+            return List{List::impl_type{*impl().get_list()}};
         }
         return std::nullopt;
     }
@@ -376,7 +364,7 @@ namespace traeger
     {
         if (type() == Type::Map)
         {
-            return Map{*impl().get_map()};
+            return Map{Map::impl_type{*impl().get_map()}};
         }
         return std::nullopt;
     }
@@ -388,18 +376,18 @@ namespace traeger
             overload{
                 [&os](Null)
                 { os << "null"; },
-                [&os](Bool value)
-                { os << std::boolalpha << value << std::noboolalpha; },
-                [&os](Float value)
-                { os << std::showpoint << value << std::noshowpoint; },
+                [&os](const Bool variant)
+                { os << std::boolalpha << variant << std::noboolalpha; },
+                [&os](const Float variant)
+                { os << std::showpoint << variant << std::noshowpoint; },
                 [&os](const Value::impl_type::string_type &boxed)
                 { os << std::quoted(boxed.get()); },
                 [&os](const Value::impl_type::list_type &values)
-                { os << List{values}; },
+                { os << List{List::impl_type{values}}; },
                 [&os](const Value::impl_type::map_type &values)
-                { os << Map{values}; },
-                [&os](auto value)
-                { os << value; }},
+                { os << Map{Map::impl_type{values}}; },
+                [&os](auto variant)
+                { os << variant; }},
             value.impl().variant);
         return os;
     }

@@ -3,9 +3,7 @@
 #pragma once
 
 #include <cstddef>
-#include <cstdint>
 #include <optional>
-#include <ostream>
 #include <stdexcept>
 #include <string>
 #include <type_traits>
@@ -20,26 +18,26 @@ namespace traeger
     template <typename Arg>
     auto constexpr assert_is_variant_type() -> void
     {
-        static_assert(std::disjunction<std::is_same<Arg, Null>,
-                                       std::is_same<Arg, Bool>,
-                                       std::is_same<Arg, Int>,
-                                       std::is_same<Arg, UInt>,
-                                       std::is_same<Arg, Float>,
-                                       std::is_same<Arg, String>,
-                                       std::is_same<Arg, List>,
-                                       std::is_same<Arg, Map>>::value);
+        static_assert(std::disjunction_v<std::is_same<Arg, Null>,
+                                         std::is_same<Arg, Bool>,
+                                         std::is_same<Arg, Int>,
+                                         std::is_same<Arg, UInt>,
+                                         std::is_same<Arg, Float>,
+                                         std::is_same<Arg, String>,
+                                         std::is_same<Arg, List>,
+                                         std::is_same<Arg, Map>>);
     }
 
     struct Value
     {
         struct impl_type;
 
-        inline auto impl() const & noexcept -> const impl_type &
+        auto impl() const & noexcept -> const impl_type &
         {
             return *reinterpret_cast<const impl_type *>(&impl_);
         }
 
-        inline auto impl() & noexcept -> impl_type &
+        auto impl() & noexcept -> impl_type &
         {
             return *reinterpret_cast<impl_type *>(&impl_);
         }
@@ -106,35 +104,35 @@ namespace traeger
         static constexpr auto type() noexcept -> Type
         {
             assert_is_variant_type<Arg>();
-            if constexpr (std::is_same<Arg, Null>::value)
+            if constexpr (std::is_same_v<Arg, Null>)
             {
                 return Type::Null;
             }
-            if constexpr (std::is_same<Arg, Bool>::value)
+            if constexpr (std::is_same_v<Arg, Bool>)
             {
                 return Type::Bool;
             }
-            if constexpr (std::is_same<Arg, Int>::value)
+            if constexpr (std::is_same_v<Arg, Int>)
             {
                 return Type::Int;
             }
-            if constexpr (std::is_same<Arg, UInt>::value)
+            if constexpr (std::is_same_v<Arg, UInt>)
             {
                 return Type::UInt;
             }
-            if constexpr (std::is_same<Arg, Float>::value)
+            if constexpr (std::is_same_v<Arg, Float>)
             {
                 return Type::Float;
             }
-            if constexpr (std::is_same<Arg, String>::value)
+            if constexpr (std::is_same_v<Arg, String>)
             {
                 return Type::String;
             }
-            if constexpr (std::is_same<Arg, List>::value)
+            if constexpr (std::is_same_v<Arg, List>)
             {
                 return Type::List;
             }
-            if constexpr (std::is_same<Arg, Map>::value)
+            if constexpr (std::is_same_v<Arg, Map>)
             {
                 return Type::Map;
             }
@@ -148,42 +146,39 @@ namespace traeger
         constexpr auto get() const noexcept -> std::optional<Arg>
         {
             assert_is_variant_type<Arg>();
-            if constexpr (std::is_same<Arg, Null>::value)
+            if constexpr (std::is_same_v<Arg, Null>)
             {
                 return get_null();
             }
-            if constexpr (std::is_same<Arg, Bool>::value)
+            if constexpr (std::is_same_v<Arg, Bool>)
             {
                 return get_bool();
             }
-            if constexpr (std::is_same<Arg, Int>::value)
+            if constexpr (std::is_same_v<Arg, Int>)
             {
                 return get_int();
             }
-            if constexpr (std::is_same<Arg, UInt>::value)
+            if constexpr (std::is_same_v<Arg, UInt>)
             {
                 return get_uint();
             }
-            if constexpr (std::is_same<Arg, Float>::value)
+            if constexpr (std::is_same_v<Arg, Float>)
             {
                 return get_float();
             }
-            if constexpr (std::is_same<Arg, String>::value)
+            if constexpr (std::is_same_v<Arg, String>)
             {
                 if (const auto *ptr_string = get_string(); ptr_string)
                 {
-                    return std::optional<String>{*ptr_string};
+                    return std::optional{*ptr_string};
                 }
-                else
-                {
-                    return std::nullopt;
-                }
+                return std::nullopt;
             }
-            if constexpr (std::is_same<Arg, List>::value)
+            if constexpr (std::is_same_v<Arg, List>)
             {
                 return get_list();
             }
-            if constexpr (std::is_same<Arg, Map>::value)
+            if constexpr (std::is_same_v<Arg, Map>)
             {
                 return get_map();
             }
@@ -216,7 +211,7 @@ namespace traeger
             Map::layout_type>;
 
     private:
-        std::byte impl_[sizeof(layout_type)];
+        std::byte impl_[sizeof(layout_type)]{};
     };
 
     auto operator<<(std::ostream &os,
@@ -232,7 +227,7 @@ namespace traeger
                 "invalid index in argument " + std::to_string(Index));
         }
 
-        if constexpr (std::is_same<Arg, Value>::value)
+        if constexpr (std::is_same_v<Arg, Value>)
         {
             return *ptr_value;
         }
@@ -250,23 +245,23 @@ namespace traeger
         }
     }
 
-    template <typename Arg, typename... Args>
-    auto Map::get(const String &key, Arg &arg) const noexcept -> std::pair<bool, String>
+    template <typename Variant, typename...>
+    auto Map::get(const String &key, Variant &variant) const noexcept -> std::pair<bool, String>
     {
         const auto *ptr_value = find(key);
         if (!ptr_value)
         {
             return {false, "invalid key " + key};
         }
-        const auto optional = ptr_value->get<Arg>();
+        auto optional = ptr_value->get<Variant>();
         if (!optional)
         {
             return {false, "invalid cast from type " +
                                ptr_value->type_name() +
                                " to " +
-                               Value::type_name(Value::type<Arg>())};
+                               Value::type_name(Value::type<Variant>())};
         }
-        arg = optional.value();
+        variant = std::move(optional).value();
         return {true, String{}};
     }
 

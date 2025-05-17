@@ -22,13 +22,13 @@ namespace
         const Promise promise;
         const List arguments;
 
-        socket_closure(const Scheduler &scheduler,
-                       const Mailbox &mailbox,
-                       const Promise &promise,
+        socket_closure(Scheduler scheduler,
+                       Mailbox mailbox,
+                       Promise promise,
                        List &&arguments) noexcept
-            : scheduler(scheduler),
-              mailbox(mailbox),
-              promise(promise),
+            : scheduler(std::move(scheduler)),
+              mailbox(std::move(mailbox)),
+              promise(std::move(promise)),
               arguments(std::move(arguments))
         {
         }
@@ -54,13 +54,13 @@ namespace
                     }
                     else
                     {
-                        closure->promise.set_result(value);
+                        closure->promise.set_result(Result{value});
                     }
                     return {};
                 })
             .fail(
                 [closure](const Error &error)
-                { closure->promise.set_result(error); });
+                { closure->promise.set_result(Result{error}); });
     }
 
     auto schedule_send(const std::shared_ptr<socket_closure> &socket_closure) noexcept -> void
@@ -84,14 +84,14 @@ namespace
                 }
                 else
                 {
-                    socket_closure->promise.set_result(value);
+                    socket_closure->promise.set_result(Result{value});
                 }
                 return {};
             });
         send_promise.fail(
             [socket_closure](const Error &error)
             {
-                socket_closure->promise.set_result(error);
+                socket_closure->promise.set_result(Result{error});
             });
     }
 }
@@ -106,7 +106,7 @@ namespace traeger
     auto Socket::recv(const Scheduler &scheduler) const noexcept -> Promise
     {
         Promise promise{scheduler};
-        auto closure = std::make_shared<socket_closure>(
+        const auto closure = std::make_shared<socket_closure>(
             scheduler,
             mailbox_,
             promise,
@@ -124,7 +124,7 @@ namespace traeger
         {
             list.append(std::move(message));
         }
-        auto closure = std::make_shared<socket_closure>(
+        const auto closure = std::make_shared<socket_closure>(
             scheduler,
             mailbox_, promise,
             make_list(list));

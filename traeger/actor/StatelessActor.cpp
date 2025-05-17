@@ -30,7 +30,7 @@ namespace traeger
 
             using shared_lock = std::shared_lock<std::shared_mutex>;
 
-            lock_type(concurrency_type concurrency,
+            lock_type(const concurrency_type concurrency,
                       std::shared_mutex &mutex) noexcept
             {
                 switch (concurrency)
@@ -44,11 +44,11 @@ namespace traeger
                 }
             }
 
-            operator bool() const noexcept
+            explicit operator bool() const noexcept
             {
                 return std::visit(
                     [](const auto &lock)
-                    { return bool(lock); },
+                    { return static_cast<bool>(lock); },
                     lock_);
             }
 
@@ -79,22 +79,22 @@ namespace traeger
                     scheduler.schedule(
                         [scheduler, impl]
                         {
-                            impl->try_to_execute_next(scheduler);
+                            impl->try_to_execute_next();
                             impl->schedule_next(scheduler, impl);
                         });
                 }
             }
 
         private:
-            auto try_to_execute_next(const Scheduler &scheduler) noexcept -> void
+            auto try_to_execute_next() noexcept -> void
             {
                 std::unique_lock tasks_lock{tasks_mutex_};
                 if (!tasks_.empty())
                 {
                     auto &&next = std::move(tasks_.front());
-                    if (auto lock = lock_type{next.concurrency, execution_mutex_}; lock)
+                    if (const auto lock = lock_type{next.concurrency, execution_mutex_}; lock)
                     {
-                        auto work = std::move(next).work;
+                        const auto work = std::move(next).work;
                         tasks_.pop();
                         tasks_lock.unlock();
                         work();
@@ -102,7 +102,6 @@ namespace traeger
                 }
             }
 
-        private:
             std::shared_mutex execution_mutex_;
             std::mutex tasks_mutex_;
             std::queue<task_type> tasks_;
@@ -110,10 +109,10 @@ namespace traeger
 
         using map_type = immer::map<String, std::pair<concurrency_type, Function>>;
 
-        struct mailbox_impl_type
-            : public Mailbox::Interface
+        struct mailbox_impl_type final
+            : Mailbox::Interface
         {
-            virtual ~mailbox_impl_type() noexcept = default;
+            ~mailbox_impl_type() noexcept override = default;
 
             mailbox_impl_type(const std::shared_ptr<queue_impl_type> &queue,
                               map_type::transient_type functions)
@@ -141,7 +140,7 @@ namespace traeger
                 }
                 else
                 {
-                    promise.set_result(Error{"no such actor method " + name});
+                    promise.set_result(Result{Error{"no such actor method " + name}});
                 }
                 return promise;
             }
@@ -173,9 +172,7 @@ namespace traeger
         map_type::transient_type functions_;
     };
 
-    StatelessActor::~StatelessActor() noexcept
-    {
-    }
+    StatelessActor::~StatelessActor() noexcept = default;
 
     StatelessActor::StatelessActor() noexcept
         : impl_(std::make_unique<impl_type>())

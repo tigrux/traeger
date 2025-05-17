@@ -25,10 +25,9 @@ namespace traeger
 
     struct Scheduler
     {
-    public:
         Scheduler() = delete;
 
-        Scheduler(Threads threads) noexcept;
+        explicit Scheduler(Threads threads) noexcept;
 
         auto schedule(Work &&work) const noexcept -> void;
 

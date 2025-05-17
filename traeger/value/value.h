@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <stddef.h>
 #include <traeger/value/types.h>
 
 typedef struct traeger_string_t traeger_string_t;
@@ -23,8 +24,6 @@ typedef struct traeger_map_iterator_t traeger_map_iterator_t;
 typedef struct traeger_value_t traeger_value_t;
 
 typedef const traeger_value_t traeger_const_value_t;
-
-typedef struct traeger_result_t traeger_result_t;
 
 #ifdef __cplusplus
 extern "C"

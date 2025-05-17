@@ -1,7 +1,7 @@
 set(TRAEGER_MODULE_HEADERS Module.hpp module.h)
 
 target_link_libraries(traeger_module PUBLIC traeger::actor)
-if(!WIN32)
+if(NOT WIN32)
     target_link_libraries(traeger_module PUBLIC dl)
 endif()
 

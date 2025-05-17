@@ -9,7 +9,7 @@ TEST_CASE("List.iter")
 {
     using namespace traeger;
 
-    auto list = make_list("A3", "B2", "C1", "D0");
+    const auto list = make_list("A3", "B2", "C1", "D0");
 
     SECTION("for-range loop")
     {

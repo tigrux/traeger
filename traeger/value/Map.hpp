@@ -3,8 +3,6 @@
 #pragma once
 
 #include <cstddef>
-#include <cstdint>
-#include <ostream>
 #include <utility>
 
 #include <traeger/value/Types.hpp>
@@ -15,12 +13,12 @@ namespace traeger
     {
         struct impl_type;
 
-        inline auto impl() const & noexcept -> const impl_type &
+        auto impl() const & noexcept -> const impl_type &
         {
             return *reinterpret_cast<const impl_type *>(impl_);
         }
 
-        inline auto impl() & noexcept -> impl_type &
+        auto impl() & noexcept -> impl_type &
         {
             return *reinterpret_cast<impl_type *>(impl_);
         }
@@ -33,9 +31,9 @@ namespace traeger
 
         Map(Map &&other) noexcept;
 
-        explicit Map(const impl_type &impl) noexcept;
+        explicit Map(const impl_type &other_impl) noexcept;
 
-        explicit Map(impl_type &&impl) noexcept;
+        explicit Map(impl_type &&other_impl) noexcept;
 
         auto operator=(const Map &other) noexcept -> Map &;
 
@@ -91,23 +89,23 @@ namespace traeger
         {
             struct impl_type;
 
-            inline auto impl() const & noexcept -> const impl_type &
+            auto impl() const & noexcept -> const impl_type &
             {
                 return *reinterpret_cast<const impl_type *>(impl_);
             }
 
-            inline auto impl() & noexcept -> impl_type &
+            auto impl() & noexcept -> impl_type &
             {
                 return *reinterpret_cast<impl_type *>(impl_);
             }
 
             ~Iterator() noexcept;
 
-            Iterator(const Map &map) noexcept;
+            explicit Iterator(const Map &map) noexcept;
 
-            operator bool() const noexcept;
-            auto operator!=(bool end) noexcept -> bool;
-            auto operator==(bool end) noexcept -> bool;
+            explicit operator bool() const noexcept;
+            auto operator!=(bool end) const noexcept -> bool;
+            auto operator==(bool end) const noexcept -> bool;
 
             auto key() const noexcept -> const String &;
             auto value() const noexcept -> const Value &;
@@ -128,11 +126,12 @@ namespace traeger
             };
 
         private:
-            std::byte impl_[sizeof(layout_type)];
+            std::byte impl_[sizeof(layout_type)]{};
         };
 
         auto begin() const noexcept -> Iterator;
-        auto end() const noexcept -> bool;
+
+        static auto end() noexcept -> bool;
 
         using layout_type = struct
         {
@@ -141,7 +140,7 @@ namespace traeger
         };
 
     private:
-        std::byte impl_[sizeof(layout_type)];
+        std::byte impl_[sizeof(layout_type)]{};
     };
 
     auto operator<<(std::ostream &os,
@@ -164,9 +163,9 @@ inline auto begin(const traeger::Map &map) -> traeger::Map::Iterator
     return map.begin();
 }
 
-inline auto end(const traeger::Map &map) -> bool
+inline auto end(const traeger::Map &) -> bool
 {
-    return map.end();
+    return traeger::Map::end();
 }
 
 struct traeger_map_t final : traeger::Map

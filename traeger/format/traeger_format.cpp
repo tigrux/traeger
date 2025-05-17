@@ -8,7 +8,7 @@ extern "C"
     using namespace traeger;
 
     const traeger_format_t *traeger_format_get_by_name(const char *name_data,
-                                                       size_t name_size)
+                                                       const size_t name_size)
     {
         if (name_data != nullptr)
         {
@@ -34,8 +34,9 @@ extern "C"
         if (value != nullptr &&
             result != nullptr)
         {
-            auto [encode_result, encode_error] = cast(self).encode(cast(value));
-            if (encode_result)
+
+            if (auto [encode_result, encode_error] = cast(self).encode(cast(value));
+                encode_result)
             {
                 *result = new traeger_string_t{std::move(encode_result).value()};
                 return true;
@@ -57,8 +58,8 @@ extern "C"
             string != nullptr &&
             result != nullptr)
         {
-            auto [decode_result, decode_error] = cast(self).decode(cast(string));
-            if (decode_result)
+            if (auto [decode_result, decode_error] = cast(self).decode(cast(string));
+                decode_result)
             {
                 *result = new traeger_value_t{std::move(decode_result).value()};
                 return true;

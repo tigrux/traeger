@@ -11,8 +11,8 @@ TEST_CASE("Promise.then")
     using namespace traeger;
     using namespace std::chrono_literals;
 
-    auto scheduler = Scheduler{Threads{8}};
-    auto precedent_promise = Promise{scheduler};
+    const auto scheduler = Scheduler{Threads{8}};
+    const auto precedent_promise = Promise{scheduler};
 
     auto first_promise = std::promise<Value>{};
     auto second_promise = std::promise<Value>{};
@@ -24,7 +24,7 @@ TEST_CASE("Promise.then")
                 [&first_promise](const Value &value) -> Result
                 {
                     first_promise.set_value(value);
-                    return Value{2000};
+                    return Result{Value{2000}};
                 })
             .then(
                 [&second_promise](const Value &value) -> Result
@@ -33,7 +33,7 @@ TEST_CASE("Promise.then")
                     return Result{};
                 });
 
-        precedent_promise.set_result(Value{1000});
+        precedent_promise.set_result(Result{Value{1000}});
         REQUIRE(first_promise.get_future().get() == Value{1000});
         REQUIRE(second_promise.get_future().get() == Value{2000});
     }
@@ -50,7 +50,7 @@ TEST_CASE("Promise.then")
                         10ms,
                         [promise]
                         {
-                            promise.set_result(Value{2000});
+                            promise.set_result(Result{Value{2000}});
                         });
                     return promise;
                 })
@@ -61,7 +61,7 @@ TEST_CASE("Promise.then")
                     return Result{};
                 });
 
-        precedent_promise.set_result(Value{1000});
+        precedent_promise.set_result(Result{Value{1000}});
         REQUIRE(first_promise.get_future().get() == Value{1000});
         REQUIRE(second_promise.get_future().get() == Value{2000});
     }

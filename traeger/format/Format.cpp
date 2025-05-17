@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSL-1.0
 
 #include <array>
-#include <array>
 #include <exception>
 #include <optional>
 #include <string_view>
@@ -25,7 +24,7 @@ extern "C"
 
 namespace
 {
-    const std::array traeger_known_formats{
+    constexpr std::array traeger_known_formats{
 #if defined(TRAEGER_FORMAT_JSON)
         &traeger_format_json,
 #endif

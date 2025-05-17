@@ -2,7 +2,7 @@
 Traeger is a collection of libraries to write applications following the principles of the [Actor Model](https://en.wikipedia.org/wiki/Actor_model).
 
 * It simplifies the development of concurrent, distributed and portable applications.
-* It is writen in a subset of C++ 17 that works on multiple platforms (Linux, MacOS, Windows) and architectures (x86_64 and arm64).
+* It is writen in a subset of C++ 17 that works on multiple platforms (Linux, macOS, Windows) and architectures (x86_64 and arm64).
 * Its libraries do not have dependencies, aside from the standard C++ runtime.
 * It does not reinvent the wheel and instead leverages battle-tested projects like
   [immer](https://github.com/arximboldi/immer/),
@@ -14,15 +14,15 @@ Traeger is a collection of libraries to write applications following the princip
 * Bindings for a few other languages are provided:
     * Python: for prototyping and testing.
     * C: for interfacing with other languages like Rust and Go.
-    * Go: for networking and micro-services.
+    * Go: for networking and microservices.
     * Rust: to gain access to its arsenal of crates.
 * The word Traeger is German for carrier and the name was inspired by the library [immer](https://github.com/arximboldi/immer/).
 
 # Prerequisites
 * cmake >= 3.24:
-    * On MacOS it can be installed using [brew](https://brew.sh).
-    * On Windows it is recommended to use the developer terminal of [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
-    * On Linux it is recommended to install it from the [official project page](https://cmake.org/download/).
+    * On macOS, it can be installed using [brew](https://brew.sh).
+    * On Windows, it is recommended to use the developer terminal of [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
+    * On Linux, it is recommended to install it from the [official project page](https://cmake.org/download/).
 * A compiler with good support of C++ 17: clang >= 6.0, or g++ >= 7.5.
 
 Traeger has some dependencies that are downloaded by cmake as part of the build process via [FetchContent](https://cmake.org/cmake/help/v3.24/module/FetchContent.html).
@@ -83,7 +83,7 @@ Traeger provides a library `traeger::value` with types that can be efficiently c
 
 int main()
 {
-    auto list1 = traeger::make_list(2, 3, 5);
+    const auto list1 = traeger::make_list(2, 3, 5);
     std::cout << "This is list1: " << list1 << std::endl;
 
     auto list2 = list1;
@@ -95,7 +95,7 @@ int main()
     list3.append(7);
     std::cout << "The list3 has prime numbers: " << list3 << std::endl;
 
-    auto map1 = traeger::make_map(
+    const auto map1 = traeger::make_map(
         "odds", list2,
         "primes", list3);
     std::cout << "A map with the numbers:" << std::endl;
@@ -132,13 +132,13 @@ class Account
     traeger::Float funds_;
 
 public:
-    Account(traeger::Float initial_funds) noexcept
+    explicit Account(const traeger::Float initial_funds) noexcept
         : funds_(initial_funds)
     {
     }
 
     // this method is non-const i.e. it modifies the instance
-    auto deposit(traeger::Float amount) -> traeger::Float
+    auto deposit(const traeger::Float amount) -> traeger::Float
     {
         // simulate a costly operation
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
@@ -151,7 +151,7 @@ public:
     }
 
     // this method is non-const i.e. it modifies the instance
-    auto debit(traeger::Float amount) -> traeger::Float
+    auto debit(const traeger::Float amount) -> traeger::Float
     {
         // simulate a costly operation
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
@@ -183,7 +183,7 @@ traeger::Actor make_account_actor(traeger::Float initial_funds)
     account_actor.define("deposit", &Account::deposit);
     account_actor.define("debit", &Account::debit);
     account_actor.define("balance", &Account::balance);
-    return std::move(account_actor);
+    return static_cast<traeger::Actor>(std::move(account_actor));
 }
 ```
 
@@ -207,10 +207,10 @@ traeger::Actor make_account_actor(traeger::Float initial_funds)
 
 #include <traeger/actor/Actor.hpp>
 
-void perform_operations(traeger::Scheduler scheduler, traeger::Mailbox mailbox)
+void perform_operations(const traeger::Scheduler &scheduler, const traeger::Mailbox &mailbox)
 {
     // Use a decorator to enable type deduction in C++
-    auto actor_mailbox = traeger::Actor::Mailbox{mailbox};
+    const auto actor_mailbox = traeger::Actor::Mailbox{mailbox};
 
     for (auto [operation, amount] : {
              std::make_pair("deposit", 1000),
@@ -265,12 +265,12 @@ void perform_operations(traeger::Scheduler scheduler, traeger::Mailbox mailbox)
 
 extern traeger::Actor make_account_actor(traeger::Float initial_funds);
 
-extern void perform_operations(traeger::Scheduler scheduler, traeger::Mailbox mailbox);
+extern void perform_operations(const traeger::Scheduler &scheduler, const traeger::Mailbox &mailbox);
 
 int main()
 {
-    auto scheduler = traeger::Scheduler{traeger::Threads{8}};
-    auto account_actor = make_account_actor(0.0);
+    const auto scheduler = traeger::Scheduler{traeger::Threads{8}};
+    const auto account_actor = make_account_actor(0.0);
 
     perform_operations(scheduler, account_actor.mailbox());
 
@@ -297,7 +297,7 @@ Traeger provides a library `traeger::format` with encoders and decoders for comm
 
 int main()
 {
-    auto value = traeger::Value{
+    const auto value = traeger::Value{
         traeger::make_map(
             "name", "John",
             "age", 30,
@@ -324,6 +324,7 @@ int main()
 
     const auto decoded_value = decode_optional.value();
     std::cout << "The decoded value is " << decoded_value << std::endl;
+    return 0;
 }
 ```
 
@@ -343,9 +344,7 @@ In this pattern a replier binds a mailbox to an address to which requesters conn
 // FILE: examples/example-socket-replier.cpp
 // SPDX-License-Identifier: BSL-1.0
 
-#include <chrono>
 #include <iostream>
-#include <thread>
 #include <string>
 
 #include <traeger/actor/Actor.hpp>
@@ -356,8 +355,8 @@ extern traeger::Actor make_account_actor(traeger::Float initial_funds);
 
 int main()
 {
-    auto context = traeger::Context{};
-    const char *address = "tcp://*:5555";
+    const auto context = traeger::Context{};
+    const auto *address = "tcp://*:5555";
 
     auto [replier_optional, replier_error] = context.replier(address);
     if (!replier_optional)
@@ -365,11 +364,11 @@ int main()
         std::cerr << "Socket error = " << replier_error << std::endl;
         return 1;
     }
-    auto replier = replier_optional.value();
+    const auto replier = replier_optional.value();
 
-    auto scheduler = traeger::Scheduler{traeger::Threads{8}};
-    auto actor = make_account_actor(0.0);
-    auto reply_promise = replier.reply(scheduler, actor.mailbox());
+    const auto scheduler = traeger::Scheduler{traeger::Threads{8}};
+    const auto actor = make_account_actor(0.0);
+    const auto reply_promise = replier.reply(scheduler, actor.mailbox());
     std::cout << "Replier listening on address: " << address << std::endl;
 
     std::string dummy_string;
@@ -394,16 +393,15 @@ int main()
 #include <thread>
 
 #include <traeger/format/Format.hpp>
-#include <traeger/actor/Actor.hpp>
 #include <traeger/socket/Context.hpp>
 #include <traeger/socket/Requester.hpp>
 
-extern void perform_operations(traeger::Scheduler scheduler, traeger::Mailbox mailbox);
+extern void perform_operations(const traeger::Scheduler &scheduler, const traeger::Mailbox &mailbox);
 
 int main()
 {
-    auto context = traeger::Context{};
-    const char *address = "tcp://localhost:5555";
+    const auto context = traeger::Context{};
+    const auto *address = "tcp://localhost:5555";
     const auto &format = traeger::Format::json();
 
     auto [requester_optional, requester_error] = context.requester(address, format);
@@ -412,9 +410,9 @@ int main()
         std::cerr << "Socket error = " << requester_error << std::endl;
         return 1;
     }
-    auto requester = requester_optional.value();
+    const auto requester = requester_optional.value();
 
-    auto scheduler = traeger::Scheduler{traeger::Threads{8}};
+    const auto scheduler = traeger::Scheduler{traeger::Threads{8}};
 
     std::cout << "Sending messages to replier on address: " << address << std::endl;
     perform_operations(scheduler, requester.mailbox());
@@ -447,7 +445,7 @@ In this pattern a publisher binds to an address to multicast values grouped by t
 #include <traeger/socket/Context.hpp>
 #include <traeger/socket/Publisher.hpp>
 
-void heart_beat(traeger::Scheduler scheduler, traeger::Publisher publisher, traeger::Int counter)
+void heart_beat(const traeger::Scheduler &scheduler, const traeger::Publisher &publisher, const traeger::Int counter)
 {
     scheduler.schedule_delayed(
         std::chrono::seconds(1),
@@ -464,8 +462,8 @@ void heart_beat(traeger::Scheduler scheduler, traeger::Publisher publisher, trae
 
 int main()
 {
-    auto context = traeger::Context{};
-    const char *address = "tcp://*:5556";
+    const auto context = traeger::Context{};
+    const auto *address = "tcp://*:5556";
     const auto &format = traeger::Format::json();
 
     auto [publisher_optional, publisher_error] = context.publisher(address, format);
@@ -474,9 +472,9 @@ int main()
         std::cerr << "Socket bind error: " << publisher_error << std::endl;
         return 1;
     }
-    auto publisher = publisher_optional.value();
+    const auto publisher = publisher_optional.value();
 
-    auto scheduler = traeger::Scheduler{traeger::Threads{8}};
+    const auto scheduler = traeger::Scheduler{traeger::Threads{8}};
     std::cout << "Publishing heart-beat events on address: " << address << std::endl;
     heart_beat(scheduler, publisher, 0);
 
@@ -489,7 +487,7 @@ int main()
 
 #### The subscriber
 * A subscriber connects to the address of a publisher.
-* A subscriber listens for values ​​of topics to which it has subscribed.
+* A subscriber listens for values of topics to which it has subscribed.
 
 ```C++
 // FILE: examples/example-socket-subscriber.cpp
@@ -506,9 +504,9 @@ int main()
 
 int main()
 {
-    auto context = traeger::Context{};
-    const char *address = "tcp://localhost:5556";
-    auto topics = std::vector<traeger::String>{"heart-beat"};
+    const auto context = traeger::Context{};
+    const auto *address = "tcp://localhost:5556";
+    const auto topics = std::vector<traeger::String>{"heart-beat"};
 
     auto [subscriber_optional, subscriber_error] = context.subscriber(address, topics);
     if (!subscriber_optional)
@@ -516,15 +514,15 @@ int main()
         std::cerr << "Socket bind error: " << subscriber_error << std::endl;
         return 1;
     }
-    auto subscriber = subscriber_optional.value();
+    const auto subscriber = subscriber_optional.value();
 
-    auto scheduler = traeger::Scheduler{traeger::Threads{8}};
+    const auto scheduler = traeger::Scheduler{traeger::Threads{8}};
     auto last_heart_beat = std::chrono::system_clock::now();
 
     std::cout << "Listening for heart-beat events on address: " << address << std::endl;
     subscriber.listen(
         scheduler,
-        [&last_heart_beat](traeger::String topic, traeger::Value value)
+        [&last_heart_beat](const traeger::String &topic, const traeger::Value &value)
         {
             last_heart_beat = std::chrono::system_clock::now();
             std::cout << topic << ": " << value << std::endl;
@@ -532,8 +530,8 @@ int main()
 
     while (scheduler.count() != 0)
     {
-        auto now = std::chrono::system_clock::now();
-        if (now - last_heart_beat >= std::chrono::seconds(2))
+        if (auto now = std::chrono::system_clock::now();
+            now - last_heart_beat >= std::chrono::seconds(2))
         {
             std::cout << "The last heart-beat was more than 2s ago" << std::endl;
             break;
@@ -547,7 +545,7 @@ int main()
 
 Traeger provides a library `traeger::module` to define and load modules.
 
-Actors can be instantiated in the code of shared objects, then loaded programatically.
+Actors can be instantiated in the code of shared objects, then loaded programmatically.
 This enables modular applications in environments where the hardware may vary.
 
 ### Loading modules
@@ -564,9 +562,9 @@ Loading a module, then retrieving a mailbox from it.
 
 #include <traeger/module/Module.hpp>
 
-extern void perform_operations(traeger::Scheduler scheduler, traeger::Mailbox mailbox);
+extern void perform_operations(const traeger::Scheduler &scheduler, const traeger::Mailbox &mailbox);
 
-int main(int argc, char *argv[])
+int main(const int argc, const char *argv[])
 {
     if (argc < 2)
     {
@@ -585,9 +583,9 @@ int main(int argc, char *argv[])
         std::cout << "Module error: " << module_error << std::endl;
         return 1;
     }
-    auto loaded_module = module_optional.value();
-    auto mailbox = loaded_module.mailbox();
-    auto scheduler = traeger::Scheduler{traeger::Threads{8}};
+    const auto loaded_module = module_optional.value();
+    const auto mailbox = loaded_module.mailbox();
+    const auto scheduler = traeger::Scheduler{traeger::Threads{8}};
 
     perform_operations(scheduler, mailbox);
 
@@ -595,6 +593,7 @@ int main(int argc, char *argv[])
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
+    return 0;
 }
 ```
 
@@ -616,11 +615,11 @@ The definition of a shared object, it is provided an initial configuration, and 
 extern traeger::Actor make_account_actor(traeger::Float initial_funds);
 
 extern "C" DLLEXPORT void
-traeger_module_init(const traeger_map_t *configuration,
+traeger_module_init(const traeger_map_t *init,
                     traeger_mailbox_interface_t **result,
                     traeger_string_t *error)
 {
-    if (configuration == nullptr ||
+    if (init == nullptr ||
         result == nullptr ||
         error == nullptr)
     {
@@ -628,10 +627,10 @@ traeger_module_init(const traeger_map_t *configuration,
     }
 
     traeger::Float initial_funds = 0.0;
-    configuration->get("initial_funds", initial_funds);
+    init->get("initial_funds", initial_funds);
     std::cout << "initial_funds: " << initial_funds << std::endl;
 
-    auto actor = make_account_actor(initial_funds);
+    const auto actor = make_account_actor(initial_funds);
     *result = actor.mailbox_interface().release();
 }
 ```

@@ -2,10 +2,6 @@
 
 #pragma once
 
-#include <exception>
-#include <functional>
-#include <ostream>
-#include <type_traits>
 #include <utility>
 
 #include <traeger/value/Value.hpp>
@@ -31,13 +27,13 @@ namespace traeger
 
         Result(Result &&other) noexcept;
 
-        Result(const Value &value) noexcept;
+        explicit Result(const Value &value) noexcept;
 
-        Result(Value &&value) noexcept;
+        explicit Result(Value &&value) noexcept;
 
-        Result(const Error &error) noexcept;
+        explicit Result(const Error &error) noexcept;
 
-        Result(Error &&error) noexcept;
+        explicit Result(Error &&error) noexcept;
 
         Result &operator=(const Result &other) noexcept;
 
@@ -53,7 +49,7 @@ namespace traeger
 
         auto error() const & noexcept -> const String *;
 
-        auto type_name() noexcept -> const String &;
+        auto type_name() const noexcept -> const String &;
 
         static auto type_name(Type type) noexcept -> const String &;
 

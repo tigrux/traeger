@@ -19,12 +19,12 @@ namespace traeger
     {
         struct impl_type;
 
-        inline auto impl() const & noexcept -> const impl_type &
+        auto impl() const & noexcept -> const impl_type &
         {
             return *reinterpret_cast<const impl_type *>(impl_);
         }
 
-        inline auto impl() & noexcept -> impl_type &
+        auto impl() & noexcept -> impl_type &
         {
             return *reinterpret_cast<impl_type *>(impl_);
         }
@@ -35,11 +35,11 @@ namespace traeger
 
         List(const List &other) noexcept;
 
-        List(List &&list) noexcept;
+        List(List &&other) noexcept;
 
-        explicit List(const impl_type &impl) noexcept;
+        explicit List(const impl_type &other_impl) noexcept;
 
-        explicit List(impl_type &&impl) noexcept;
+        explicit List(impl_type &&other_impl) noexcept;
 
         auto operator=(const List &other) noexcept -> List &;
 
@@ -113,25 +113,25 @@ namespace traeger
         {
             struct impl_type;
 
-            inline auto impl() const & noexcept -> const List::Iterator::impl_type &
+            auto impl() const & noexcept -> const impl_type &
             {
                 return *reinterpret_cast<const impl_type *>(impl_);
             }
 
-            inline auto impl() & noexcept -> List::Iterator::impl_type &
+            auto impl() & noexcept -> impl_type &
             {
                 return *reinterpret_cast<impl_type *>(impl_);
             }
 
             ~Iterator() noexcept;
 
-            Iterator(const List &list) noexcept;
+            explicit Iterator(const List &list) noexcept;
 
-            operator bool() const noexcept;
+            explicit operator bool() const noexcept;
 
-            auto operator!=(bool end) noexcept -> bool;
+            auto operator!=(bool end) const noexcept -> bool;
 
-            auto operator==(bool end) noexcept -> bool;
+            auto operator==(bool end) const noexcept -> bool;
 
             auto value() const noexcept -> const Value &;
             auto operator*() const noexcept -> const Value &;
@@ -151,11 +151,11 @@ namespace traeger
             };
 
         private:
-            std::byte impl_[sizeof(layout_type)];
+            std::byte impl_[sizeof(layout_type)]{};
         };
 
         auto begin() const noexcept -> Iterator;
-        auto end() const noexcept -> bool;
+        static auto end() noexcept -> bool;
 
         using layout_type = struct
         {
@@ -172,10 +172,10 @@ namespace traeger
         template <typename Tuple, int... index>
         auto get_index_sequence(std::integer_sequence<int, index...>) const -> Tuple
         {
-            return std::make_tuple(get_index_arg<index, typename std::tuple_element<index, Tuple>::type>()...);
+            return std::make_tuple(get_index_arg<index, std::tuple_element_t<index, Tuple>>()...);
         }
 
-        std::byte impl_[sizeof(layout_type)];
+        std::byte impl_[sizeof(layout_type)]{};
     };
 
     auto operator<<(std::ostream &os,
@@ -199,9 +199,9 @@ inline auto begin(const traeger::List &list) -> traeger::List::Iterator
     return list.begin();
 }
 
-inline auto end(const traeger::List &list) -> bool
+inline auto end(const traeger::List &) -> bool
 {
-    return list.end();
+    return traeger::List::end();
 }
 
 struct traeger_list_t final : traeger::List

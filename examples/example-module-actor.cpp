@@ -6,9 +6,9 @@
 
 #include <traeger/module/Module.hpp>
 
-extern void perform_operations(traeger::Scheduler scheduler, traeger::Mailbox mailbox);
+extern void perform_operations(const traeger::Scheduler &scheduler, const traeger::Mailbox &mailbox);
 
-int main(int argc, char *argv[])
+int main(const int argc, const char *argv[])
 {
     if (argc < 2)
     {
@@ -27,9 +27,9 @@ int main(int argc, char *argv[])
         std::cout << "Module error: " << module_error << std::endl;
         return 1;
     }
-    auto loaded_module = module_optional.value();
-    auto mailbox = loaded_module.mailbox();
-    auto scheduler = traeger::Scheduler{traeger::Threads{8}};
+    const auto loaded_module = module_optional.value();
+    const auto mailbox = loaded_module.mailbox();
+    const auto scheduler = traeger::Scheduler{traeger::Threads{8}};
 
     perform_operations(scheduler, mailbox);
 
@@ -37,4 +37,5 @@ int main(int argc, char *argv[])
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
+    return 0;
 }

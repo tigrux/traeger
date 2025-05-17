@@ -21,14 +21,14 @@ namespace
         const Promise promise;
         const Socket router;
 
-        reply_closure(const Scheduler &scheduler,
-                      const Mailbox &mailbox,
-                      const Promise &promise,
-                      const Socket &router) noexcept
-            : scheduler(scheduler),
-              mailbox(mailbox),
-              promise(promise),
-              router(router)
+        reply_closure(Scheduler scheduler,
+                      Mailbox mailbox,
+                      Promise promise,
+                      Socket router) noexcept
+            : scheduler(std::move(scheduler)),
+              mailbox(std::move(mailbox)),
+              promise(std::move(promise)),
+              router(std::move(router))
         {
         }
     };
@@ -37,30 +37,30 @@ namespace
                const std::shared_ptr<reply_closure> &closure) -> Result
     {
         String id, message_name, format_name, request;
-        auto [unpack_ok, unpack_error] = messages.unpack(id, message_name, format_name, request);
-        if (!unpack_ok)
+        if (auto [unpack_ok, unpack_error] = messages.unpack(id, message_name, format_name, request);
+            !unpack_ok)
         {
-            return {Error{"unpacking frames: " + unpack_error}};
+            return Result{Error{"unpacking frames: " + unpack_error}};
         }
 
         auto format = Format::by_name(format_name);
         if (!format)
         {
-            return {Error{"no such format " + format_name}};
+            return Result{Error{"no such format " + format_name}};
         }
 
         auto &&[decoded, decoded_error] = format->decode(request);
         if (!decoded)
         {
-            return {Error{std::move(decoded_error)}};
+            return Result{Error{std::move(decoded_error)}};
         }
 
         auto maybe_arguments = decoded.value().get_list();
         if (!maybe_arguments)
         {
-            return {Error{"expected a list with arguments"}};
+            return Result{Error{"expected a list with arguments"}};
         }
-        auto arguments = maybe_arguments.value();
+        const auto &arguments = std::move(maybe_arguments).value();
 
         closure->mailbox
             .send(closure->scheduler, message_name, arguments)
@@ -70,10 +70,10 @@ namespace
                     auto [encoded, encoded_error] = format->encode(value);
                     if (!encoded)
                     {
-                        return {Error{std::move(encoded_error)}};
+                        return Result{Error{std::move(encoded_error)}};
                     }
                     closure->router.send(closure->scheduler, {id, std::move(encoded).value(), Error{}});
-                    return {Value{nullptr}};
+                    return Result{Value{nullptr}};
                 })
             .fail(
                 [closure, id](const Error &error)
@@ -81,7 +81,7 @@ namespace
                     closure->router.send(closure->scheduler, {id, String{}, Error{error}});
                 });
 
-        return {Value{nullptr}};
+        return Result{Value{nullptr}};
     }
 
     auto schedule_reply(const std::shared_ptr<reply_closure> &reply_closure) noexcept -> void
@@ -96,22 +96,19 @@ namespace
         recv_promise.then(
             [reply_closure](const Value &value) -> Result
             {
-                if (auto optional = value.get_list(); value.get_list())
+                if (const auto optional = value.get_list(); value.get_list())
                 {
                     reply_closure->scheduler.schedule(
                         [reply_closure]
                         { schedule_reply(reply_closure); });
                     return reply(optional.value(), reply_closure);
                 }
-                else
-                {
-                    return {};
-                }
+                return {};
             });
         recv_promise.fail(
             [reply_closure](const Error &error)
             {
-                reply_closure->promise.set_result(error);
+                reply_closure->promise.set_result(Result{error});
             });
     }
 }

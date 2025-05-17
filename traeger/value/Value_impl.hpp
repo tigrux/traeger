@@ -1,5 +1,7 @@
 // SPDX-License-Identifier: BSL-1.0
 
+#pragma once
+
 #include "traeger/value/Value.hpp"
 #include "traeger/value/List_impl.hpp"
 #include "traeger/value/Map_impl.hpp"
@@ -22,17 +24,17 @@ namespace traeger
             list_type,
             map_type>;
 
-        ~impl_type() noexcept;
+        ~impl_type() noexcept = default;
 
         impl_type() noexcept;
 
-        impl_type(const impl_type &other) noexcept;
+        impl_type(const impl_type &other) noexcept = default;
 
-        impl_type(impl_type &&other) noexcept;
+        impl_type(impl_type &&other) noexcept = default;
 
-        impl_type(const variant_type &variant) noexcept;
+        explicit impl_type(const variant_type &variant) noexcept;
 
-        impl_type(variant_type &&variant) noexcept;
+        explicit impl_type(variant_type &&variant) noexcept;
 
         auto get_list() const noexcept -> const list_type *;
 

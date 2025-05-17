@@ -10,11 +10,11 @@ TEST_CASE("Map.size")
     using namespace traeger;
 
     auto map = Map{};
-    REQUIRE(map.size() == 0);
+    REQUIRE(map.empty());
 
     SECTION("size increases one at a time")
     {
-        auto keys = std::array{"A", "B", "C", "D", "E"};
+        constexpr auto keys = std::array{"A", "B", "C", "D", "E"};
         for (unsigned int i = 0; i < 5; ++i)
         {
             map.set(keys[i], i + 1);

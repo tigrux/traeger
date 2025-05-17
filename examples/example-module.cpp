@@ -10,11 +10,11 @@
 extern traeger::Actor make_account_actor(traeger::Float initial_funds);
 
 extern "C" DLLEXPORT void
-traeger_module_init(const traeger_map_t *configuration,
+traeger_module_init(const traeger_map_t *init,
                     traeger_mailbox_interface_t **result,
                     traeger_string_t *error)
 {
-    if (configuration == nullptr ||
+    if (init == nullptr ||
         result == nullptr ||
         error == nullptr)
     {
@@ -22,9 +22,9 @@ traeger_module_init(const traeger_map_t *configuration,
     }
 
     traeger::Float initial_funds = 0.0;
-    configuration->get("initial_funds", initial_funds);
+    init->get("initial_funds", initial_funds);
     std::cout << "initial_funds: " << initial_funds << std::endl;
 
-    auto actor = make_account_actor(initial_funds);
+    const auto actor = make_account_actor(initial_funds);
     *result = actor.mailbox_interface().release();
 }

@@ -26,7 +26,7 @@ namespace traeger
         Context() noexcept;
 
 #if defined(__ZMQ_HPP_INCLUDED__)
-        operator zmq::context_t &() const;
+        explicit operator zmq::context_t &() const;
 #endif
 
         auto replier(const String &address) const noexcept -> std::pair<std::optional<Replier>, String>;

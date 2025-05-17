@@ -10,7 +10,7 @@
 #include <traeger/socket/Context.hpp>
 #include <traeger/socket/Publisher.hpp>
 
-void heart_beat(traeger::Scheduler scheduler, traeger::Publisher publisher, traeger::Int counter)
+void heart_beat(const traeger::Scheduler &scheduler, const traeger::Publisher &publisher, const traeger::Int counter)
 {
     scheduler.schedule_delayed(
         std::chrono::seconds(1),
@@ -27,8 +27,8 @@ void heart_beat(traeger::Scheduler scheduler, traeger::Publisher publisher, trae
 
 int main()
 {
-    auto context = traeger::Context{};
-    const char *address = "tcp://*:5556";
+    const auto context = traeger::Context{};
+    const auto *address = "tcp://*:5556";
     const auto &format = traeger::Format::json();
 
     auto [publisher_optional, publisher_error] = context.publisher(address, format);
@@ -37,9 +37,9 @@ int main()
         std::cerr << "Socket bind error: " << publisher_error << std::endl;
         return 1;
     }
-    auto publisher = publisher_optional.value();
+    const auto publisher = publisher_optional.value();
 
-    auto scheduler = traeger::Scheduler{traeger::Threads{8}};
+    const auto scheduler = traeger::Scheduler{traeger::Threads{8}};
     std::cout << "Publishing heart-beat events on address: " << address << std::endl;
     heart_beat(scheduler, publisher, 0);
 

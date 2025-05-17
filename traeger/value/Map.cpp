@@ -2,34 +2,13 @@
 
 #include <iomanip>
 #include <ostream>
-#include <cstddef>
 #include <utility>
-#include <optional>
 
 #include "traeger/value/Value.hpp"
 #include "traeger/value/Map_impl.hpp"
 
 namespace traeger
 {
-    Map::impl_type::~impl_type() noexcept
-    {
-    }
-
-    Map::impl_type::impl_type() noexcept
-        : map()
-    {
-    }
-
-    Map::impl_type::impl_type(const impl_type &other) noexcept
-        : map(other.map)
-    {
-    }
-
-    Map::impl_type::impl_type(impl_type &&other) noexcept
-        : map(std::move(other.map))
-    {
-    }
-
     Map::impl_type::impl_type(const persistent_type &persistent) noexcept
         : map(persistent.transient())
     {
@@ -87,7 +66,10 @@ namespace traeger
 
     auto Map::operator=(const Map &other) noexcept -> Map &
     {
-        impl().map = other.impl().map;
+        if (this != &other)
+        {
+            impl().map = other.impl().map;
+        }
         return *this;
     }
 
@@ -148,25 +130,9 @@ namespace traeger
         return impl().map.size();
     }
 
-    Map::Iterator::impl_type::~impl_type() noexcept
-    {
-    }
-
     Map::Iterator::impl_type::impl_type(const iterator_type &begin, const iterator_type &end) noexcept
         : begin(begin),
           end(end)
-    {
-    }
-
-    Map::Iterator::impl_type::impl_type(const impl_type &other) noexcept
-        : begin(other.begin),
-          end(other.end)
-    {
-    }
-
-    Map::Iterator::impl_type::impl_type(impl_type &&other) noexcept
-        : begin(std::move(other.begin)),
-          end(std::move(other.end))
     {
     }
 
@@ -182,7 +148,7 @@ namespace traeger
 
     Map::Iterator::operator bool() const noexcept
     {
-        return (impl().begin != impl().end);
+        return impl().begin != impl().end;
     }
 
     auto Map::Iterator::key() const noexcept -> const String &
@@ -205,33 +171,33 @@ namespace traeger
         if (*this)
         {
             ++impl().begin;
-            return bool(*this);
+            return static_cast<bool>(*this);
         }
         return false;
     }
 
-    auto Map::Iterator::operator++() noexcept -> Map::Iterator &
+    auto Map::Iterator::operator++() noexcept -> Iterator &
     {
         increment();
         return *this;
     }
 
-    auto Map::Iterator::operator!=(bool end) noexcept -> bool
+    auto Map::Iterator::operator!=(const bool end) const noexcept -> bool
     {
-        return bool(*this) != end;
+        return static_cast<bool>(*this) != end;
     }
 
-    auto Map::Iterator::operator==(bool end) noexcept -> bool
+    auto Map::Iterator::operator==(const bool end) const noexcept -> bool
     {
-        return bool(*this) == end;
+        return static_cast<bool>(*this) == end;
     }
 
-    auto Map::begin() const noexcept -> Map::Iterator
+    auto Map::begin() const noexcept -> Iterator
     {
         return Iterator{*this};
     }
 
-    auto Map::end() const noexcept -> bool
+    auto Map::end() noexcept -> bool
     {
         return false;
     }

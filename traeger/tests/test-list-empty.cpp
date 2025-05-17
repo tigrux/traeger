@@ -10,11 +10,11 @@ TEST_CASE("List.empty")
 
     auto list = List{};
     REQUIRE(list.empty());
-    REQUIRE(list.size() == 0);
+    REQUIRE(list.empty());
 
     SECTION("copies are not affected")
     {
-        auto list2 = list;
+        const auto list2 = list;
         list.append(10);
         REQUIRE_FALSE(list.empty());
         REQUIRE(list2.empty());

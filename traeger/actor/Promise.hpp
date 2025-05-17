@@ -23,9 +23,9 @@ namespace traeger
 
         using ErrorCallback = std::function<void(const Error &)>;
 
-        using ValueCallbacks = std::queue<Promise::ValueCallback>;
+        using ValueCallbacks = std::queue<ValueCallback>;
 
-        using ErrorCallbacks = std::queue<Promise::ErrorCallback>;
+        using ErrorCallbacks = std::queue<ErrorCallback>;
 
         Promise(const Promise &other) noexcept;
 

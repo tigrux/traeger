@@ -27,12 +27,12 @@ namespace
 
     auto result_from_variant(Variant variant) -> Result
     {
-        return {value_from_variant(std::move(variant))};
+        return Result{value_from_variant(std::move(variant))};
     }
 
     auto result_from_error(String error) -> Result
     {
-        return {Error{std::move(error)}};
+        return Result{Error{std::move(error)}};
     }
 
     auto result_repr(const Result &self)
@@ -92,11 +92,11 @@ namespace
             {
                 try
                 {
-                    return {value_from_variant(then_callback(value_to_variant(value)))};
+                    return Result{value_from_variant(then_callback(value_to_variant(value)))};
                 }
                 catch (const std::exception &e)
                 {
-                    return {Error{e.what()}};
+                    return Result{Error{e.what()}};
                 }
             });
     }

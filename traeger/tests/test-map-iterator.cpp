@@ -9,7 +9,7 @@ TEST_CASE("Map.iter")
 {
     using namespace traeger;
 
-    auto map = make_map("A", 3, "B", 2, "C", 1, "D", 0);
+    const auto map = make_map("A", 3, "B", 2, "C", 1, "D", 0);
 
     SECTION("for-range loop")
     {

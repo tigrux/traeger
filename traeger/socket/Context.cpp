@@ -19,16 +19,11 @@
 namespace traeger
 {
     struct Context::impl_type
-        : public std::enable_shared_from_this<impl_type>
+        : std::enable_shared_from_this<impl_type>
     {
-        impl_type() noexcept
-            : context_()
-        {
-        }
-
         auto socket(zmq::socket_t &&socket) noexcept -> Socket
         {
-            auto actor = make_actor<socket_state>(shared_from_this(), std::move(socket));
+            const auto actor = make_actor<socket_state>(shared_from_this(), std::move(socket));
             actor.define("recv", &socket_state::recv);
             actor.define("send", &socket_state::send);
             return Socket{actor.mailbox()};
@@ -74,11 +69,11 @@ namespace traeger
                 UInt message_index = 0;
                 for (const Value &value : messages)
                 {
-                    auto flags = message_index != message_count - 1
-                                     ? zmq::send_flags::dontwait | zmq::send_flags::sndmore
-                                     : zmq::send_flags::dontwait;
-                    const auto &message = *value.get_string();
-                    if (!socket_.send(zmq::buffer(message), flags))
+                    const auto flags = message_index != message_count - 1
+                                           ? zmq::send_flags::dontwait | zmq::send_flags::sndmore
+                                           : zmq::send_flags::dontwait;
+                    if (const auto &message = *value.get_string();
+                        !socket_.send(zmq::buffer(message), flags))
                     {
                         return Value{nullptr};
                     }

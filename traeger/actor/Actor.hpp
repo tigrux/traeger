@@ -2,11 +2,9 @@
 
 #pragma once
 
-#include <cstddef>
 #include <exception>
 #include <functional>
 #include <memory>
-#include <stdexcept>
 #include <string>
 #include <tuple>
 #include <type_traits>
@@ -26,13 +24,13 @@ namespace traeger
             template <typename Callback>
             auto then(Callback &&then_callback) const noexcept -> traeger::Promise
             {
-                using CallbackResultType = typename std::invoke_result<Callback, Value>::type;
+                using CallbackResultType = std::invoke_result_t<Callback, Value>;
                 return traeger::Promise::then(
                     [then_callback = std::forward<Callback>(then_callback)](const Value &value) -> Result
                     {
                         try
                         {
-                            if constexpr (!std::is_same<CallbackResultType, void>::value)
+                            if constexpr (!std::is_same_v<CallbackResultType, void>)
                             {
                                 return Result{Value{then_callback(value)}};
                             }
@@ -71,9 +69,8 @@ namespace traeger
     template <typename State>
     struct StatefulActor : Actor
     {
-    public:
         template <typename... Args>
-        StatefulActor(Args &&...args) noexcept
+        explicit StatefulActor(Args &&...args) noexcept
             : Actor(),
               state_(std::make_shared<State>(std::forward<Args>(args)...))
         {
@@ -192,7 +189,7 @@ namespace traeger
                 try
                 {
                     using Tuple = std::tuple<Args...>;
-                    if constexpr (std::is_same<Return, void>::value)
+                    if constexpr (std::is_same_v<Return, void>)
                     {
                         invoke_func<Func, Tuple>(
                             std::forward<Func>(func),

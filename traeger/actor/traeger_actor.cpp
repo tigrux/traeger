@@ -9,8 +9,8 @@ namespace
     using namespace traeger;
 
     Work make_work(traeger_work_callback_t work_callback,
-                   traeger_closure_t closure,
-                   traeger_closure_free_t closure_free) noexcept
+                   const traeger_closure_t closure,
+                   const traeger_closure_free_t closure_free) noexcept
     {
         return [closure = std::shared_ptr<void>{closure, closure_free},
                 work_callback]() -> void
@@ -20,57 +20,57 @@ namespace
     }
 
     Function make_function(traeger_function_callback_t function_callback,
-                           traeger_closure_t closure,
-                           traeger_closure_free_t closure_free) noexcept
+                           const traeger_closure_t closure,
+                           const traeger_closure_free_t closure_free) noexcept
     {
         return
             [closure = std::shared_ptr<void>{closure, closure_free},
              function_callback](List list) -> Result
         {
             traeger_result_t result;
-            auto *arguments = new traeger_list_t{std::move(list)};
+            const auto *arguments = new traeger_list_t{std::move(list)};
             function_callback(arguments, closure.get(), &result);
             return std::move(result);
         };
     }
 
     Promise::ResultCallback make_promise_result_callback(traeger_promise_result_callback_t result_callback,
-                                                         traeger_closure_t closure,
-                                                         traeger_closure_free_t closure_free)
+                                                         const traeger_closure_t closure,
+                                                         const traeger_closure_free_t closure_free)
     {
         return [closure = std::shared_ptr<void>{closure, closure_free},
                 result_callback](const Value &argument) -> Result
         {
             traeger_result_t result;
-            auto *value = new traeger_value_t{argument};
+            const auto *value = new traeger_value_t{argument};
             result_callback(value, closure.get(), &result);
             return std::move(result);
         };
     }
 
     Promise::PromiseCallback make_promise_promise_callback(traeger_promise_promise_callback_t promise_callback,
-                                                           traeger_closure_t closure,
-                                                           traeger_closure_free_t closure_free,
+                                                           const traeger_closure_t closure,
+                                                           const traeger_closure_free_t closure_free,
                                                            const Scheduler &scheduler)
     {
         return [closure = std::shared_ptr<void>{closure, closure_free},
                 promise_callback, scheduler](const Value &argument) -> Promise
         {
             traeger_promise_t promise{Promise{scheduler}};
-            auto *value = new traeger_value_t{argument};
+            const auto *value = new traeger_value_t{argument};
             promise_callback(value, closure.get(), &promise);
             return std::move(promise);
         };
     }
 
     Promise::ErrorCallback make_promise_error_callback(traeger_promise_error_callback_t error_callback,
-                                                       traeger_closure_t closure,
-                                                       traeger_closure_free_t closure_free)
+                                                       const traeger_closure_t closure,
+                                                       const traeger_closure_free_t closure_free)
     {
         return [closure = std::shared_ptr<void>{closure, closure_free},
                 error_callback](const String &argument) -> void
         {
-            traeger_string_t error{argument};
+            const traeger_string_t error{argument};
             error_callback(&error, closure.get());
         };
     }
@@ -98,10 +98,8 @@ extern "C"
 
     void traeger_result_free(traeger_result_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     void traeger_result_set_value(traeger_result_t *self,
@@ -110,7 +108,7 @@ extern "C"
         if (self != nullptr &&
             value != nullptr)
         {
-            cast(self) = *value;
+            cast(self) = Result{*value};
         }
     }
 
@@ -118,55 +116,55 @@ extern "C"
     {
         if (self != nullptr)
         {
-            cast(self) = Value{nullptr};
+            cast(self) = Result{Value{nullptr}};
         }
     }
 
     void traeger_result_set_bool(traeger_result_t *self,
-                                 traeger_bool_t value)
+                                 const traeger_bool_t value)
 
     {
         if (self != nullptr)
         {
-            cast(self) = Value{value};
+            cast(self) = Result{Value{value}};
         }
     }
 
     void traeger_result_set_int(traeger_result_t *self,
-                                traeger_int_t value)
+                                const traeger_int_t value)
     {
         if (self != nullptr)
         {
-            cast(self) = Value{value};
+            cast(self) = Result{Value{value}};
         }
     }
 
     void traeger_result_set_uint(traeger_result_t *self,
-                                 traeger_uint_t value)
+                                 const traeger_uint_t value)
     {
         if (self != nullptr)
         {
-            cast(self) = Value{value};
+            cast(self) = Result{Value{value}};
         }
     }
 
     void traeger_result_set_float(traeger_result_t *self,
-                                  traeger_float_t value)
+                                  const traeger_float_t value)
     {
         if (self != nullptr)
         {
-            cast(self) = Value{value};
+            cast(self) = Result{Value{value}};
         }
     }
 
     void traeger_result_set_string(traeger_result_t *self,
                                    const char *string_data,
-                                   size_t string_size)
+                                   const size_t string_size)
     {
         if (self != nullptr &&
             string_data != nullptr)
         {
-            cast(self) = Value{String(string_data, string_size)};
+            cast(self) = Result{Value{String(string_data, string_size)}};
         }
     }
 
@@ -176,7 +174,7 @@ extern "C"
         if (self != nullptr &&
             list != nullptr)
         {
-            cast(self) = Value{cast(list)};
+            cast(self) = Result{Value{cast(list)}};
         }
     }
 
@@ -186,18 +184,18 @@ extern "C"
         if (self != nullptr &&
             map != nullptr)
         {
-            cast(self) = Value{cast(map)};
+            cast(self) = Result{Value{cast(map)}};
         }
     }
 
     void traeger_result_set_error(traeger_result_t *self,
                                   const char *error_data,
-                                  size_t error_size)
+                                  const size_t error_size)
     {
         if (self != nullptr &&
             error_data != nullptr)
         {
-            cast(self) = Error{String(error_data, error_size)};
+            cast(self) = Result{Error{String(error_data, error_size)}};
         }
     }
 
@@ -235,9 +233,9 @@ extern "C"
 
     // Function
 
-    traeger_function_t *traeger_function_new(traeger_function_callback_t function_callback,
-                                             traeger_closure_t closure,
-                                             traeger_closure_free_t closure_free)
+    traeger_function_t *traeger_function_new(const traeger_function_callback_t function_callback,
+                                             const traeger_closure_t closure,
+                                             const traeger_closure_free_t closure_free)
     {
         if (function_callback != nullptr &&
             closure != nullptr &&
@@ -259,10 +257,8 @@ extern "C"
 
     void traeger_function_free(traeger_function_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     traeger_result_type_t
@@ -290,7 +286,7 @@ extern "C"
 
     // Scheduler
 
-    traeger_scheduler_t *traeger_scheduler_new(unsigned int threads_count)
+    traeger_scheduler_t *traeger_scheduler_new(const unsigned int threads_count)
     {
         return new traeger_scheduler_t{Scheduler{Threads{threads_count}}};
     }
@@ -306,10 +302,8 @@ extern "C"
 
     void traeger_scheduler_free(traeger_scheduler_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     size_t traeger_scheduler_count(const traeger_scheduler_t *self)
@@ -322,9 +316,9 @@ extern "C"
     }
 
     void traeger_scheduler_schedule(const traeger_scheduler_t *self,
-                                    traeger_work_callback_t work_callback,
-                                    traeger_closure_t closure,
-                                    traeger_closure_free_t closure_free)
+                                    const traeger_work_callback_t work_callback,
+                                    const traeger_closure_t closure,
+                                    const traeger_closure_free_t closure_free)
     {
         if (self != nullptr &&
             work_callback != nullptr &&
@@ -336,10 +330,10 @@ extern "C"
     }
 
     void traeger_scheduler_schedule_delayed(const traeger_scheduler_t *self,
-                                            traeger_float_t delay,
-                                            traeger_work_callback_t work_callback,
-                                            traeger_closure_t closure,
-                                            traeger_closure_free_t closure_free)
+                                            const traeger_float_t delay,
+                                            const traeger_work_callback_t work_callback,
+                                            const traeger_closure_t closure,
+                                            const traeger_closure_free_t closure_free)
     {
         if (self != nullptr &&
             work_callback != nullptr &&
@@ -373,10 +367,8 @@ extern "C"
 
     void traeger_promise_free(traeger_promise_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     void traeger_promise_set_promise(traeger_promise_t *self,
@@ -421,9 +413,9 @@ extern "C"
     }
 
     traeger_promise_t *traeger_promise_then_result(const traeger_promise_t *self,
-                                                   traeger_promise_result_callback_t result_callback,
-                                                   traeger_closure_t closure,
-                                                   traeger_closure_free_t closure_free)
+                                                   const traeger_promise_result_callback_t result_callback,
+                                                   const traeger_closure_t closure,
+                                                   const traeger_closure_free_t closure_free)
     {
         if (self != nullptr &&
             result_callback != nullptr &&
@@ -438,9 +430,9 @@ extern "C"
     }
 
     traeger_promise_t *traeger_promise_then_promise(const traeger_promise_t *self,
-                                                    traeger_promise_promise_callback_t promise_callback,
-                                                    traeger_closure_t closure,
-                                                    traeger_closure_free_t closure_free)
+                                                    const traeger_promise_promise_callback_t promise_callback,
+                                                    const traeger_closure_t closure,
+                                                    const traeger_closure_free_t closure_free)
     {
         if (self != nullptr &&
             promise_callback != nullptr &&
@@ -456,9 +448,9 @@ extern "C"
     }
 
     void traeger_promise_fail(const traeger_promise_t *self,
-                              traeger_promise_error_callback_t error_callback,
-                              traeger_closure_t closure,
-                              traeger_closure_free_t closure_free)
+                              const traeger_promise_error_callback_t error_callback,
+                              const traeger_closure_t closure,
+                              const traeger_closure_free_t closure_free)
     {
         if (self != nullptr &&
             error_callback != nullptr &&
@@ -484,16 +476,14 @@ extern "C"
 
     void traeger_mailbox_free(traeger_mailbox_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     traeger_promise_t *traeger_mailbox_send(const traeger_mailbox_t *self,
                                             const traeger_scheduler_t *scheduler,
                                             const char *name_data,
-                                            size_t name_size,
+                                            const size_t name_size,
                                             const traeger_list_t *arguments)
     {
         if (self != nullptr &&
@@ -517,10 +507,8 @@ extern "C"
 
     void traeger_actor_free(traeger_actor_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     traeger_mailbox_t *traeger_actor_get_mailbox(const traeger_actor_t *self)
@@ -543,7 +531,7 @@ extern "C"
 
     void traeger_actor_define_reader(const traeger_actor_t *self,
                                      const char *name_data,
-                                     size_t name_size,
+                                     const size_t name_size,
                                      const traeger_function_t *function)
     {
         if (self != nullptr &&
@@ -558,7 +546,7 @@ extern "C"
 
     void traeger_actor_define_writer(const traeger_actor_t *self,
                                      const char *name_data,
-                                     size_t name_size,
+                                     const size_t name_size,
                                      const traeger_function_t *function)
     {
         if (self != nullptr &&
@@ -589,10 +577,7 @@ extern "C"
 
     void traeger_queue_free(traeger_queue_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+        delete self;
     }
 
     bool traeger_queue_closed(const traeger_queue_t *self)
@@ -633,7 +618,7 @@ extern "C"
     }
 
     bool traeger_queue_push_bool(const traeger_queue_t *self,
-                                 traeger_bool_t value)
+                                 const traeger_bool_t value)
     {
         if (self != nullptr)
         {
@@ -643,7 +628,7 @@ extern "C"
     }
 
     bool traeger_queue_push_int(const traeger_queue_t *self,
-                                traeger_int_t value)
+                                const traeger_int_t value)
     {
         if (self != nullptr)
         {
@@ -653,7 +638,7 @@ extern "C"
     }
 
     bool traeger_queue_push_uint(const traeger_queue_t *self,
-                                 traeger_uint_t value)
+                                 const traeger_uint_t value)
     {
         if (self != nullptr)
         {
@@ -663,7 +648,7 @@ extern "C"
     }
 
     bool traeger_queue_push_float(const traeger_queue_t *self,
-                                  traeger_float_t value)
+                                  const traeger_float_t value)
     {
         if (self != nullptr)
         {
@@ -674,7 +659,7 @@ extern "C"
 
     bool traeger_queue_push_string(const traeger_queue_t *self,
                                    const char *string_data,
-                                   size_t string_size)
+                                   const size_t string_size)
     {
         if (self != nullptr)
         {

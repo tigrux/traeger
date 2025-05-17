@@ -9,7 +9,7 @@ namespace
 {
     using namespace traeger;
 
-    struct AdderMailbox : public Mailbox::Interface
+    struct AdderMailbox final : Mailbox::Interface
     {
         Promise
         send(const Scheduler &scheduler,
@@ -30,12 +30,12 @@ namespace
                                 sum += *arg_int;
                             }
                         }
-                        promise.set_result(Value{sum});
+                        promise.set_result(Result{Value{sum}});
                     });
             }
             else
             {
-                promise.set_result(Error{"Not a method"});
+                promise.set_result(Result{Error{"Not a method"}});
             }
 
             return promise;
@@ -47,7 +47,7 @@ TEST_CASE("Mailbox.send")
 {
     using namespace traeger;
 
-    auto scheduler = Scheduler{Threads{8}};
+    const auto scheduler = Scheduler{Threads{8}};
     auto adder_mailbox = AdderMailbox{};
 
     SECTION("value")

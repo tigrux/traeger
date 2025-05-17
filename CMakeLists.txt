@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_POLICY_VERSION_MINIMUM 3.5)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
-if(!WIN32)
+if(NOT WIN32)
     add_compile_options(-Wall -Werror)
 endif()
 

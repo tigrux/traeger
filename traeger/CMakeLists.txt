@@ -31,7 +31,7 @@ if(BUILD_TESTING)
         test
         "ctest"
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-        DEPENDS test-value test-format test-socket test-actor test-module
+        DEPENDS test-value test-format test-socket test-actor
     )
 endif()
 

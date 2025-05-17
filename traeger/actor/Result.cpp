@@ -9,16 +9,11 @@
 namespace traeger
 {
     Result::Result() noexcept
-        : value_(),
-          type_(Type::Undefined)
+        : type_(Type::Undefined)
     {
     }
 
-    Result::Result(const Result &other) noexcept
-        : value_(other.value_),
-          type_(other.type_)
-    {
-    }
+    Result::Result(const Result &other) noexcept = default;
 
     Result::Result(Result &&other) noexcept
         : value_(std::move(other.value_)),
@@ -52,12 +47,7 @@ namespace traeger
         type_ = Type::Error;
     }
 
-    auto Result::operator=(const Result &other) noexcept -> Result &
-    {
-        value_ = other.value_;
-        type_ = other.type_;
-        return *this;
-    }
+    auto Result::operator=(const Result &other) noexcept -> Result & = default;
 
     auto Result::operator=(Result &&other) noexcept -> Result &
     {
@@ -70,15 +60,15 @@ namespace traeger
 
     auto Result::operator==(const Result &other) const noexcept -> bool
     {
-        return (type_ == other.type_) && (value_ == other.value_);
+        return type_ == other.type_ && value_ == other.value_;
     }
 
     auto Result::operator!=(const Result &other) const noexcept -> bool
     {
-        return (type_ != other.type_) || (value_ != other.value_);
+        return type_ != other.type_ || value_ != other.value_;
     }
 
-    auto Result::type() const noexcept -> Result::Type
+    auto Result::type() const noexcept -> Type
     {
         return type_;
     }
@@ -101,7 +91,7 @@ namespace traeger
         return nullptr;
     }
 
-    auto Result::type_name() noexcept -> const String &
+    auto Result::type_name() const noexcept -> const String &
     {
         return type_name(type_);
     }

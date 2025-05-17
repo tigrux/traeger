@@ -13,7 +13,7 @@ TEST_CASE("Queue.pop")
     using namespace std::chrono_literals;
 
     auto queue = Queue{};
-    auto scheduler = Scheduler{Threads{8}};
+    const auto scheduler = Scheduler{Threads{8}};
 
     auto promise = std::promise<void>{};
     scheduler.schedule(

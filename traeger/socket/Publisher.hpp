@@ -18,7 +18,7 @@ namespace traeger
 
     private:
         Publisher(Socket &&socket,
-                  const Format &format) noexcept;
+                  Format format) noexcept;
         friend struct Context;
 
         Socket publisher_;

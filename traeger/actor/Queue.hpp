@@ -31,7 +31,7 @@ namespace traeger
         struct impl_type;
         std::shared_ptr<impl_type> impl_;
     };
-};
+}
 
 struct traeger_queue_t final : traeger::Queue
 {

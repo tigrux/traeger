@@ -4,17 +4,17 @@
 #include <future>
 #include <traeger/actor/Scheduler.hpp>
 #include <traeger/actor/Actor.hpp>
+#include <utility>
 
 namespace
 {
     class User
     {
-    private:
         std::string name_;
 
     public:
-        User(const std::string &name)
-            : name_(name)
+        explicit User(std::string name)
+            : name_(std::move(name))
         {
         }
 
@@ -25,7 +25,7 @@ namespace
 
         void set_name(std::string name)
         {
-            name_ = name;
+            name_ = std::move(name);
         }
     };
 
@@ -36,7 +36,7 @@ namespace
 
     void user_set_name(User &user, std::string name)
     {
-        return user.set_name(name);
+        return user.set_name(std::move(name));
     }
 }
 
@@ -159,7 +159,7 @@ TEST_CASE("Actor.define")
                      { return user.get_name(); });
         actor.define("set_name",
                      [](User &user, String name)
-                     { user.set_name(name); });
+                     { user.set_name(std::move(name)); });
         auto mailbox = actor.mailbox();
 
         SECTION("read")

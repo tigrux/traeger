@@ -19,7 +19,7 @@ TEST_CASE("Context.publisher")
         const auto context = Context{};
         const auto &format = Format::json();
         const auto [publisher_optional, error] = context.publisher("ipc://test-publisher.socket", format);
-        REQUIRE(error == "");
+        REQUIRE(error.empty());
         REQUIRE(publisher_optional.has_value());
 
         const auto &publisher = publisher_optional.value();

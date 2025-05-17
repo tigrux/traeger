@@ -13,7 +13,7 @@ TEST_CASE("Result.set")
 
     SECTION("value")
     {
-        result = Value{123};
+        result = Result{Value{123}};
         REQUIRE(result.value());
         REQUIRE(*result.value() == 123);
         REQUIRE(result == Result{Value{123}});
@@ -21,7 +21,7 @@ TEST_CASE("Result.set")
 
     SECTION("error")
     {
-        result = Error{"some error"};
+        result = Result{Error{"some error"}};
         REQUIRE(result.error());
         REQUIRE(*result.error() == "some error");
         REQUIRE(result == Result{Error{"some error"}});

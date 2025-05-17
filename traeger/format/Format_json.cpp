@@ -100,8 +100,8 @@ namespace
     {
         return std::visit(
             overload{
-                [](auto value)
-                { return nlohmann::json(value); },
+                [](const auto scalar)
+                { return nlohmann::json(scalar); },
                 [](const Value::impl_type::string_type &boxed)
                 { return nlohmann::json(boxed.get()); },
                 [](const Value::impl_type::list_type &values)

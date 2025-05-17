@@ -3,7 +3,6 @@
 #include <variant>
 #include <string>
 #include <utility>
-#include <cstddef>
 
 #include <msgpack.hpp>
 
@@ -18,7 +17,7 @@ namespace
     {
         std::string str;
 
-        auto write(const char *data, std::size_t size) noexcept -> void
+        auto write(const char *data, const std::size_t size) noexcept -> void
         {
             str.append(data, size);
         }
@@ -119,10 +118,10 @@ namespace
     {
         std::visit(
             overload{
-                [&packer](Null value)
+                [&packer](Null)
                 { packer.pack_nil(); },
-                [&packer](auto value)
-                { packer.pack(value); },
+                [&packer](auto scalar)
+                { packer.pack(scalar); },
                 [&packer](const Value::impl_type::string_type &boxed)
                 { packer.pack(boxed.get()); },
                 [&packer](const Value::impl_type::list_type &values)
@@ -148,7 +147,7 @@ extern "C"
             },
             [](const std::string_view &content) -> Value
             {
-                auto pack = msgpack::unpack(content.data(), content.size());
+                const auto pack = msgpack::unpack(content.data(), content.size());
                 return value_from_msgpack(pack.get());
             }}};
 }

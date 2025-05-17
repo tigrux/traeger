@@ -21,16 +21,16 @@ namespace traeger
     auto value_from_variant(const Variant &variant) noexcept -> Value
     {
         return std::visit(
-            [](const auto &variant)
-            { return Value{variant}; },
+            [](const auto &value)
+            { return Value{value}; },
             variant);
     }
 
     auto value_from_variant(Variant &&variant) noexcept -> Value
     {
         return std::visit(
-            [](auto &&variant)
-            { return Value{std::move(variant)}; },
+            [](auto &&value)
+            { return Value{std::forward<decltype(value)>(value)}; },
             std::move(variant));
     }
 
@@ -41,9 +41,9 @@ namespace traeger
                 [](auto variant)
                 { return Variant{variant}; },
                 [](const Value::impl_type::list_type &values)
-                { return Variant{List{values}}; },
+                { return Variant{List{List::impl_type{values}}}; },
                 [](const Value::impl_type::map_type &values)
-                { return Variant{Map{values}}; }},
+                { return Variant{Map{Map::impl_type{values}}}; }},
             value.impl().variant);
     }
 
@@ -54,9 +54,9 @@ namespace traeger
                 [](auto variant)
                 { return Variant{variant}; },
                 [](Value::impl_type::list_type &&values)
-                { return Variant{List{std::move(values)}}; },
+                { return Variant{List{List::impl_type{std::move(values)}}}; },
                 [](Value::impl_type::map_type &&values)
-                { return Variant{Map{std::move(values)}}; }},
+                { return Variant{Map{Map::impl_type{std::move(values)}}}; }},
             std::move(value.impl().variant));
     }
 }

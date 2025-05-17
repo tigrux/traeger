@@ -29,7 +29,7 @@ TEST_CASE("StatelessActor.define")
                     }
                 }
                 std::this_thread::sleep_for(10ms);
-                return Value{sum};
+                return Result{Value{sum}};
             });
 
         const auto mailbox = actor.mailbox();
@@ -96,7 +96,7 @@ TEST_CASE("StatelessActor.define")
             "get-todo",
             [todo_list](const List &) -> Result
             {
-                return Value{*todo_list};
+                return Result{Value{*todo_list}};
             });
 
         const auto mailbox = actor.mailbox();

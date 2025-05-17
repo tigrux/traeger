@@ -9,19 +9,19 @@ TEST_CASE("Result.type")
 
     SECTION("undefined")
     {
-        Result result;
+        const Result result;
         REQUIRE(result.type() == Result::Type::Undefined);
     }
 
     SECTION("value")
     {
-        Result result{Value{true}};
+        const Result result{Value{true}};
         REQUIRE(result.type() == Result::Type::Value);
     }
 
     SECTION("error")
     {
-        Result result{Error{"some error"}};
+        const Result result{Error{"some error"}};
         REQUIRE(result.type() == Result::Type::Error);
     }
 }

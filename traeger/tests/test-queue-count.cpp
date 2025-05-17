@@ -8,7 +8,7 @@ TEST_CASE("Queue.count")
 {
     using namespace traeger;
 
-    auto queue = Queue{};
+    const auto queue = Queue{};
 
     REQUIRE(queue.count() == 0);
     queue.push(10);

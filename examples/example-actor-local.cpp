@@ -7,12 +7,12 @@
 
 extern traeger::Actor make_account_actor(traeger::Float initial_funds);
 
-extern void perform_operations(traeger::Scheduler scheduler, traeger::Mailbox mailbox);
+extern void perform_operations(const traeger::Scheduler &scheduler, const traeger::Mailbox &mailbox);
 
 int main()
 {
-    auto scheduler = traeger::Scheduler{traeger::Threads{8}};
-    auto account_actor = make_account_actor(0.0);
+    const auto scheduler = traeger::Scheduler{traeger::Threads{8}};
+    const auto account_actor = make_account_actor(0.0);
 
     perform_operations(scheduler, account_actor.mailbox());
 

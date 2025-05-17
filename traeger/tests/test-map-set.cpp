@@ -9,7 +9,7 @@ TEST_CASE("Map.set")
     using namespace traeger;
 
     auto map = Map{};
-    REQUIRE(map.size() == 0);
+    REQUIRE(map.empty());
 
     SECTION("temporary")
     {

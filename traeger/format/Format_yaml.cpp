@@ -92,10 +92,10 @@ namespace
     {
         return std::visit(
             overload{
-                [](Null value)
+                [](Null)
                 { return YAML::Node(); },
-                [](auto value)
-                { return YAML::Node(value); },
+                [](auto scalar)
+                { return YAML::Node(scalar); },
                 [](const Value::impl_type::string_type &boxed)
                 { return YAML::Node(boxed.get()); },
                 [](const Value::impl_type::list_type &values)

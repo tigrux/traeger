@@ -9,10 +9,10 @@ TEST_CASE("Promise.promise")
 {
     using namespace traeger;
 
-    auto scheduler = Scheduler{Threads{8}};
+    const auto scheduler = Scheduler{Threads{8}};
 
-    auto precedent_promise = Promise{scheduler};
-    auto consequent_promise = Promise{scheduler};
+    const auto precedent_promise = Promise{scheduler};
+    const auto consequent_promise = Promise{scheduler};
     consequent_promise.set_result_from_promise(precedent_promise);
 
     SECTION("value")
@@ -25,7 +25,7 @@ TEST_CASE("Promise.promise")
                 return Result{};
             });
 
-        precedent_promise.set_result(Value{123});
+        precedent_promise.set_result(Result{Value{123}});
         REQUIRE(promise.get_future().get() == Value{123});
     }
 
@@ -38,7 +38,7 @@ TEST_CASE("Promise.promise")
                 promise.set_value(error);
             });
 
-        precedent_promise.set_result(Error{"some error"});
+        precedent_promise.set_result(Result{Error{"some error"}});
         REQUIRE(promise.get_future().get() == Error{"some error"});
     }
 }

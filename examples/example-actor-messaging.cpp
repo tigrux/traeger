@@ -6,10 +6,10 @@
 
 #include <traeger/actor/Actor.hpp>
 
-void perform_operations(traeger::Scheduler scheduler, traeger::Mailbox mailbox)
+void perform_operations(const traeger::Scheduler &scheduler, const traeger::Mailbox &mailbox)
 {
     // Use a decorator to enable type deduction in C++
-    auto actor_mailbox = traeger::Actor::Mailbox{mailbox};
+    const auto actor_mailbox = traeger::Actor::Mailbox{mailbox};
 
     for (auto [operation, amount] : {
              std::make_pair("deposit", 1000),

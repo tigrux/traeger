@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: BSL-1.0
 
 #include <catch2/catch_test_macros.hpp>
-#include <limits>
 #include <traeger/value/Value.hpp>
 #include <traeger/format/Format.hpp>
 
@@ -23,7 +22,7 @@ TEST_CASE("Format.decode")
 
         SECTION("list")
         {
-            auto [decoded_optional, decoded_error] = format.decode("[null,true,10,\"Hello world\",[10,20],{\"x\":10,\"y\":20}]");
+            auto [decoded_optional, decoded_error] = format.decode(R"([null,true,10,"Hello world",[10,20],{"x":10,"y":20}])");
             REQUIRE(decoded_error.empty());
             REQUIRE(decoded_optional.has_value());
             REQUIRE(*decoded_optional == make_list(nullptr,
@@ -36,7 +35,7 @@ TEST_CASE("Format.decode")
 
         SECTION("map")
         {
-            auto [decoded_optional, decoded_error] = format.decode("{\"b\":true,\"i\":10,\"l\":[10,20],\"m\":{\"x\":10,\"y\":20},\"n\":null,\"s\":\"Hello world\"}");
+            auto [decoded_optional, decoded_error] = format.decode(R"({"b":true,"i":10,"l":[10,20],"m":{"x":10,"y":20},"n":null,"s":"Hello world"})");
             REQUIRE(decoded_error.empty());
             REQUIRE(decoded_optional.has_value());
             REQUIRE(*decoded_optional == make_map("n", nullptr,

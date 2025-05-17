@@ -9,7 +9,7 @@ TEST_CASE("List.size")
     using namespace traeger;
 
     auto list = List{};
-    REQUIRE(list.size() == 0);
+    REQUIRE(list.empty());
 
     SECTION("size increases one at a time")
     {

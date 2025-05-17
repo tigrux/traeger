@@ -26,7 +26,7 @@ namespace traeger
         struct impl_type;
         std::shared_ptr<impl_type> impl_;
 
-        Module(std::shared_ptr<impl_type> &&impl) noexcept;
+        explicit Module(std::shared_ptr<impl_type> &&impl) noexcept;
     };
 }
 

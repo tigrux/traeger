@@ -2,7 +2,7 @@
 Traeger is a collection of libraries to write applications following the principles of the [Actor Model](https://en.wikipedia.org/wiki/Actor_model).
 
 * It simplifies the development of concurrent, distributed and portable applications.
-* It is writen in a subset of C++ 17 that works on multiple platforms (Linux, MacOS, Windows) and architectures (x86_64 and arm64).
+* It is writen in a subset of C++ 17 that works on multiple platforms (Linux, macOS, Windows) and architectures (x86_64 and arm64).
 * Its libraries do not have dependencies, aside from the standard C++ runtime.
 * It does not reinvent the wheel and instead leverages battle-tested projects like
   [immer](https://github.com/arximboldi/immer/),
@@ -14,15 +14,15 @@ Traeger is a collection of libraries to write applications following the princip
 * Bindings for a few other languages are provided:
     * Python: for prototyping and testing.
     * C: for interfacing with other languages like Rust and Go.
-    * Go: for networking and micro-services.
+    * Go: for networking and microservices.
     * Rust: to gain access to its arsenal of crates.
 * The word Traeger is German for carrier and the name was inspired by the library [immer](https://github.com/arximboldi/immer/).
 
 # Prerequisites
 * cmake >= 3.24:
-    * On MacOS it can be installed using [brew](https://brew.sh).
-    * On Windows it is recommended to use the developer terminal of [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
-    * On Linux it is recommended to install it from the [official project page](https://cmake.org/download/).
+    * On macOS, it can be installed using [brew](https://brew.sh).
+    * On Windows, it is recommended to use the developer terminal of [Visual Studio 2022](https://visualstudio.microsoft.com/downloads/).
+    * On Linux, it is recommended to install it from the [official project page](https://cmake.org/download/).
 * A compiler with good support of C++ 17: clang >= 6.0, or g++ >= 7.5.
 
 Traeger has some dependencies that are downloaded by cmake as part of the build process via [FetchContent](https://cmake.org/cmake/help/v3.24/module/FetchContent.html).
@@ -413,7 +413,7 @@ if __name__ == "__main__":
 
 #### The subscriber
 * A subscriber connects to the address of a publisher.
-* A subscriber listens for values ​​of topics to which it has subscribed.
+* A subscriber listens for values of topics to which it has subscribed.
 
 ```Python
 # FILE: python/examples/example-socket-subscriber.py
@@ -465,7 +465,7 @@ if __name__ == "__main__":
 
 Traeger provides a library `traeger::module` to define and load modules.
 
-Actors can be instantiated in the code of shared objects, then loaded programatically.
+Actors can be instantiated in the code of shared objects, then loaded programmatically.
 This enables modular applications in environments where the hardware may vary.
 
 ### Loading modules
@@ -522,11 +522,11 @@ The definition of a shared object, it is provided an initial configuration, and 
 extern traeger::Actor make_account_actor(traeger::Float initial_funds);
 
 extern "C" DLLEXPORT void
-traeger_module_init(const traeger_map_t *configuration,
+traeger_module_init(const traeger_map_t *init,
                     traeger_mailbox_interface_t **result,
                     traeger_string_t *error)
 {
-    if (configuration == nullptr ||
+    if (init == nullptr ||
         result == nullptr ||
         error == nullptr)
     {
@@ -534,10 +534,10 @@ traeger_module_init(const traeger_map_t *configuration,
     }
 
     traeger::Float initial_funds = 0.0;
-    configuration->get("initial_funds", initial_funds);
+    init->get("initial_funds", initial_funds);
     std::cout << "initial_funds: " << initial_funds << std::endl;
 
-    auto actor = make_account_actor(initial_funds);
+    const auto actor = make_account_actor(initial_funds);
     *result = actor.mailbox_interface().release();
 }
 ```

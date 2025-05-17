@@ -26,7 +26,7 @@ namespace traeger
 
         Mailbox() = delete;
 
-        Mailbox(const std::shared_ptr<Interface> &interface) noexcept;
+        explicit Mailbox(const std::shared_ptr<Interface> &interface) noexcept;
 
         auto send(const Scheduler &scheduler,
                   const String &name,

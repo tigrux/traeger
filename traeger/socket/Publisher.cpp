@@ -10,9 +10,9 @@
 namespace traeger
 {
     Publisher::Publisher(Socket &&socket,
-                         const Format &format) noexcept
+                         Format format) noexcept
         : publisher_(std::move(socket)),
-          format_(format)
+          format_(std::move(format))
     {
     }
 
@@ -24,7 +24,7 @@ namespace traeger
         if (!encoded)
         {
             Promise promise{scheduler};
-            promise.set_result(Error{error});
+            promise.set_result(Result{Error{error}});
             return promise;
         }
         return publisher_.send(scheduler, {topic, format_.name(), encoded.value()});

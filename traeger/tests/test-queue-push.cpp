@@ -10,7 +10,7 @@ TEST_CASE("Queue.push")
     using namespace traeger;
 
     auto queue = Queue{};
-    auto scheduler = Scheduler{Threads{8}};
+    const auto scheduler = Scheduler{Threads{8}};
     scheduler.schedule(
         [&queue]
         {

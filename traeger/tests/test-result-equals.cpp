@@ -8,29 +8,29 @@ TEST_CASE("Result.equals")
 {
     using namespace traeger;
 
-    auto outer_results = std::vector<Result>{
-        Value{nullptr},
-        Value{true},
-        Value{1234456},
-        Value{std::numeric_limits<UInt>::max()},
-        Value{3.1416},
-        Value{"Hello world"},
-        Value{make_list(10, 20, 30)},
-        Value{make_map("a", 10, "b", 20, "c", 30)},
-        Error{"some error"},
-        Error{"another error"}};
+    auto outer_results = std::vector{
+        Result{Value{nullptr}},
+        Result{Value{true}},
+        Result{Value{1234456}},
+        Result{Value{std::numeric_limits<UInt>::max()}},
+        Result{Value{3.1416}},
+        Result{Value{"Hello world"}},
+        Result{Value{make_list(10, 20, 30)}},
+        Result{Value{make_map("a", 10, "b", 20, "c", 30)}},
+        Result{Error{"some error"}},
+        Result{Error{"another error"}}};
 
-    auto inner_results = std::vector<Result>{
-        Value{nullptr},
-        Value{true},
-        Value{1234456},
-        Value{std::numeric_limits<UInt>::max()},
-        Value{3.1416},
-        Value{"Hello world"},
-        Value{make_list(10, 20, 30)},
-        Value{make_map("a", 10, "b", 20, "c", 30)},
-        Error{"some error"},
-        Error{"another error"}};
+    auto inner_results = std::vector{
+        Result{Value{nullptr}},
+        Result{Value{true}},
+        Result{Value{1234456}},
+        Result{Value{std::numeric_limits<UInt>::max()}},
+        Result{Value{3.1416}},
+        Result{Value{"Hello world"}},
+        Result{Value{make_list(10, 20, 30)}},
+        Result{Value{make_map("a", 10, "b", 20, "c", 30)}},
+        Result{Error{"some error"}},
+        Result{Error{"another error"}}};
 
     for (unsigned int outer_index = 0; outer_index < outer_results.size(); ++outer_index)
     {

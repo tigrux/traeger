@@ -10,13 +10,13 @@ class Account
     traeger::Float funds_;
 
 public:
-    Account(traeger::Float initial_funds) noexcept
+    explicit Account(const traeger::Float initial_funds) noexcept
         : funds_(initial_funds)
     {
     }
 
     // this method is non-const i.e. it modifies the instance
-    auto deposit(traeger::Float amount) -> traeger::Float
+    auto deposit(const traeger::Float amount) -> traeger::Float
     {
         // simulate a costly operation
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
@@ -29,7 +29,7 @@ public:
     }
 
     // this method is non-const i.e. it modifies the instance
-    auto debit(traeger::Float amount) -> traeger::Float
+    auto debit(const traeger::Float amount) -> traeger::Float
     {
         // simulate a costly operation
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
@@ -61,5 +61,5 @@ traeger::Actor make_account_actor(traeger::Float initial_funds)
     account_actor.define("deposit", &Account::deposit);
     account_actor.define("debit", &Account::debit);
     account_actor.define("balance", &Account::balance);
-    return std::move(account_actor);
+    return static_cast<traeger::Actor>(std::move(account_actor));
 }

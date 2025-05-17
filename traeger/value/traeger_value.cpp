@@ -3,8 +3,6 @@
 #include <iostream>
 #include <sstream>
 
-#include <stdlib.h>
-
 #include "traeger/value/traeger_value.hpp"
 
 namespace
@@ -25,7 +23,7 @@ extern "C"
     // String
 
     traeger_string_t *traeger_string_new(const char *string_data,
-                                         size_t string_size)
+                                         const size_t string_size)
     {
         if (string_data != nullptr)
         {
@@ -45,15 +43,13 @@ extern "C"
 
     void traeger_string_free(traeger_string_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     void traeger_string_set(traeger_string_t *self,
                             const char *string_data,
-                            size_t string_size)
+                            const size_t string_size)
     {
         if (self != nullptr &&
             string_data != nullptr)
@@ -101,10 +97,8 @@ extern "C"
 
     void traeger_list_free(traeger_list_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     void traeger_list_print(const traeger_list_t *self)
@@ -155,7 +149,7 @@ extern "C"
     }
 
     void traeger_list_append_bool(traeger_list_t *self,
-                                  traeger_bool_t value)
+                                  const traeger_bool_t value)
     {
         if (self != nullptr)
         {
@@ -164,7 +158,7 @@ extern "C"
     }
 
     void traeger_list_append_int(traeger_list_t *self,
-                                 traeger_int_t value)
+                                 const traeger_int_t value)
     {
         if (self != nullptr)
         {
@@ -173,7 +167,7 @@ extern "C"
     }
 
     void traeger_list_append_uint(traeger_list_t *self,
-                                  traeger_uint_t value)
+                                  const traeger_uint_t value)
     {
         if (self != nullptr)
         {
@@ -182,7 +176,7 @@ extern "C"
     }
 
     void traeger_list_append_float(traeger_list_t *self,
-                                   traeger_float_t value)
+                                   const traeger_float_t value)
     {
         if (self != nullptr)
         {
@@ -192,7 +186,7 @@ extern "C"
 
     void traeger_list_append_string(traeger_list_t *self,
                                     const char *string_data,
-                                    size_t string_size)
+                                    const size_t string_size)
     {
         if (self != nullptr &&
             string_data != nullptr)
@@ -222,7 +216,7 @@ extern "C"
     }
 
     void traeger_list_set_value(traeger_list_t *self,
-                                int index,
+                                const int index,
                                 const traeger_value_t *value)
     {
         if (self != nullptr &&
@@ -233,7 +227,7 @@ extern "C"
     }
 
     void traeger_list_set_null(traeger_list_t *self,
-                               int index)
+                               const int index)
     {
         if (self != nullptr)
         {
@@ -242,8 +236,8 @@ extern "C"
     }
 
     void traeger_list_set_bool(traeger_list_t *self,
-                               int index,
-                               traeger_bool_t value)
+                               const int index,
+                               const traeger_bool_t value)
     {
         if (self != nullptr)
         {
@@ -252,8 +246,8 @@ extern "C"
     }
 
     void traeger_list_set_int(traeger_list_t *self,
-                              int index,
-                              traeger_int_t value)
+                              const int index,
+                              const traeger_int_t value)
     {
         if (self != nullptr)
         {
@@ -262,8 +256,8 @@ extern "C"
     }
 
     void traeger_list_set_uint(traeger_list_t *self,
-                               int index,
-                               traeger_uint_t value)
+                               const int index,
+                               const traeger_uint_t value)
     {
         if (self != nullptr)
         {
@@ -272,8 +266,8 @@ extern "C"
     }
 
     void traeger_list_set_float(traeger_list_t *self,
-                                int index,
-                                traeger_float_t value)
+                                const int index,
+                                const traeger_float_t value)
     {
         if (self != nullptr)
         {
@@ -282,9 +276,9 @@ extern "C"
     }
 
     void traeger_list_set_string(traeger_list_t *self,
-                                 int index,
+                                 const int index,
                                  const char *string_data,
-                                 size_t string_size)
+                                 const size_t string_size)
 
     {
         if (self != nullptr &&
@@ -295,7 +289,7 @@ extern "C"
     }
 
     void traeger_list_set_list(traeger_list_t *self,
-                               int index,
+                               const int index,
                                const traeger_list_t *list)
 
     {
@@ -307,7 +301,7 @@ extern "C"
     }
 
     void traeger_list_set_map(traeger_list_t *self,
-                              int index,
+                              const int index,
                               const traeger_map_t *map)
 
     {
@@ -319,7 +313,7 @@ extern "C"
     }
 
     bool traeger_list_find(const traeger_list_t *self,
-                           int index,
+                           const int index,
                            traeger_value_t **value)
     {
         if (self != nullptr &&
@@ -353,7 +347,7 @@ extern "C"
     }
 
     size_t traeger_list_resize(traeger_list_t *self,
-                               size_t new_size)
+                               const size_t new_size)
     {
         if (self != nullptr)
         {
@@ -375,10 +369,8 @@ extern "C"
 
     void traeger_list_iterator_free(traeger_list_iterator_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     bool traeger_list_iterator_has_next(const traeger_list_iterator_t *self)
@@ -429,10 +421,8 @@ extern "C"
 
     void traeger_map_free(traeger_map_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     void traeger_map_print(const traeger_map_t *self)
@@ -468,7 +458,7 @@ extern "C"
 
     void traeger_map_set_value(traeger_map_t *self,
                                const char *key_data,
-                               size_t key_size,
+                               const size_t key_size,
                                const traeger_value_t *value)
     {
         if (self != nullptr &&
@@ -481,7 +471,7 @@ extern "C"
 
     void traeger_map_set_null(traeger_map_t *self,
                               const char *key_data,
-                              size_t key_size)
+                              const size_t key_size)
     {
         if (self != nullptr &&
             key_data != nullptr)
@@ -492,8 +482,8 @@ extern "C"
 
     void traeger_map_set_bool(traeger_map_t *self,
                               const char *key_data,
-                              size_t key_size,
-                              traeger_bool_t value)
+                              const size_t key_size,
+                              const traeger_bool_t value)
     {
         if (self != nullptr &&
             key_data != nullptr)
@@ -504,8 +494,8 @@ extern "C"
 
     void traeger_map_set_int(traeger_map_t *self,
                              const char *key_data,
-                             size_t key_size,
-                             traeger_int_t value)
+                             const size_t key_size,
+                             const traeger_int_t value)
     {
         if (self != nullptr &&
             key_data != nullptr)
@@ -516,8 +506,8 @@ extern "C"
 
     void traeger_map_set_uint(traeger_map_t *self,
                               const char *key_data,
-                              size_t key_size,
-                              traeger_uint_t value)
+                              const size_t key_size,
+                              const traeger_uint_t value)
     {
         if (self != nullptr &&
             key_data != nullptr)
@@ -528,8 +518,8 @@ extern "C"
 
     void traeger_map_set_float(traeger_map_t *self,
                                const char *key_data,
-                               size_t key_size,
-                               traeger_float_t value)
+                               const size_t key_size,
+                               const traeger_float_t value)
 
     {
         if (self != nullptr &&
@@ -541,9 +531,9 @@ extern "C"
 
     void traeger_map_set_string(traeger_map_t *self,
                                 const char *key_data,
-                                size_t key_size,
+                                const size_t key_size,
                                 const char *string_data,
-                                size_t string_size)
+                                const size_t string_size)
     {
         if (self != nullptr &&
             key_data != nullptr &&
@@ -555,7 +545,7 @@ extern "C"
 
     void traeger_map_set_list(traeger_map_t *self,
                               const char *key_data,
-                              size_t key_size,
+                              const size_t key_size,
                               const traeger_list_t *list)
 
     {
@@ -568,7 +558,7 @@ extern "C"
 
     void traeger_map_set_map(traeger_map_t *self,
                              const char *key_data,
-                             size_t key_size,
+                             const size_t key_size,
                              const traeger_map_t *map)
     {
         if (self != nullptr &&
@@ -581,7 +571,7 @@ extern "C"
 
     void traeger_map_erase(traeger_map_t *self,
                            const char *key_data,
-                           size_t key_size)
+                           const size_t key_size)
     {
         if (self != nullptr &&
             key_data != nullptr)
@@ -592,7 +582,7 @@ extern "C"
 
     bool traeger_map_contains(const traeger_map_t *self,
                               const char *key_data,
-                              size_t key_size)
+                              const size_t key_size)
     {
         if (self != nullptr &&
             key_data != nullptr)
@@ -604,7 +594,7 @@ extern "C"
 
     bool traeger_map_find(const traeger_map_t *self,
                           const char *key_data,
-                          size_t key_size,
+                          const size_t key_size,
                           traeger_value_t **value)
     {
         if (self != nullptr &&
@@ -650,10 +640,8 @@ extern "C"
 
     void traeger_map_iterator_free(traeger_map_iterator_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     bool traeger_map_iterator_has_next(const traeger_map_iterator_t *self)
@@ -707,10 +695,8 @@ extern "C"
 
     void traeger_value_free(traeger_value_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     void traeger_value_print(const traeger_value_t *self)
@@ -760,9 +746,9 @@ extern "C"
         return nullptr;
     }
 
-    const char *traeger_value_type_get_name(traeger_value_type_t type)
+    const char *traeger_value_type_get_name(const traeger_value_type_t type)
     {
-        const auto value_type = Value::Type(static_cast<int>(type));
+        const auto value_type = static_cast<Value::Type>(static_cast<int>(type));
         return Value::type_name(value_type).c_str();
     }
 
@@ -775,7 +761,7 @@ extern "C"
     }
 
     void traeger_value_set_bool(traeger_value_t *self,
-                                traeger_bool_t value)
+                                const traeger_bool_t value)
     {
         if (self != nullptr)
         {
@@ -784,7 +770,7 @@ extern "C"
     }
 
     void traeger_value_set_int(traeger_value_t *self,
-                               traeger_int_t value)
+                               const traeger_int_t value)
     {
         if (self != nullptr)
         {
@@ -793,7 +779,7 @@ extern "C"
     }
 
     void traeger_value_set_uint(traeger_value_t *self,
-                                traeger_uint_t value)
+                                const traeger_uint_t value)
     {
         if (self != nullptr)
         {
@@ -802,7 +788,7 @@ extern "C"
     }
 
     void traeger_value_set_float(traeger_value_t *self,
-                                 traeger_float_t value)
+                                 const traeger_float_t value)
     {
         if (self != nullptr)
         {
@@ -812,7 +798,7 @@ extern "C"
 
     void traeger_value_set_string(traeger_value_t *self,
                                   const char *string_data,
-                                  size_t string_size)
+                                  const size_t string_size)
     {
         if (self != nullptr)
         {
@@ -854,8 +840,8 @@ extern "C"
     {
         if (self != nullptr)
         {
-            const auto optional = cast(self).get_null();
-            if (optional)
+            if (const auto optional = cast(self).get_null();
+                optional)
             {
                 return true;
             }
@@ -869,8 +855,8 @@ extern "C"
         if (self != nullptr &&
             value != nullptr)
         {
-            const auto optional = cast(self).get_bool();
-            if (optional)
+            if (const auto optional = cast(self).get_bool();
+                optional)
             {
                 *value = optional.value();
                 return true;
@@ -885,8 +871,8 @@ extern "C"
         if (self != nullptr &&
             value != nullptr)
         {
-            const auto optional = cast(self).get_int();
-            if (optional)
+            if (const auto optional = cast(self).get_int();
+                optional)
             {
                 *value = optional.value();
                 return true;
@@ -901,8 +887,8 @@ extern "C"
         if (self != nullptr &&
             value != nullptr)
         {
-            const auto optional = cast(self).get_uint();
-            if (optional)
+            if (const auto optional = cast(self).get_uint();
+                optional)
             {
                 *value = optional.value();
                 return true;
@@ -917,8 +903,8 @@ extern "C"
         if (self != nullptr &&
             value != nullptr)
         {
-            const auto optional = cast(self).get_float();
-            if (optional)
+            if (const auto optional = cast(self).get_float();
+                optional)
             {
                 *value = optional.value();
                 return true;
@@ -933,10 +919,10 @@ extern "C"
         if (self != nullptr &&
             string != nullptr)
         {
-            const auto optional = cast(self).get_string();
-            if (optional)
+            if (const auto ptr = cast(self).get_string();
+                ptr)
             {
-                *string = new traeger_string_t{*optional};
+                *string = new traeger_string_t{*ptr};
                 return true;
             }
         }
@@ -949,8 +935,8 @@ extern "C"
         if (self != nullptr &&
             list != nullptr)
         {
-            const auto optional = cast(self).get_list();
-            if (optional)
+            if (const auto optional = cast(self).get_list();
+                optional)
             {
                 *list = new traeger_list_t{std::move(optional).value()};
                 return true;
@@ -965,8 +951,8 @@ extern "C"
         if (self != nullptr &&
             map != nullptr)
         {
-            const auto optional = cast(self).get_map();
-            if (optional)
+            if (const auto optional = cast(self).get_map();
+                optional)
             {
                 *map = new traeger_map_t{std::move(optional).value()};
                 return true;

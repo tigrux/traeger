@@ -54,17 +54,15 @@ extern "C"
 
     void traeger_context_free(traeger_context_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     // Replier
 
     bool traeger_replier_new(const traeger_context_t *self,
                              const char *address_data,
-                             size_t address_size,
+                             const size_t address_size,
                              traeger_replier_t **result,
                              traeger_string_t **error)
     {
@@ -72,8 +70,9 @@ extern "C"
             address_data != nullptr &&
             result != nullptr)
         {
-            auto [replier, socket_error] = cast(self).replier(String(address_data, address_size));
-            if (replier)
+
+            if (auto [replier, socket_error] = cast(self).replier(String(address_data, address_size));
+                replier)
             {
                 *result = new traeger_replier_t{std::move(replier).value()};
                 return true;
@@ -97,10 +96,8 @@ extern "C"
 
     void traeger_replier_free(traeger_replier_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     traeger_promise_t *traeger_replier_reply(const traeger_replier_t *self,
@@ -120,7 +117,7 @@ extern "C"
 
     bool traeger_requester_new(const traeger_context_t *self,
                                const char *address_data,
-                               size_t address_size,
+                               const size_t address_size,
                                const traeger_format_t *format,
                                traeger_requester_t **result,
                                traeger_string_t **error)
@@ -130,8 +127,8 @@ extern "C"
             format != nullptr &&
             result != nullptr)
         {
-            auto [requester, socket_error] = cast(self).requester(String(address_data, address_size), cast(format));
-            if (requester)
+            if (auto [requester, socket_error] = cast(self).requester(String(address_data, address_size), cast(format));
+                requester)
             {
                 *result = new traeger_requester_t{std::move(requester).value()};
                 return true;
@@ -155,10 +152,8 @@ extern "C"
 
     void traeger_requester_free(traeger_requester_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     traeger_mailbox_t *traeger_requester_get_mailbox(const traeger_requester_t *self)
@@ -174,7 +169,7 @@ extern "C"
 
     bool traeger_publisher_new(const traeger_context_t *self,
                                const char *address_data,
-                               size_t address_size,
+                               const size_t address_size,
                                const traeger_format_t *format,
                                traeger_publisher_t **result,
                                traeger_string_t **error)
@@ -185,8 +180,8 @@ extern "C"
             result != nullptr)
         {
             // return new traeger_publisher_t{cast(self).publisher(cast(format))};
-            auto [publisher, socket_error] = cast(self).publisher(String(address_data, address_size), cast(format));
-            if (publisher)
+            if (auto [publisher, socket_error] = cast(self).publisher(String(address_data, address_size), cast(format));
+                publisher)
             {
                 *result = new traeger_publisher_t{std::move(publisher).value()};
                 return true;
@@ -210,16 +205,14 @@ extern "C"
 
     void traeger_publisher_free(traeger_publisher_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     traeger_promise_t *traeger_publisher_publish(const traeger_publisher_t *self,
                                                  const traeger_scheduler_t *scheduler,
                                                  const char *topic_data,
-                                                 size_t topic_size,
+                                                 const size_t topic_size,
                                                  const traeger_value_t *value)
     {
         if (self != nullptr &&
@@ -236,7 +229,7 @@ extern "C"
 
     bool traeger_subscriber_new(const traeger_context_t *self,
                                 const char *address_data,
-                                size_t address_size,
+                                const size_t address_size,
                                 const traeger_list_t *topics,
                                 traeger_subscriber_t **result,
                                 traeger_string_t **error)
@@ -246,8 +239,8 @@ extern "C"
             topics != nullptr &&
             result != nullptr)
         {
-            auto [subscriber, socket_error] = cast(self).subscriber(String(address_data, address_size), list_to_strings(cast(topics)));
-            if (subscriber)
+            if (auto [subscriber, socket_error] = cast(self).subscriber(String(address_data, address_size), list_to_strings(cast(topics)));
+                subscriber)
             {
                 *result = new traeger_subscriber_t{std::move(subscriber).value()};
                 return true;
@@ -271,10 +264,8 @@ extern "C"
 
     void traeger_subscriber_free(traeger_subscriber_t *self)
     {
-        if (self != nullptr)
-        {
-            delete self;
-        }
+
+        delete self;
     }
 
     traeger_promise_t *traeger_subscriber_listen(const traeger_subscriber_t *self,

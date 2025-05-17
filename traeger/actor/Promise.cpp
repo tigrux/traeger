@@ -13,8 +13,8 @@ namespace traeger
 {
     struct Promise::impl_type
     {
-        impl_type(const Scheduler &scheduler) noexcept
-            : scheduler_(scheduler)
+        explicit impl_type(Scheduler scheduler) noexcept
+            : scheduler_(std::move(scheduler))
         {
         }
 
@@ -34,12 +34,10 @@ namespace traeger
         {
             std::lock_guard lock{mutex_};
             Promise promise{scheduler_};
-            value_callbacks_.push(
-                [promise, result_callback = std::move(result_callback)](const Value &value)
-                { promise.set_result(result_callback(value)); });
-            error_callbacks_.push(
-                [promise](const Error &error)
-                { promise.set_result(error); });
+            value_callbacks_.emplace([promise, result_callback = std::move(result_callback)](const Value &value)
+                                     { promise.set_result(result_callback(value)); });
+            error_callbacks_.emplace([promise](const Error &error)
+                                     { promise.set_result(Result{error}); });
             schedule_callbacks();
             return promise;
         }
@@ -48,11 +46,10 @@ namespace traeger
         {
             std::lock_guard lock{mutex_};
             Promise promise{scheduler_};
-            value_callbacks_.push(
-                [promise, promise_callback = std::move(promise_callback)](const Value &value)
-                { promise.set_result_from_promise(promise_callback(value)); });
-            error_callbacks_.push([promise](const Error &error)
-                                  { promise.set_result(error); });
+            value_callbacks_.emplace([promise, promise_callback = std::move(promise_callback)](const Value &value)
+                                     { promise.set_result_from_promise(promise_callback(value)); });
+            error_callbacks_.emplace([promise](const Error &error)
+                                     { promise.set_result(Result{error}); });
             schedule_callbacks();
             return promise;
         }
@@ -137,21 +134,14 @@ namespace traeger
     {
     }
 
-    Promise::Promise(const Promise &other) noexcept
-        : impl_(other.impl_)
-    {
-    }
+    Promise::Promise(const Promise &other) noexcept = default;
 
     Promise::Promise(Promise &&other) noexcept
         : impl_(std::move(other.impl_))
     {
     }
 
-    Promise &Promise::operator=(const Promise &other) noexcept
-    {
-        impl_ = other.impl_;
-        return *this;
-    }
+    Promise &Promise::operator=(const Promise &other) noexcept = default;
 
     Promise &Promise::operator=(Promise &&other) noexcept
     {

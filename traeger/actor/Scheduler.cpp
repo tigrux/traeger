@@ -15,9 +15,9 @@
 
 namespace traeger
 {
-    auto to_microseconds(Float seconds) noexcept -> std::chrono::microseconds
+    auto to_microseconds(const Float seconds) noexcept -> std::chrono::microseconds
     {
-        std::intmax_t microseconds = std::round(seconds * std::micro::den);
+        const std::intmax_t microseconds = std::lround(seconds * std::micro::den);
         return std::chrono::microseconds(microseconds);
     }
 
@@ -43,7 +43,7 @@ namespace traeger
             }
         }
 
-        impl_type(unsigned int threads_count) noexcept
+        explicit impl_type(const unsigned int threads_count) noexcept
             : active_(true),
               threads_count_(threads_count),
               active_threads_count_(0)
@@ -119,8 +119,8 @@ namespace traeger
                     !scheduled_queue_.empty() &&
                     queue_.empty())
                 {
-                    const auto &top = scheduled_queue_.top();
-                    condition_.wait_until(lock, top.time_point);
+                    const auto &[time_point, work] = scheduled_queue_.top();
+                    condition_.wait_until(lock, time_point);
                 }
                 else
                 {
@@ -136,10 +136,10 @@ namespace traeger
                 {
                     if (!scheduled_queue_.empty())
                     {
-                        auto &&top = scheduled_queue_.top();
-                        if (Clock::now() >= top.time_point)
+                        if (const auto &[top_time_point, top_work] = scheduled_queue_.top();
+                            Clock::now() >= top_time_point)
                         {
-                            work = std::move(top.work);
+                            work = top_work;
                             scheduled_queue_.pop();
                             return true;
                         }

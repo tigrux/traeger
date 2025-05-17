@@ -4,6 +4,8 @@
 
 #include <traeger/value/value.h>
 
+typedef struct traeger_result_t traeger_result_t;
+
 typedef struct traeger_function_t traeger_function_t;
 
 typedef struct traeger_work_t traeger_work_t;
