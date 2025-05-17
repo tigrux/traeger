@@ -4,7 +4,7 @@ from skbuild import setup
 
 setup(
     name="traeger",
-    version="0.2.0",
+    version="0.3.0",
     description="A minimal and portable Actor System for C++ and Python",
     author="tigrux@gmail.com",
     license="BSL-1.0",

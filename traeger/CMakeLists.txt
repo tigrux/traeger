@@ -37,5 +37,5 @@ endif()
 
 set_target_properties(
     ${TRAEGER_LIBRARIES}
-    PROPERTIES VERSION ${version} SOVERSION 0
+    PROPERTIES VERSION ${PROJECT_VERSION} SOVERSION 0
 )
